@@ -1,28 +1,17 @@
-<!--{"kind": "bleed", "device": "kinetic", "what": "One large line of type over open backdrop, no card. Use it to break up panels and let the 3D breathe. Never two in a row.", "slots": {"quote": "str, 6-14 words, a claim or a principle, not a testimonial", "attrib": "str, 2-6 words, e.g. 'Our one guarantee'"}}-->
-<section>
-  <div class="bleed b-quote">
-    <p class="b-quote-t">{{quote}}</p>
-    <div class="b-quote-a fine">{{attrib}}</div>
+<!--{"kind": "bleed", "device": "kinetic", "what": "One large line over open backdrop, assembling word by word while the frame holds. Use it to break up panels and let the 3D breathe. Never two in a row.", "slots": {"quote": "str, 6-14 words, a claim or a principle, not a testimonial", "attrib": "str, 2-6 words, e.g. 'Our one guarantee'"}}-->
+<section data-sc-act="pin" data-sc-span="1.5">
+  <div data-sc-stage class="bleed b-quote">
+    <p class="b-quote-t" data-sc-kinetic="words" data-sc-cue="0.05 0.9">{{quote}}</p>
+    <div class="b-quote-a fine" data-sc-cue="0.4 0.95">{{attrib}}</div>
   </div>
 </section>
 <style>
-.b-quote-t{font-size:clamp(36px,4.6vw,60px);line-height:1.12;letter-spacing:-.02em;color:var(--ink);
-  max-width:24ch;font-weight:600;text-shadow:0 2px 40px rgba(0,0,0,.6);margin:0}
-/* Each word lifts in turn as the line enters. */
-.b-quote-t .w{display:inline-block;opacity:0;transform:translateY(18px);
-  transition:opacity .6s cubic-bezier(.16,.84,.44,1),transform .6s cubic-bezier(.16,.84,.44,1)}
-.b-quote-t.on .w{opacity:1;transform:none}
+/* Was a bespoke word split with its own observer. The engine does both, and
+   its stagger is the same easing as everything else on the page. Span 1.5
+   because a pinned act under ~1.2 has a pixel of travel and every cue snaps. */
+.b-quote{display:flex;flex-direction:column;justify-content:center;min-height:66vh}
+.b-quote-t{font-family:var(--font-display);font-size:clamp(36px,4.6vw,60px);line-height:1.12;
+  letter-spacing:var(--track);color:var(--ink);max-width:24ch;font-weight:600;
+  text-shadow:0 2px 40px rgba(0,0,0,.6);margin:0}
 .b-quote-a{margin-top:22px;letter-spacing:.2em;text-transform:uppercase}
 </style>
-<script>
-(function(){
-  document.querySelectorAll(".b-quote-t").forEach(function(el){
-    if(el.dataset.split)return; el.dataset.split="1";
-    el.innerHTML=el.textContent.trim().split(/\s+/).map(function(w,i){
-      return '<span class="w" style="transition-delay:'+(i*45)+'ms">'+w+'</span>';
-    }).join(" ");
-    new IntersectionObserver(function(es){es.forEach(function(e){
-      if(e.isIntersecting)e.target.classList.add("on");});},{threshold:.4}).observe(el);
-  });
-})();
-</script>

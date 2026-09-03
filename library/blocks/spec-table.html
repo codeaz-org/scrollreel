@@ -1,9 +1,9 @@
-<!--{"kind": "panel", "device": "stagger", "what": "The technical detail a serious buyer looks for: materials, standards, tolerances, warranties. Rows type themselves in as they enter. Use real standard numbers.", "slots": {"title": "str, 3-6 words", "note": "str, one line", "items": "list of 4-6 objects: {k: the spec name, v: the value, e.g. 'EN 490' or '\u00b12mm' or '25 years'}"}}-->
+<!--{"kind": "panel", "device": "stagger", "what": "The technical detail a serious buyer looks for: materials, standards, tolerances, warranties. Rows arrive in sequence. Use real standard numbers.", "slots": {"title": "str, 3-6 words", "note": "str, one line", "items": "list of 4-6 objects: {k: the spec name, v: the value, e.g. 'EN 490' or '2mm' or '25 years'}"}}-->
 <section>
   <div class="panel stack b-spec">
     <h2>{{title}}</h2>
     <p class="fine">{{note}}</p>
-    <dl class="b-spec-rows">
+    <dl class="b-spec-rows" data-sc-in data-sc-stagger="80">
       {{#items}}
       <div class="b-spec-row"><dt>{{k}}</dt><dd>{{v}}</dd></div>
       {{/items}}
@@ -13,21 +13,8 @@
 <style>
 .b-spec-rows{margin:8px 0 0;display:grid;gap:0}
 .b-spec-row{display:flex;justify-content:space-between;gap:20px;padding:16px 0;
-  border-bottom:1px dashed var(--line);
-  opacity:0;transform:translateX(-12px);
-  transition:opacity .5s cubic-bezier(.16,.84,.44,1),transform .5s cubic-bezier(.16,.84,.44,1)}
-.b-spec-row.on{opacity:1;transform:none}
+  border-bottom:1px dashed var(--line)}
 .b-spec-row dt{color:var(--muted);font-size:19px}
 .b-spec-row dd{margin:0;font-weight:700;font-size:21px;font-variant-numeric:tabular-nums;
   color:var(--ink);text-align:right}
 </style>
-<script>
-(function(){
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(!e.isIntersecting)return;
-    var rows=[].slice.call(e.target.parentNode.children);
-    setTimeout(function(){e.target.classList.add("on")},rows.indexOf(e.target)*80);
-    io.unobserve(e.target);});},{threshold:.4});
-  document.querySelectorAll(".b-spec-row").forEach(function(r){io.observe(r)});
-})();
-</script>

@@ -1,44 +1,34 @@
-<!--{"kind": "panel", "device": "pin", "what": "One photograph held still while the words beside it change as you scroll. The image pins, the copy advances -- the clearest way to walk through three points without three sections.", "slots": {"img": "img path", "items": "list of exactly 3 objects: {head: 3-6 words, body: one or two sentences}"}}-->
-<section>
-  <div class="panel b-split">
+<!--{"kind": "panel", "device": "pin", "what": "One photograph held still while the words beside it change. The image pins, the copy advances: the clearest way to walk through three points without three sections.", "slots": {"img": "img path", "items": "list of exactly 3 objects: {head: 3-6 words, body: one or two sentences}"}}-->
+<section data-sc-act="pin" data-sc-span="2.8">
+  <div data-sc-stage class="panel b-split">
     <div class="b-split-grid">
       <div class="b-split-media"><img src="{{img}}" alt=""></div>
       <div class="b-split-steps">
-        {{#items}}
-        <div class="b-split-step">
-          <h3>{{head}}</h3>
-          <p>{{body}}</p>
+        <div class="b-split-step" data-sc-cue="0 0.36 0">
+          <h3>{{items.0.head}}</h3><p>{{items.0.body}}</p>
         </div>
-        {{/items}}
+        <div class="b-split-step" data-sc-cue="0.32 0.68">
+          <h3>{{items.1.head}}</h3><p>{{items.1.body}}</p>
+        </div>
+        <div class="b-split-step" data-sc-cue="0.64 1">
+          <h3>{{items.2.head}}</h3><p>{{items.2.body}}</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 <style>
-.b-split-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
-.b-split-media{position:sticky;top:12vh;border-radius:14px;overflow:hidden}
-.b-split-media img{width:100%;height:52vh;object-fit:cover;border-radius:0}
-.b-split-step{padding:11vh 0;opacity:.28;transform:translateY(10px);
-  transition:opacity .55s ease,transform .55s cubic-bezier(.16,.84,.44,1)}
-.b-split-step.on{opacity:1;transform:none}
-.b-split-step:first-child{padding-top:2vh}
-.b-split-step p{margin-top:12px}
+/* Cue windows overlap by about 15% on purpose: the outgoing line is still
+   fading as the next arrives, so the reader never faces an empty stage. The
+   first cue uses the greet form (third value 0) because a pinned stage is
+   fully visible a viewport before its own progress leaves 0. */
+.b-split{min-height:74vh;display:flex;align-items:center}
+.b-split-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;width:100%}
+.b-split-media{border-radius:calc(var(--radius) * .7);overflow:hidden}
+.b-split-media img{width:100%;height:54vh;object-fit:cover;border-radius:0}
+.b-split-steps{position:relative;min-height:44vh}
+.b-split-step{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:12px}
 @media(max-width:760px){.b-split-grid{grid-template-columns:1fr}
-  .b-split-media{position:static}.b-split-step{padding:5vh 0}}
+  .b-split-steps{position:static;min-height:0}
+  .b-split-step{position:static;padding:4vh 0}}
 </style>
-<script>
-(function(){
-  // Whichever step is nearest the middle of the screen is the live one.
-  var steps=[].slice.call(document.querySelectorAll(".b-split-step"));
-  if(!steps.length)return;
-  function tick(){
-    var mid=innerHeight*0.45,best=null,bestD=1e9;
-    steps.forEach(function(s){
-      var r=s.getBoundingClientRect(),c=r.top+r.height/2,d=Math.abs(c-mid);
-      if(d<bestD){bestD=d;best=s;}
-    });
-    steps.forEach(function(s){s.classList.toggle("on",s===best);});
-  }
-  addEventListener("scroll",tick,{passive:true});addEventListener("resize",tick);tick();
-})();
-</script>

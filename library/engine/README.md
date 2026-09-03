@@ -22,11 +22,18 @@ What blocks use most:
 | `data-sc-count="0 4200"` | number blooms across the window |
 | `data-sc-pan="0.6"` | lateral travel inside `data-sc-act="pan"` |
 | `data-sc-parallax="-0.2"` | layer moves against the scroll |
-| `data-sc-stagger` | children arrive in sequence |
+| `data-sc-in data-sc-stagger="80"` | children arrive in sequence, 80ms apart |
 | `data-sc-magnet` / `data-sc-tilt` | pointer devices, not scroll |
 
 Act wrappers (`data-sc-act="pin|pan|scrub|flow"` with `data-sc-span`) are set by
 the composer, not by a block: a block does not know what sits either side of it.
+
+**`data-sc-stagger` is not standalone.** The observer watches `[data-sc-in]`
+only, and stagger is read off that same element with `parseFloat` -- so a bare
+`data-sc-stagger` with no value and no `data-sc-in` is never observed, while
+the engine CSS has already hidden its children. That is invisible content with
+no console error, and it is how five stat cells shipped at opacity 0. Always
+`data-sc-in data-sc-stagger="<ms>"`.
 
 Cue rules worth remembering, from references/devices.md:
 

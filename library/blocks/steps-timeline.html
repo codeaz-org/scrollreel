@@ -1,6 +1,6 @@
-<!--{"kind": "panel", "device": "pin", "what": "How the job actually runs, as numbered steps with a line that fills as you scroll. Give each step a concrete detail: a timescale, a tolerance, a material.", "slots": {"title": "str, 3-6 words", "items": "list of 3-5 objects: {step: '01', head: 3-6 words, body: one sentence, meta: short detail e.g. '48 hours' or '\u00b12mm'}"}}-->
-<section>
-  <div class="panel stack b-steps">
+<!--{"kind": "panel", "device": "pin", "what": "How the job actually runs, as numbered steps that advance while the frame holds. Give each step a concrete detail: a timescale, a tolerance, a material.", "slots": {"title": "str, 3-6 words", "items": "list of 3-5 objects: {step: '01', head: 3-6 words, body: one sentence, meta: short detail e.g. '48 hours'}"}}-->
+<section data-sc-act="pin" data-sc-span="2.6">
+  <div data-sc-stage class="panel stack b-steps">
     <h2>{{title}}</h2>
     <div class="b-steps-list">
       <div class="b-steps-rail"><div class="b-steps-fill"></div></div>
@@ -18,32 +18,22 @@
   </div>
 </section>
 <style>
+/* The rail fills from --sc-p, the act's own progress, rather than from a
+   scroll listener counting bounding rects. That is the skill's pattern for
+   bespoke behaviour: read the engine's progress, do not re-derive it. */
+.b-steps{display:flex;flex-direction:column;justify-content:center;min-height:70vh}
 .b-steps-list{position:relative;padding-left:34px;margin-top:8px}
 .b-steps-rail{position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
-.b-steps-fill{width:100%;height:0;background:var(--accent);transition:height .25s linear}
-.b-step{display:flex;gap:20px;padding:20px 0;opacity:.35;transition:opacity .5s ease}
-.b-step.on{opacity:1}
-.b-step-n{position:absolute;left:0;width:20px;height:20px;border-radius:50%;
+.b-steps-fill{width:100%;background:var(--accent);
+  height:calc(var(--sc-p, 0) * 100%)}
+.b-step{display:flex;gap:20px;padding:18px 0;position:relative}
+.b-step-n{position:absolute;left:-34px;width:20px;height:20px;border-radius:50%;
   background:var(--panel);border:2px solid var(--line);font-size:0}
-.b-step.on .b-step-n{border-color:var(--accent)}
-.b-step-meta{margin-top:10px;font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.b-step-meta{margin-top:10px;font-size:16px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent-panel)}
+/* Each step lights as the fill passes it. Four steps, so quarters. */
+.b-step:nth-child(2){opacity:calc(.3 + var(--sc-p, 0) * 4)}
+.b-step:nth-child(3){opacity:calc(.3 + (var(--sc-p, 0) - .25) * 4)}
+.b-step:nth-child(4){opacity:calc(.3 + (var(--sc-p, 0) - .5) * 4)}
+.b-step:nth-child(5){opacity:calc(.3 + (var(--sc-p, 0) - .75) * 4)}
 </style>
-<script>
-(function(){
-  var lists=[].slice.call(document.querySelectorAll(".b-steps-list"));
-  function tick(){
-    lists.forEach(function(l){
-      var steps=[].slice.call(l.querySelectorAll(".b-step")),
-          fill=l.querySelector(".b-steps-fill"),done=0;
-      steps.forEach(function(s){
-        var r=s.getBoundingClientRect();
-        var on=r.top<innerHeight*0.72;
-        s.classList.toggle("on",on);
-        if(on)done++;
-      });
-      if(fill)fill.style.height=(done/Math.max(1,steps.length)*100)+"%";
-    });
-  }
-  addEventListener("scroll",tick,{passive:true});addEventListener("resize",tick);tick();
-})();
-</script>

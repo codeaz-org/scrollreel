@@ -1,6 +1,6 @@
-<!--{"kind": "bleed", "device": "draw", "what": "One promise, stated plainly on the open backdrop with a seal that draws itself. Use for the guarantee, the callout time, or the thing they will put in writing. Never for a slogan.", "slots": {"promise": "str, 5-12 words, something checkable, e.g. 'Every roof we lay is guaranteed for 25 years'", "detail": "str, one short line of terms", "mark": "str, 2-4 words for the seal, e.g. '25 year cover'"}}-->
+<!--{"kind": "bleed", "device": "draw", "what": "One promise on the open backdrop with a seal that draws itself. Use for the guarantee, the callout time, or the thing they will put in writing. Never for a slogan.", "slots": {"promise": "str, 5-12 words, something checkable", "detail": "str, one short line of terms", "mark": "str, 2-4 words for the seal, e.g. '25 year cover'"}}-->
 <section>
-  <div class="bleed b-guar">
+  <div class="bleed b-guar" data-sc-in>
     <div class="b-guar-seal" aria-hidden="true">
       <svg viewBox="0 0 120 120">
         <circle class="b-guar-ring" cx="60" cy="60" r="52"></circle>
@@ -20,21 +20,12 @@
 .b-guar-seal svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
 .b-guar-ring{fill:none;stroke:var(--accent);stroke-width:2;
   stroke-dasharray:340;stroke-dashoffset:340;
-  transition:stroke-dashoffset 1.5s cubic-bezier(.16,.84,.44,1)}
-.b-guar-ring2{stroke:var(--line);stroke-dasharray:290;stroke-dashoffset:290;
-  transition-delay:.18s}
-.b-guar-seal.on .b-guar-ring{stroke-dashoffset:0}
+  transition:stroke-dashoffset 1.5s var(--sc-ease-out,cubic-bezier(.16,.84,.44,1))}
+.b-guar-ring2{stroke:var(--line);stroke-dasharray:290;stroke-dashoffset:290;transition-delay:.18s}
+.b-guar.sc-in .b-guar-ring{stroke-dashoffset:0}
 .b-guar-mark{max-width:100px;text-align:center;font-size:16px;font-weight:700;
   letter-spacing:.1em;text-transform:uppercase;line-height:1.3}
-.b-guar-p{font-size:clamp(30px,3.8vw,48px);line-height:1.14;letter-spacing:-.02em;
-  max-width:22ch;margin:0;text-shadow:0 2px 40px rgba(0,0,0,.6)}
+.b-guar-p{font-family:var(--font-display);font-size:clamp(30px,3.8vw,48px);line-height:1.14;
+  letter-spacing:var(--track);max-width:22ch;margin:0;text-shadow:0 2px 40px rgba(0,0,0,.6)}
 .b-guar-d{margin-top:16px;letter-spacing:.12em;text-transform:uppercase}
 </style>
-<script>
-(function(){
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target);}
-  });},{threshold:.5});
-  document.querySelectorAll(".b-guar-seal").forEach(function(s){io.observe(s)});
-})();
-</script>

@@ -1,34 +1,20 @@
-<!--{"kind": "panel", "device": "count", "what": "Three or four numbers that prove the business, counting up when they scroll into view. Use real, specific figures.", "slots": {"items": "list of 3-4 objects: {value: number as string e.g. '1420', suffix: '+' or '%' or 'yrs' or '', label: 2-5 words}"}}-->
+<!--{"kind": "panel", "device": "count", "what": "Three or four numbers that prove the business, counting up as they arrive in sequence. Use figures the business could actually state.", "slots": {"items": "list of 3-4 objects: {value: number as string e.g. '1420', suffix: '+' or '%' or 'yrs' or '', label: 2-5 words}"}}-->
 <section>
-  <div class="panel b-stats">
+  <div class="panel b-stats" data-sc-in data-sc-stagger="80">
     {{#items}}
     <div class="b-stat">
-      <div class="b-stat-v" data-to="{{value}}" data-suffix="{{suffix}}">0{{suffix}}</div>
+      <div class="b-stat-v"><span data-sc-count="0 {{value}}">0</span>{{suffix}}</div>
       <div class="b-stat-l fine">{{label}}</div>
     </div>
     {{/items}}
   </div>
 </section>
 <style>
+/* The counter and the stagger are both the engine's now. This block used to
+   run its own rAF loop with its own easing, which is how a page ended up with
+   a dozen listeners that almost agreed with each other. */
 .b-stats{display:grid;gap:30px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
-.b-stat-v{font-size:clamp(42px,5vw,62px);font-weight:800;letter-spacing:-.03em;color:var(--accent);
-  font-variant-numeric:tabular-nums}
+.b-stat-v{font-family:var(--font-display);font-size:clamp(42px,5vw,62px);font-weight:800;
+  letter-spacing:-.03em;color:var(--accent-panel);font-variant-numeric:tabular-nums}
 .b-stat-l{margin-top:8px;text-transform:uppercase;letter-spacing:.14em}
 </style>
-<script>
-(function(){
-  // Counts on entry, once. Eased rather than linear so it settles instead of
-  // stopping dead on the final number.
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(!e.isIntersecting||e.target.dataset.done)return;
-    e.target.dataset.done="1";
-    var el=e.target,to=parseFloat(el.dataset.to)||0,sfx=el.dataset.suffix||"",t0=null,dur=1100;
-    function step(ts){t0=t0||ts;var p=Math.min(1,(ts-t0)/dur);
-      var e2=1-Math.pow(1-p,3);
-      el.textContent=Math.round(to*e2).toLocaleString()+sfx;
-      if(p<1)requestAnimationFrame(step);}
-    requestAnimationFrame(step);
-  });},{threshold:.5});
-  document.querySelectorAll(".b-stat-v").forEach(function(el){io.observe(el)});
-})();
-</script>

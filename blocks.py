@@ -30,7 +30,7 @@ _HEADER = re.compile(r"^\s*<!--(\{.*?\})-->", re.S)
 _STYLE = re.compile(r"<style>(.*?)</style>", re.S)
 _SCRIPT = re.compile(r"<script>(.*?)</script>", re.S)
 _LOOP = re.compile(r"\{\{#(\w+)\}\}(.*?)\{\{/\1\}\}", re.S)
-_FIELD = re.compile(r"\{\{(\.|\w+)\}\}")
+_FIELD = re.compile(r"\{\{(\.|[\w.]+)\}\}")
 
 
 def load():
@@ -72,6 +72,28 @@ def catalogue(blocks=None):
     return "\n\n".join(lines)
 
 
+def _lookup(data, path):
+    """Resolve "items.0.head" against the data.
+
+    Needed by blocks whose items cannot be a plain loop because each one takes
+    a different value -- split-stage gives its three panes overlapping cue
+    windows, which a repeat cannot express.
+    """
+    cur = data
+    for part in path.split("."):
+        if isinstance(cur, list):
+            if not part.isdigit() or int(part) >= len(cur):
+                return ""
+            cur = cur[int(part)]
+        elif isinstance(cur, dict):
+            if part not in cur:
+                return ""
+            cur = cur[part]
+        else:
+            return ""
+    return "" if cur is None else cur
+
+
 def _fill(template, data):
     """Loops first, then scalars.
 
@@ -94,7 +116,7 @@ def _fill(template, data):
         return "".join(parts)
 
     out = _LOOP.sub(loop, template)
-    return _FIELD.sub(lambda m: str(data.get(m.group(1), "")), out)
+    return _FIELD.sub(lambda m: str(_lookup(data, m.group(1))), out)
 
 
 def validate(plan, blocks=None):
