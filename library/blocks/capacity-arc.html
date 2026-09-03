@@ -1,0 +1,31 @@
+<!--{"kind": "bleed", "device": "count", "what": "One arc showing how full the diary is, with the next free date stated. Scarcity told honestly, which is the most persuasive thing a busy trade can say.", "slots": {"pct": "whole number 0-100, how booked they are", "next_free": "str, e.g. 'first week of March'", "line": "str, one sentence"}}-->
+<section>
+  <div class="bleed b-cap" data-sc-in style="--v:{{pct}}">
+    <div class="b-cap-dial">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="b-cap-track" cx="60" cy="60" r="50"></circle>
+        <circle class="b-cap-arc" cx="60" cy="60" r="50"></circle>
+      </svg>
+      <div class="b-cap-n"><span data-sc-count="0 {{pct}}">0</span>%</div>
+    </div>
+    <div>
+      <p class="b-cap-line">{{line}}</p>
+      <div class="fine b-cap-next">Next availability: {{next_free}}</div>
+    </div>
+  </div>
+</section>
+<style>
+.b-cap{display:flex;align-items:center;gap:38px;flex-wrap:wrap}
+.b-cap-dial{position:relative;width:180px;height:180px;flex:0 0 auto;display:grid;place-items:center}
+.b-cap-dial svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.b-cap-track{fill:none;stroke:var(--line);stroke-width:8}
+.b-cap-arc{fill:none;stroke:var(--accent);stroke-width:8;stroke-linecap:round;
+  stroke-dasharray:314;stroke-dashoffset:314;
+  transition:stroke-dashoffset 1.6s var(--sc-ease-out,cubic-bezier(.16,.84,.44,1))}
+.sc-in .b-cap-arc{stroke-dashoffset:calc(314 - 314 * var(--v) / 100)}
+.b-cap-n{font-family:var(--font-display);font-size:40px;font-weight:800;
+  font-variant-numeric:tabular-nums}
+.b-cap-line{font-family:var(--font-display);font-size:clamp(28px,3.6vw,46px);line-height:1.16;
+  max-width:20ch;margin:0}
+.b-cap-next{margin-top:14px;letter-spacing:.16em;text-transform:uppercase}
+</style>

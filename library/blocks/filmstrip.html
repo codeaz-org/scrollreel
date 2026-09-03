@@ -1,0 +1,26 @@
+<!--{"kind": "panel", "device": "pan", "what": "A strip of frames from one job, sprocket holes and all, travelling sideways. Reads as documentary rather than portfolio: the same job across a day, not six different jobs.", "slots": {"title": "str, 3-6 words", "note": "str, one short line naming the job", "items": "list of 4-6 objects: {img: img path, stamp: short, e.g. '07:40' or 'Day 2'}"}}-->
+<section data-sc-act="pan" data-sc-span="2.2">
+  <div data-sc-stage class="panel stack b-film">
+    <h2>{{title}}</h2>
+    <p class="fine">{{note}}</p>
+    <div class="b-film-vp">
+      <div class="b-film-strip" data-sc-pan="0.6">
+        {{#items}}
+        <figure class="b-film-frame">
+          <img src="{{img}}" alt="">
+          <figcaption class="fine">{{stamp}}</figcaption>
+        </figure>
+        {{/items}}
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+.b-film-vp{overflow:hidden;margin-top:8px;padding:14px 0;
+  background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 26px) top/100% 6px no-repeat,
+             repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 26px) bottom/100% 6px no-repeat}
+.b-film-strip{display:flex;gap:12px;width:max-content}
+.b-film-frame{margin:0;flex:0 0 auto;width:280px}
+.b-film-frame img{width:100%;height:190px;object-fit:cover;border-radius:2px}
+.b-film-frame figcaption{margin-top:8px;letter-spacing:.18em;text-transform:uppercase}
+</style>

@@ -1,0 +1,27 @@
+<!--{"kind": "panel", "device": "stagger", "what": "What a job actually includes, as an indented breakdown. Answers 'what am I paying for' better than any paragraph, and shows the invisible work under the visible work.", "slots": {"title": "str, 3-6 words", "root": "str, the job name, e.g. 'Full re-roof, 3-bed terrace'", "items": "list of 4-7 objects: {name: the line item, detail: short note, depth: '1' or '2' for indent level}"}}-->
+<section>
+  <div class="panel stack b-tree">
+    <h2>{{title}}</h2>
+    <div class="b-tree-root">{{root}}</div>
+    <ul class="b-tree-list" data-sc-in data-sc-stagger="70">
+      {{#items}}
+      <li class="b-tree-row b-tree-d{{depth}}">
+        <span class="b-tree-name">{{name}}</span>
+        <span class="fine b-tree-detail">{{detail}}</span>
+      </li>
+      {{/items}}
+    </ul>
+  </div>
+</section>
+<style>
+.b-tree-root{font-weight:700;font-size:21px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.b-tree-list{list-style:none;margin:0;padding:0}
+.b-tree-row{display:flex;gap:14px;align-items:baseline;padding:11px 0;position:relative}
+.b-tree-row::before{content:"";width:14px;height:1px;background:var(--line);flex:0 0 auto;
+  align-self:center}
+.b-tree-d1{padding-left:8px}
+.b-tree-d2{padding-left:40px;opacity:.86}
+.b-tree-d2::before{width:22px}
+.b-tree-name{font-size:19px}
+.b-tree-detail{margin-left:auto;white-space:nowrap}
+</style>

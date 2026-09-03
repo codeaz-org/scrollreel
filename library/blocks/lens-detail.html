@@ -1,0 +1,26 @@
+<!--{"kind": "panel", "device": "pointer", "what": "One photograph with a magnifier that follows the pointer, so the fine detail is inspectable. For work whose quality is only visible up close: a weld, a joint, a crumb, a finish.", "slots": {"title": "str, 3-6 words", "body": "str, one or two sentences about what to look at", "img": "img path"}}-->
+<section>
+  <div class="panel stack b-lens" data-sc-in>
+    <h2>{{title}}</h2>
+    <p>{{body}}</p>
+    <div class="b-lens-frame">
+      <img class="b-lens-base" src="{{img}}" alt="">
+      <span class="b-lens-glass" style="background-image:url('{{img}}')"></span>
+    </div>
+  </div>
+</section>
+<style>
+/* Follows --sc-mx/--sc-my, the pointer position the engine already publishes,
+   so the block adds no listener of its own. In the recorded video the pointer
+   never moves, so the glass simply rests at centre and reads as a detail
+   inset: it degrades to something deliberate rather than to nothing. */
+.b-lens-frame{position:relative;overflow:hidden;border-radius:calc(var(--radius) * .7)}
+.b-lens-base{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+.b-lens-glass{position:absolute;width:190px;height:190px;border-radius:50%;
+  left:calc(var(--sc-mx, .5) * 100%);top:calc(var(--sc-my, .5) * 100%);
+  transform:translate(-50%,-50%);
+  border:2px solid var(--accent);box-shadow:0 18px 44px rgba(0,0,0,.5);
+  background-size:260% auto;
+  background-position:calc(var(--sc-mx, .5) * 100%) calc(var(--sc-my, .5) * 100%);
+  transition:left .18s ease-out,top .18s ease-out}
+</style>

@@ -1,0 +1,14 @@
+<!--{"kind": "panel", "device": "kinetic", "what": "A proper opening paragraph with a drop cap, set at reading width. The block for a business whose story is the selling point: a fourth-generation trade, a restored building, a founder who left something else to do this.", "slots": {"body": "str, three or four sentences of real prose, no bullet points", "sign": "str, a name and a role"}}-->
+<section>
+  <div class="panel b-edit" data-sc-in>
+    <p class="b-edit-body">{{body}}</p>
+    <div class="fine b-edit-sign">{{sign}}</div>
+  </div>
+</section>
+<style>
+.b-edit{max-width:66ch;margin-inline:auto}
+.b-edit-body{font-size:calc(var(--body-size) * 1.12);line-height:1.68;color:var(--ink)}
+.b-edit-body::first-letter{float:left;font-family:var(--font-display);font-size:4.4em;
+  line-height:.82;padding:.04em .10em 0 0;color:var(--accent-panel);font-weight:700}
+.b-edit-sign{margin-top:24px;letter-spacing:.18em;text-transform:uppercase}
+</style>

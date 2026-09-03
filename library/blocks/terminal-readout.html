@@ -1,0 +1,28 @@
+<!--{"kind": "panel", "device": "kinetic", "what": "A diagnostic readout: prefixed lines arriving in order like console output, each one a real check with a real result. For trades that measure and log.", "slots": {"title": "str, 3-6 words", "host": "str, short label, e.g. 'bay-02' or 'unit-14'", "items": "list of 4-7 objects: {check: what was tested, result: the value, state: 'ok' or 'warn'}"}}-->
+<section>
+  <div class="panel stack b-term">
+    <div class="b-term-bar"><span class="b-term-dot"></span><span class="fine">{{host}}</span></div>
+    <h2>{{title}}</h2>
+    <div class="b-term-lines" data-sc-in data-sc-stagger="120">
+      {{#items}}
+      <div class="b-term-line b-term-{{state}}">
+        <span class="b-term-pre">&gt;</span>
+        <span class="b-term-check">{{check}}</span>
+        <span class="b-term-res">{{result}}</span>
+      </div>
+      {{/items}}
+    </div>
+  </div>
+</section>
+<style>
+.b-term-bar{display:flex;align-items:center;gap:10px;padding-bottom:10px;
+  border-bottom:1px solid var(--line)}
+.b-term-dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.b-term-lines{margin-top:6px;font-family:ui-monospace,'IBM Plex Mono',monospace}
+.b-term-line{display:grid;grid-template-columns:auto 1fr auto;gap:12px;padding:9px 0;
+  border-bottom:1px dashed var(--line);font-size:17px}
+.b-term-pre{color:var(--accent-panel)}
+.b-term-res{font-variant-numeric:tabular-nums;font-weight:700}
+.b-term-warn .b-term-res{color:#e8a13a}
+.b-term-ok .b-term-res{color:#3ddc84}
+</style>

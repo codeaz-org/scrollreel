@@ -482,6 +482,171 @@ SKINS = {
                   ".panel::after{right:-1px;bottom:-1px;border-left:0;border-top:0}"
                   "h2{letter-spacing:.06em}"),
     },
+    "chalkboard": {
+        "grammar": "gallery",
+        "what": "Hand-lettered on slate: chalky type, soft dusty edges, a wiped "
+                "board behind it. Everything looks written this morning.",
+        "fonts": ["Caveat:wght@500;700", "Karla:wght@400;500"],
+        "display": "'Caveat', cursive",
+        "body": "'Karla', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#f2efe6", "--muted": "#b9b3a4",
+            "--panel": "rgba(22,26,24,.88)", "--line": "rgba(242,239,230,.26)",
+            "--radius": "6px", "--border": "2px",
+            "--measure": "960px", "--pad": "36px 40px",
+            "--h1": "clamp(64px,8.4vw,104px)", "--h2": "clamp(42px,5.4vw,66px)",
+            "--body-size": "19px", "--track": "0em", "--case": "none",
+        },
+        "extra": ("h1,h2{font-weight:700;text-shadow:0 1px 0 rgba(255,255,255,.18)}"
+                  ".panel{background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);"
+                  "background-size:4px 4px}"
+                  ".fine{font-family:var(--font-body);letter-spacing:.16em;text-transform:uppercase}"),
+    },
+    "enamel": {
+        "grammar": "typographic poster",
+        "what": "Vitreous enamel signage: one deep saturated ground, a thick "
+                "white keyline around everything, rounded plate corners.",
+        "fonts": ["Alfa+Slab+One", "Inter:wght@400;600"],
+        "display": "'Alfa Slab One', Georgia, serif",
+        "body": "'Inter', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#fbf9f4", "--muted": "#cfd6d2",
+            "--panel": "rgba(10,42,54,.92)", "--line": "rgba(251,249,244,.92)",
+            "--radius": "14px", "--border": "4px",
+            "--measure": "980px", "--pad": "34px 38px",
+            "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
+            "--body-size": "19px", "--track": "-.01em", "--case": "uppercase",
+        },
+        "extra": (".panel{box-shadow:0 0 0 3px rgba(10,42,54,.92),0 22px 50px rgba(0,0,0,.45)}"
+                  "h1,h2{text-transform:uppercase;letter-spacing:.01em}"),
+    },
+    "letterpress": {
+        "grammar": "chaptered editorial",
+        "what": "Printed by impression: cream stock, ink that sits IN the paper, "
+                "ornament rules between sections, small caps labels.",
+        "fonts": ["Spectral:wght@400;600;700", "Spectral:wght@400"],
+        "display": "'Spectral', Georgia, serif",
+        "body": "'Spectral', Georgia, serif",
+        "tokens": {
+            "--ink": "#1d1a15", "--muted": "#5f574a",
+            "--panel": "rgba(244,238,226,.96)", "--line": "rgba(29,26,21,.24)",
+            "--radius": "2px", "--border": "1px",
+            "--measure": "860px", "--pad": "48px 52px",
+            "--h1": "clamp(48px,6.2vw,76px)", "--h2": "clamp(31px,3.9vw,48px)",
+            "--body-size": "20px", "--track": "0em", "--case": "none",
+        },
+        "extra": (".panel h2{text-shadow:0 1px 0 rgba(255,255,255,.6)}"
+                  ".panel h2::after{content:'';display:block;height:3px;margin-top:14px;"
+                  "border-top:1px solid var(--line);border-bottom:1px solid var(--line)}"
+                  ".fine{font-variant:small-caps;letter-spacing:.14em}"
+                  ".bleed,.bleed *{color:#f3ece0}.bleed .fine{color:#c6bcaa}"),
+        "accent_on_panel": "#8a2d17",
+    },
+    "manifest": {
+        "grammar": "tabular record",
+        "what": "Dot-matrix printout: green-bar alternating rows, perforated "
+                "edges, everything monospaced and aligned to a column.",
+        "fonts": ["Courier+Prime:wght@400;700", "Courier+Prime:wght@400"],
+        "display": "'Courier Prime', ui-monospace, monospace",
+        "body": "'Courier Prime', ui-monospace, monospace",
+        "tokens": {
+            "--ink": "#1c2019", "--muted": "#5a6356",
+            "--panel": "rgba(233,238,224,.96)", "--line": "rgba(28,32,25,.28)",
+            "--radius": "0px", "--border": "1px",
+            "--measure": "980px", "--pad": "32px 34px",
+            "--h1": "clamp(42px,5.4vw,66px)", "--h2": "clamp(28px,3.4vw,42px)",
+            "--body-size": "17px", "--track": "0em", "--case": "uppercase",
+        },
+        "extra": (".panel{background-image:repeating-linear-gradient(180deg,"
+                  "transparent 0 34px,rgba(120,160,110,.20) 34px 68px)}"
+                  "h1,h2{text-transform:uppercase;letter-spacing:.04em}"
+                  ".bleed,.bleed *{color:#eaf0e2}.bleed .fine{color:#b9c3b0}"),
+        "accent_on_panel": "#1f5f2f",
+    },
+    "patina": {
+        "grammar": "continuous world",
+        "what": "Oxidised copper: verdigris greens over warm metal, edges that "
+                "look weathered rather than drawn. Built for roofs and metalwork.",
+        "fonts": ["Fraunces:opsz,wght@9..144,500;9..144,700", "Karla:wght@400;500"],
+        "display": "'Fraunces', Georgia, serif",
+        "body": "'Karla', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#eef4ef", "--muted": "#9fb9a9",
+            "--panel": "rgba(14,32,28,.80)", "--line": "rgba(126,196,164,.28)",
+            "--radius": "12px 3px 12px 3px", "--border": "1px",
+            "--measure": "1000px", "--pad": "36px 38px",
+            "--h1": "clamp(50px,6.6vw,82px)", "--h2": "clamp(32px,4.2vw,52px)",
+            "--body-size": "19px", "--track": "-.01em", "--case": "none",
+        },
+        "extra": (".panel{background-image:radial-gradient(120% 80% at 20% 0%,"
+                  "rgba(126,196,164,.10),transparent 60%)}"
+                  "h1,h2{font-weight:500}"),
+    },
+    "timetable": {
+        "grammar": "rhythmic cutlist",
+        "what": "Split-flap departure board: rows of monospaced entries on a "
+                "dark board, one bright column. For anything with a schedule.",
+        "fonts": ["Oswald:wght@500;700", "Roboto+Mono:wght@400;500"],
+        "display": "'Oswald', system-ui, sans-serif",
+        "body": "'Roboto Mono', ui-monospace, monospace",
+        "tokens": {
+            "--ink": "#f4f6f4", "--muted": "#96a09a",
+            "--panel": "rgba(9,11,10,.90)", "--line": "rgba(244,246,244,.16)",
+            "--radius": "3px", "--border": "1px",
+            "--measure": "1020px", "--pad": "26px 30px",
+            "--h1": "clamp(50px,6.8vw,84px)", "--h2": "clamp(32px,4.2vw,50px)",
+            "--body-size": "17px", "--track": ".01em", "--case": "uppercase",
+        },
+        "extra": ("h1,h2{text-transform:uppercase;letter-spacing:.04em}"
+                  ".panel > * + *{border-top:1px solid var(--line)}"
+                  ".b-price-v,.b-spec-row dd,.b-feed-when{color:var(--accent)}"),
+    },
+    "daylight": {
+        "grammar": "gallery",
+        "what": "Actually light: white ground, near-black type, photographs "
+                "given the room. The only skin where the backdrop reads as sky "
+                "behind bright panels rather than as night.",
+        "fonts": ["Instrument+Sans:wght@400;600;700", "Instrument+Sans:wght@400;500"],
+        "display": "'Instrument Sans', system-ui, sans-serif",
+        "body": "'Instrument Sans', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#101214", "--muted": "#5a6169",
+            "--panel": "rgba(255,255,255,.94)", "--line": "rgba(16,18,20,.12)",
+            "--radius": "14px", "--border": "0px",
+            "--measure": "1020px", "--pad": "40px 44px",
+            "--h1": "clamp(52px,6.8vw,84px)", "--h2": "clamp(33px,4.2vw,52px)",
+            "--body-size": "20px", "--track": "-.03em", "--case": "none",
+        },
+        "extra": (".panel{box-shadow:0 24px 60px rgba(0,0,0,.35)}"
+                  ".bleed,.bleed *{color:#ffffff}"
+                  ".bleed .fine{color:#d6dade}"),
+        "accent_on_panel": "#0b57d0",
+    },
+    "swatch": {
+        "grammar": "gallery",
+        "what": "Material samples: each section is a chip with its reference "
+                "printed on it, laid on a neutral board. For trades that choose "
+                "finishes with a client.",
+        "fonts": ["Outfit:wght@400;600;800", "Inter:wght@400;500"],
+        "display": "'Outfit', system-ui, sans-serif",
+        "body": "'Inter', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#1a1c1e", "--muted": "#61666b",
+            "--panel": "rgba(247,246,243,.95)", "--line": "rgba(26,28,30,.14)",
+            "--radius": "10px", "--border": "0px",
+            "--measure": "1000px", "--pad": "0px",
+            "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
+            "--body-size": "19px", "--track": "-.02em", "--case": "none",
+        },
+        "extra": (".panel{overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.34)}"
+                  ".panel > *{padding-inline:38px}"
+                  ".panel > :first-child{padding-top:34px}"
+                  ".panel > :last-child{padding-bottom:34px}"
+                  ".panel::before{content:'';display:block;height:14px;"
+                  "background:var(--accent)}"
+                  ".bleed,.bleed *{color:#f7f6f3}.bleed .fine{color:#c9cbcd}"),
+        "accent_on_panel": "#1a1c1e",
+    },
     "signal": {
         "grammar": "live product surface",
         "what": "Tight technical grid, thin rules, numbers everywhere, accent "
@@ -507,14 +672,14 @@ SKINS = {
 # Three to five skins per trade, and every skin is reachable from at least
 # one trade -- a skin nothing can pick is dead weight in the file.
 FITS = {
-    "auto repair shop":      ["brutal", "signal", "industrial", "blueprint", "kiosk", "skeuo"],
-    "artisan bakery":        ["press", "atelier", "clay", "broadsheet", "pastel", "halftone"],
-    "coffee roastery":       ["press", "atelier", "noir", "vitrine", "zine", "halftone"],
-    "garden design studio":  ["botanic", "atelier", "press", "field", "pastel"],
-    "roofing contractor":    ["signal", "brutal", "industrial", "field", "ledger", "wireframe"],
-    "dental practice":       ["glass", "pastel", "swiss", "clay", "vitrine", "skeuo"],
-    "yoga studio":           ["atelier", "botanic", "pastel", "clay", "luxe"],
-    "electrical contractor": ["blueprint", "signal", "terminal", "industrial", "swiss", "crt", "wireframe"],
+    "auto repair shop":      ["brutal", "signal", "industrial", "blueprint", "kiosk", "skeuo", "enamel", "manifest", "patina"],
+    "artisan bakery":        ["press", "atelier", "clay", "broadsheet", "pastel", "halftone", "chalkboard", "letterpress", "daylight"],
+    "coffee roastery":       ["press", "atelier", "noir", "vitrine", "zine", "halftone", "chalkboard", "letterpress"],
+    "garden design studio":  ["botanic", "atelier", "press", "field", "pastel", "swatch", "daylight"],
+    "roofing contractor":    ["signal", "brutal", "industrial", "field", "ledger", "wireframe", "patina", "manifest", "enamel"],
+    "dental practice":       ["glass", "pastel", "swiss", "clay", "vitrine", "skeuo", "daylight", "enamel"],
+    "yoga studio":           ["atelier", "botanic", "pastel", "clay", "luxe", "timetable", "daylight"],
+    "electrical contractor": ["blueprint", "signal", "terminal", "industrial", "swiss", "crt", "wireframe", "manifest", "timetable"],
 }
 
 # The axes a build is fingerprinted on. Two builds sharing a skin share all of
