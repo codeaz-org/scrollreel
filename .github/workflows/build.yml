@@ -11,6 +11,11 @@ on:
         description: "Scroll duration"
         required: false
         default: "12"
+      refine:
+        description: "Second pass that reviews its own scroll (doubles the run)"
+        type: boolean
+        required: false
+        default: false
       post:
         description: "Upload to TikTok drafts when done"
         type: boolean
@@ -33,13 +38,22 @@ jobs:
       - name: Install deps
         run: pip install playwright requests
 
+      - name: Install ffmpeg
+        # Not on the ubuntu-24.04 runner image. compose.py shells out to it and
+        # the first CI run died on FileNotFoundError 36 minutes in, after the
+        # whole page had been built and recorded twice.
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
       - name: Check what the runner actually has
         run: |
-          # record.py drives the INSTALLED Chrome (channel="chrome"), not a
-          # Playwright-downloaded Chromium, and compose.py shells out to
-          # ffmpeg. Fail here with a clear message rather than 20 minutes in.
-          google-chrome --version || { echo "::error::no Chrome on this runner"; exit 1; }
-          ffmpeg -version | head -1 || { echo "::error::no ffmpeg"; exit 1; }
+          # command -v, not `tool --version | head -1`: in a pipeline the exit
+          # status is the LAST command's, so `ffmpeg -version | head -1 || exit 1`
+          # reported success while ffmpeg was absent. That is exactly how the
+          # missing ffmpeg got past this step the first time.
+          command -v google-chrome >/dev/null || { echo "::error::no Chrome"; exit 1; }
+          command -v ffmpeg >/dev/null || { echo "::error::no ffmpeg"; exit 1; }
+          google-chrome --version
+          ffmpeg -version 2>&1 | head -1
 
       - name: Prove WebGL works headless
         run: |
@@ -75,6 +89,12 @@ jobs:
           ARGS=""
           if [ -n "${{ github.event.inputs.trade }}" ]; then
             ARGS="--trade '${{ github.event.inputs.trade }}'"
+          fi
+          # Recording is the slow step here -- SwiftShader has no GPU behind it
+          # and the refine pass records the page a second time. 36 minutes of
+          # the first run was those two passes.
+          if [ "${{ github.event.inputs.refine }}" != "true" ]; then
+            ARGS="$ARGS --no-refine"
           fi
           eval python -u main.py $ARGS --seconds "${{ github.event.inputs.seconds }}"
 
