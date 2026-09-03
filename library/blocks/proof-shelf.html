@@ -1,0 +1,36 @@
+<!--{"kind": "bleed", "device": "pan", "what": "The certificates, memberships and registration numbers, travelling sideways as a shelf. Lateral movement reads as 'there are more of these than fit', which is exactly the claim being made.", "slots": {"title": "str, 3-6 words", "items": "list of 5-7 objects: {name: the body or scheme, ref: the registration number or year, note: 2-5 words}"}}-->
+<section data-sc-act="pan" data-sc-span="2.2">
+  <div data-sc-stage class="b-shelf-stage">
+    <div class="b-shelf-head bleed"><h2>{{title}}</h2></div>
+    <div class="b-shelf-vp">
+      <div class="b-shelf-rail" data-sc-pan="0.35">
+        {{#items}}
+        <div class="b-shelf-card">
+          <div class="b-shelf-name">{{name}}</div>
+          <div class="b-shelf-ref">{{ref}}</div>
+          <div class="fine">{{note}}</div>
+        </div>
+        {{/items}}
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+.b-shelf-stage{display:flex;flex-direction:column;justify-content:center;gap:5vh}
+/* Declared a bleed, not a panel: the heading sits on the open backdrop and
+   only the cards are cards, so it needs the shadow a headline over a live
+   scene needs. */
+.b-shelf-head{padding-inline:5vw}
+.b-shelf-head h2{text-shadow:0 2px 34px rgba(0,0,0,.5)}
+/* The rail needs a clipping viewport of its own: the engine translates it by
+   (scrollWidth - viewport), which puts the tail off the right edge, and
+   without a clip that becomes horizontal scroll on the whole page. */
+.b-shelf-vp{overflow:clip}
+.b-shelf-rail{display:flex;gap:20px;padding-inline:5vw;width:max-content}
+.b-shelf-card{width:290px;flex:0 0 auto;border:1px solid var(--line);
+  border-radius:calc(var(--radius) * .8);padding:26px 22px;background:var(--panel);
+  display:flex;flex-direction:column;gap:9px}
+.b-shelf-name{font-family:var(--font-display);font-size:22px;line-height:1.2}
+.b-shelf-ref{font-variant-numeric:tabular-nums;letter-spacing:.08em;
+  color:var(--accent-panel);font-weight:700}
+</style>

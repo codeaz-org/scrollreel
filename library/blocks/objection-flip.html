@@ -1,0 +1,33 @@
+<!--{"kind": "panel", "device": "reveal", "what": "The thing the customer is actually worried about, printed large, then wiped away to the answer in its place. Naming the objection in the customer's own words is what makes the answer land; a page that only lists strengths reads as a page that has not met anyone.", "slots": {"worry": "str, 6-12 words, the objection AS THE CUSTOMER WOULD SAY IT, not softened", "answer_head": "str, 3-6 words", "answer": "str, two sentences answering it with something checkable"}}-->
+<section data-sc-act="pin" data-sc-span="2.2">
+  <div data-sc-stage class="b-flip-stage">
+    <div class="panel b-flip">
+      <p class="b-flip-worry">{{worry}}</p>
+      <div class="b-flip-answer" data-sc-reveal="up" data-sc-reveal-at="0.44 0.82">
+        <h2>{{answer_head}}</h2>
+        <p>{{answer}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* Both halves occupy one grid cell and the swap is a crossfade, not a cover:
+   the panel here is translucent by design, so an answer that tried to hide the
+   worry behind its own background painted a second layer of panel over the
+   first and read as a redaction bar. The worry fades on the act's own progress
+   instead, finishing before the wipe is halfway.
+
+   Reveal timing and fade timing are written to overlap by about 6% of the act.
+   Butt them exactly and the cell is briefly empty, which reads as a bug. */
+.b-flip-stage{display:flex;align-items:center}
+.b-flip-stage > .panel{width:100%}
+.b-flip{display:grid;min-height:32vh;align-items:center}
+.b-flip-worry,.b-flip-answer{grid-area:1/1}
+.b-flip-worry{font-family:var(--font-display);font-size:clamp(28px,3.6vw,50px);
+  line-height:1.14;max-width:20ch;margin:0;color:var(--muted);
+  opacity:calc(1 - clamp(0, (var(--sc-p, 0) - 0.3) * 5.5, 1))}
+.b-flip-worry::before{content:"\201C"}
+.b-flip-worry::after{content:"\201D"}
+.b-flip-answer{display:flex;flex-direction:column;gap:16px;justify-content:center}
+.b-flip-answer p{max-width:52ch}
+</style>

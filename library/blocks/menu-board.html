@@ -1,0 +1,35 @@
+<!--{"kind": "panel", "device": "flow", "what": "The actual list, with actual prices, set like a board on a wall and animated by nothing at all. A page needs one screen that just answers the question, and putting it next to the loud sections is what makes the loud ones read as deliberate.", "slots": {"title": "str, 2-5 words", "note": "str, one short line, e.g. what changes daily", "groups": "list of exactly 2 objects: {head: 1-3 words, rows: list of 3-5 objects {name: the item, price: e.g. '4.20'}}"}}-->
+<section>
+  <div class="panel b-menu" data-sc-in>
+    <div class="b-menu-head">
+      <h2>{{title}}</h2>
+      <p class="fine">{{note}}</p>
+    </div>
+    <div class="b-menu-cols">
+      <div class="b-menu-col">
+        <h3 class="b-menu-group">{{groups.0.head}}</h3>
+        {{#groups.0.rows}}<div class="b-menu-row"><span>{{name}}</span><b>{{price}}</b></div>{{/groups.0.rows}}
+      </div>
+      <div class="b-menu-col">
+        <h3 class="b-menu-group">{{groups.1.head}}</h3>
+        {{#groups.1.rows}}<div class="b-menu-row"><span>{{name}}</span><b>{{price}}</b></div>{{/groups.1.rows}}
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* Leader dots are the row's ::after, which is the last flex item by default
+   and so landed to the RIGHT of the price. flex order puts it back between
+   the name and the figure, which is the only place a leader means anything. */
+.b-menu-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:16px}
+.b-menu-cols{display:grid;grid-template-columns:1fr 1fr;gap:38px;margin-top:24px}
+.b-menu-group{font-size:15px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent-panel);margin-bottom:12px}
+.b-menu-row{display:flex;align-items:baseline;gap:10px;padding:9px 0}
+.b-menu-row span{flex:0 1 auto;order:0}
+.b-menu-row::after{content:"";order:1;flex:1 1 auto;min-width:26px;height:1px;align-self:flex-end;margin-bottom:5px;
+  background:repeating-linear-gradient(to right,var(--line) 0 2px,transparent 2px 6px)}
+.b-menu-row b{order:2;font-variant-numeric:tabular-nums;font-weight:600}
+@media(max-width:700px){.b-menu-cols{grid-template-columns:1fr;gap:26px}}
+</style>

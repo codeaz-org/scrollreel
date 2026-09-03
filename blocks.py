@@ -29,7 +29,7 @@ DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "library", "block
 _HEADER = re.compile(r"^\s*<!--(\{.*?\})-->", re.S)
 _STYLE = re.compile(r"<style>(.*?)</style>", re.S)
 _SCRIPT = re.compile(r"<script>(.*?)</script>", re.S)
-_LOOP = re.compile(r"\{\{#(\w+)\}\}(.*?)\{\{/\1\}\}", re.S)
+_LOOP = re.compile(r"\{\{#([\w.]+)\}\}(.*?)\{\{/\1\}\}", re.S)
 _FIELD = re.compile(r"\{\{(\.|[\w.]+)\}\}")
 
 
@@ -101,8 +101,10 @@ def _fill(template, data):
     dependency list for eight substitutions and one repeat.
     """
     def loop(m):
+        # Dotted, so a block can loop over a nested list: menu-board has two
+        # named groups each holding its own rows, which a flat key cannot reach.
         key, inner = m.group(1), m.group(2)
-        items = data.get(key) or []
+        items = _lookup(data, key) or []
         if not isinstance(items, list):
             return ""
         parts = []
@@ -150,6 +152,11 @@ def validate(plan, blocks=None):
         for slot in (blocks[name].get("slots") or {}):
             if slot not in data or data[slot] in ("", None, []):
                 problems.append(f"item {i} ({name}): missing slot {slot!r}")
+    # The engine tracks ONE background wash at a time: with two drift acts on a
+    # page the second overwrites the first mid-scroll and both look broken.
+    drifting = [n for n in names if n in blocks and blocks[n].get("device") == "drift"]
+    if len(drifting) > 1:
+        problems.append(f"two drift blocks ({', '.join(drifting)}); the page has one wash")
     # Texture blocks earn their place once. A second marquee before the
     # contact block added nothing to the dental build.
     for once in ("marquee-strip", "quote-bleed"):

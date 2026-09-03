@@ -1,0 +1,18 @@
+<!--{"kind": "bleed", "device": "flow", "what": "A short note in the owner's voice, signed. No card, no photograph, no heading. The only first-person moment on the page, which is why it works and why there can only be one.", "slots": {"note": "str, 25-45 words, first person, plain, ONE specific detail only this owner would mention", "name": "str, the owner's first name and surname", "role": "str, 2-5 words, e.g. 'Second generation, since 1998'"}}-->
+<section>
+  <div class="bleed b-note" data-sc-in>
+    <p class="b-note-body">{{note}}</p>
+    <div class="b-note-sig">
+      <span class="b-note-name">{{name}}</span>
+      <span class="fine">{{role}}</span>
+    </div>
+  </div>
+</section>
+<style>
+.b-note{max-width:34ch;margin-inline:auto;padding:9vh 0;text-align:left}
+.b-note-body{font-family:var(--font-display);font-size:clamp(23px,2.5vw,32px);
+  line-height:1.45;color:var(--ink);margin:0}
+.b-note-sig{margin-top:26px;display:flex;flex-direction:column;gap:4px}
+.b-note-name{font-family:var(--font-display);font-size:24px;font-style:italic;
+  color:var(--accent)}
+</style>

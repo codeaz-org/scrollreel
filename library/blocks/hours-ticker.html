@@ -1,0 +1,29 @@
+<!--{"kind": "bleed", "device": "marquee", "what": "A thin band that runs the week across the screen, the current day marked. Not decoration: on a trade where the answer is 'are you open right now', this is the whole page in one line.", "slots": {"days": "list of exactly 7 objects: {day: three letters, time: e.g. '08-17' or 'Closed', open: 'yes' or 'no'}"}}-->
+<section>
+  <div class="bleed b-hours">
+    <div class="b-hours-track">
+      <div class="b-hours-run">
+        {{#days}}<span class="b-hours-item b-hours-{{open}}"><b>{{day}}</b>{{time}}</span>{{/days}}
+      </div>
+      <div class="b-hours-run" aria-hidden="true">
+        {{#days}}<span class="b-hours-item b-hours-{{open}}"><b>{{day}}</b>{{time}}</span>{{/days}}
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* Two identical runs side by side and a translate of exactly -50% of the pair:
+   the seam lands on a duplicate, so the loop has no jump to hide. */
+.b-hours{border-block:1px solid var(--line);padding:16px 0;overflow:hidden;
+  margin-inline:calc(50% - 50vw);width:100vw}
+.b-hours-track{display:flex;width:max-content;animation:b-hours-roll 26s linear infinite}
+.b-hours-run{display:flex;gap:34px;padding-right:34px}
+.b-hours-item{display:inline-flex;align-items:baseline;gap:10px;white-space:nowrap;
+  font-size:calc(var(--body-size) * .95);color:var(--muted)}
+.b-hours-item b{font-family:var(--font-display);letter-spacing:.16em;text-transform:uppercase;
+  font-size:calc(var(--body-size) * .8);color:var(--ink)}
+.b-hours-no{opacity:.42}
+.b-hours-no b{text-decoration:line-through}
+@keyframes b-hours-roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.b-hours-track{animation:none}}
+</style>

@@ -1,0 +1,30 @@
+<!--{"kind": "panel", "device": "parallax", "what": "Three claims on three cards moving at three different rates, so the group has depth without a single shadow. The cheapest premium signal on a page is differential movement, and it costs one attribute per card.", "slots": {"title": "str, 3-6 words", "cards": "list of exactly 3 objects: {head: 2-4 words, body: one or two short sentences}"}}-->
+<section data-sc-act="flow">
+  <div class="panel stack b-depth">
+    <h2>{{title}}</h2>
+    <div class="b-depth-row">
+      <div class="b-depth-card" data-sc-parallax="0.16">
+        <h3>{{cards.0.head}}</h3><p>{{cards.0.body}}</p>
+      </div>
+      <div class="b-depth-card b-depth-lift" data-sc-parallax="-0.1">
+        <h3>{{cards.1.head}}</h3><p>{{cards.1.body}}</p>
+      </div>
+      <div class="b-depth-card" data-sc-parallax="0.22">
+        <h3>{{cards.2.head}}</h3><p>{{cards.2.body}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* Rates are written per card rather than looped: the middle one moves against
+   the other two, which is what reads as depth. Three cards all drifting the
+   same way is just a slow section. */
+.b-depth-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start;
+  padding-block:5vh}
+.b-depth-card{min-width:0;border:1px solid var(--line);border-radius:calc(var(--radius) * .8);
+  padding:26px 22px;display:flex;flex-direction:column;gap:11px;
+  background:color-mix(in oklab, var(--ink) 5%, transparent)}
+.b-depth-card h3{font-size:23px}
+.b-depth-lift{border-color:var(--accent-panel)}
+@media(max-width:820px){.b-depth-row{grid-template-columns:1fr;gap:14px}}
+</style>

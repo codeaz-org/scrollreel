@@ -1,0 +1,24 @@
+<!--{"kind": "bleed", "device": "drift", "what": "A wash that arrives from one edge while two lines sit against it, the second answering the first. Use it where the page changes subject: it marks the seam without a heading saying 'our services'.", "slots": {"before": "str, 4-9 words, what things were like", "after": "str, 4-9 words, what changed. Must answer the first line, not repeat it", "ground": "a hex colour the wash carries, dark enough for white type, e.g. '#0d1b24'"}}-->
+<section data-sc-act="flow" data-sc-drift="{{ground}}" class="b-wash-act">
+  <div class="bleed b-wash">
+    <p class="b-wash-a" data-sc-in>{{before}}</p>
+    <p class="b-wash-b" data-sc-in>{{after}}</p>
+  </div>
+</section>
+<style>
+/* Same source as drift-band -- the engine's --sc-canvas -- shaped differently:
+   a diagonal that enters from the left instead of a horizontal band, so a page
+   using both does not read as the same device twice. Only one drift act should
+   be on a page: the engine tracks one wash at a time and two of them fight. */
+.b-wash-act{position:relative;isolation:isolate}
+.b-wash-act::before{content:"";position:absolute;inset:-4vh -50vw;z-index:-1;
+  background:linear-gradient(104deg, var(--sc-canvas, transparent) 0%,
+    var(--sc-canvas, transparent) 46%, transparent 82%)}
+.b-wash{padding:13vh 0;display:flex;flex-direction:column;gap:16px;max-width:min(26ch, 88%)}
+.b-wash-a,.b-wash-b{font-family:var(--font-display);font-size:clamp(28px,3.4vw,50px);
+  line-height:1.08;letter-spacing:var(--track);margin:0}
+.b-wash-a{color:color-mix(in oklab, #f6f3ee 52%, transparent)}
+.b-wash-b{color:#f6f3ee;padding-left:1.6em;position:relative;transition-delay:.22s}
+.b-wash-b::before{content:"";position:absolute;left:0;top:.62em;width:1.1em;height:2px;
+  background:var(--accent)}
+</style>

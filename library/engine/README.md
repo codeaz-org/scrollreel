@@ -42,3 +42,25 @@ Cue rules worth remembering, from references/devices.md:
   lit through its whole un-pin slide and overlaps the section after it.
 - Minimum useful pin span is ~1.2. Below that, progress jumps 0 to 1 between two
   scroll notches and everything snaps.
+
+Three traps this project has now hit, each of which produced a page that looked
+fine and had a dead device in it:
+
+- **`data-sc-parallax` only works inside an act.** The engine collects it with
+  `act.el.querySelectorAll`, so a section without `data-sc-act` registers
+  nothing. There is no error; the layers simply move with the page. Add
+  `data-sc-act="flow"` to the section, which costs nothing else.
+- **`data-sc-drift` writes `--sc-canvas` on the root** and expects the page
+  ground to use it. Ours is a WebGL backdrop pinned behind everything with
+  `background: transparent !important`, so the root never repaints and the
+  device does nothing at all. A drift block has to paint `var(--sc-canvas)`
+  itself, and only one of them can be on a page: the engine tracks one wash.
+- **`rampOut` defaults to 0.3, not 0.** A cue written `"0.1 1"` therefore starts
+  fading at 79% of the act and is invisible at the end of it. Fine mid-page,
+  wrong on a closer: the last screen of the video empties as the reader reaches
+  it. Pass the fourth value explicitly when the cue is meant to hold: `"0.1 1
+  0.3 0"`.
+
+`data-sc-reveal` takes its window from `data-sc-reveal-at="0.3 0.75"`. There is
+no `-from` / `-to` pair; a wrong attribute name silently gets the `0 0.5`
+default.

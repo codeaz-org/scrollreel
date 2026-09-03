@@ -1,0 +1,38 @@
+<!--{"kind": "panel", "device": "count", "what": "How many jobs are left in the diary this month, counted up as you arrive at it, with what is already booked listed beside it. Scarcity only works if it is checkable, so the number is paired with the bookings that explain it.", "slots": {"month": "str, the month name", "left": "whole number, how many slots remain, 2-9", "title": "str, 3-6 words", "booked": "list of exactly 3 objects: {when: e.g. 'Week of the 9th', what: 3-6 words}", "foot": "str, one line on what happens when it fills"}}-->
+<section>
+  <div class="panel b-slots" data-sc-in>
+    <div class="b-slots-grid">
+      <div class="b-slots-fig">
+        <div class="b-slots-num" data-sc-count="0 {{left}}" data-sc-count-ms="1600">0</div>
+        <div class="b-slots-cap fine">slots left in {{month}}</div>
+      </div>
+      <div class="b-slots-side">
+        <h2>{{title}}</h2>
+        <ul class="b-slots-list">
+          {{#booked}}<li><span class="b-slots-when fine">{{when}}</span>{{what}}</li>{{/booked}}
+        </ul>
+        <p class="fine">{{foot}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* data-sc-count outside an act ticks once on entry over data-sc-count-ms. That
+   is the right behaviour here: a number the reader can scrub back and forth is
+   a toy, and this one is a claim. */
+.b-slots-grid{display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:center}
+.b-slots-fig{text-align:center;border-right:1px solid var(--line);padding-right:44px}
+.b-slots-num{font-family:var(--font-display);font-size:clamp(74px,10vw,150px);line-height:.9;
+  color:var(--accent-panel);font-variant-numeric:tabular-nums}
+/* Wrapped rather than left on one line: the figure column is auto-sized and
+   will shrink under a long month name, which clipped the caption off the left
+   edge of the card. */
+.b-slots-cap{display:block;margin:10px auto 0;max-width:11ch;line-height:1.35;
+  letter-spacing:.1em;text-transform:uppercase}
+.b-slots-list{list-style:none;margin:16px 0;padding:0}
+.b-slots-list li{display:flex;flex-direction:column;gap:2px;padding:12px 0;
+  border-bottom:1px solid var(--line);font-size:calc(var(--body-size) * .96)}
+.b-slots-when{letter-spacing:.12em;text-transform:uppercase;color:var(--accent-panel)}
+@media(max-width:760px){.b-slots-grid{grid-template-columns:1fr;gap:26px}
+  .b-slots-fig{border-right:0;border-bottom:1px solid var(--line);padding:0 0 22px}}
+</style>
