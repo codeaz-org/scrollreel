@@ -30,6 +30,7 @@ import images
 import page_builder
 import record
 import refine
+import scenes
 
 OUT = "out"
 STATE = "state.json"
@@ -100,11 +101,35 @@ def main():
     os.makedirs(work, exist_ok=True)
 
     photos = images.fetch(business["photo_query"], work)
-    built = page_builder.build(business, component, photos)
+
+    # The scene is copied in, never generated. It is a finished WebGL file and
+    # the reason anyone stops scrolling; a model asked to "rebuild the idea in
+    # CSS" returns a fade-in, which is what the first dozen builds were.
+    used_scenes = {b.get("scene") for b in state["built"]}
+    scene = scenes.pick(business["trade"], used=used_scenes)
+    if scene:
+        with open(os.path.join(work, "scene.html"), "w") as f:
+            f.write(scene["html"])
+        print(f"[main] scene: {scene['name']} "
+              f"({'fitted' if scene['fitted'] else 'random'}, {len(scene['html']) // 1000}KB)")
+    else:
+        print("[main] no 3D scene available; the page will be flat", file=sys.stderr)
+
+    built = page_builder.build(business, component, photos, scene=scene)
+
+    # Injected rather than requested: the model does not have to remember to
+    # drive the scene, and a build that forgets would ship a frozen 3D layer.
+    html = built["html"]
+    if scene and "scrollreel-parent-bridge" not in html:
+        if "</body>" in html.lower():
+            html = re.sub(r"</body>", scenes.PARENT_BRIDGE + "</body>", html,
+                          count=1, flags=re.I)
+        else:
+            html += scenes.PARENT_BRIDGE
 
     page_path = os.path.join(work, "page.html")
     with open(page_path, "w") as f:
-        f.write(built["html"])
+        f.write(html)
     print(f"[main] site saved to {page_path}")
 
     frames_dir, n = record.record(f"file://{os.path.abspath(page_path)}", work,
@@ -115,8 +140,11 @@ def main():
     # and forgettable. The re-record costs ~40s and is worth it.
     refined = False
     if not args.no_refine:
-        improved, refined = refine.refine(built["html"], frames_dir, business)
+        improved, refined = refine.refine(html, frames_dir, business)
         if refined:
+            if scene and "scrollreel-parent-bridge" not in improved:
+                improved = re.sub(r"</body>", scenes.PARENT_BRIDGE + "</body>",
+                                  improved, count=1, flags=re.I)
             with open(page_path, "w") as f:
                 f.write(improved)
             frames_dir, n = record.record(f"file://{os.path.abspath(page_path)}", work,
@@ -140,6 +168,8 @@ def main():
     meta = {
         "business": business["name"], "trade": business["trade"], "city": business["city"],
         "component_id": component["id"], "component": component["name"],
+        "scene": (scene or {}).get("name"),
+        "scene_source": (scene or {}).get("source_url"),
         "library": component["library"], "license": component["license"],
         "source_url": component["source_url"],
         "photos": [p.get("credit") for p in photos],

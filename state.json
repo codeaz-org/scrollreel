@@ -1,51 +1,32 @@
 {
   "built": [
     {
-      "business": "Halden Auto",
-      "trade": "auto repair shop",
-      "city": "Cluj",
-      "component_id": "shadcn-ui/ui:scroll-area",
-      "component": "scroll-area",
-      "library": "shadcn/ui",
-      "license": "MIT",
-      "source_url": "https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/new-york-v4/ui/scroll-area.tsx",
-      "photos": [
-        "Photo by Gratisography on Pexels",
-        "Photo by Renee Razumov on Pexels",
-        "Photo by Jose Ricardo Barraza Morachis on Pexels",
-        "Photo by Artem Podrez on Pexels",
-        "Photo by Sergey  Meshkov on Pexels"
-      ],
-      "model": "gemini-3.5-flash",
-      "verify_problems": [],
-      "page": "out/halden-auto/page.html",
-      "video": "out/halden-auto/video.mp4",
-      "frames": 405,
-      "ts": "2026-09-03T09:16:42"
-    },
-    {
-      "business": "Kestrel & Crumb",
-      "trade": "artisan bakery",
-      "city": "Utrecht",
-      "component_id": "magicuidesign/magicui:comic-text",
-      "component": "comic-text",
+      "business": "Norwood Roofworks",
+      "trade": "roofing contractor",
+      "city": "Ghent",
+      "component_id": "magicuidesign/magicui:animated-grid-pattern",
+      "component": "animated-grid-pattern",
+      "scene": "constellation-field",
+      "scene_source": "https://github.com/MengTo/threeui/blob/main/src/shaders/neuform-isolated/sources/constellation-field.html",
       "library": "Magic UI",
       "license": "MIT",
-      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/comic-text.tsx",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/animated-grid-pattern.tsx",
       "photos": [
-        "Photo by Boys in Bristol Photography on Pexels",
-        "Photo by Yasin Onu\u015f on Pexels",
-        "Photo by ready made on Pexels",
-        "Photo by Furkan Tumer on Pexels",
-        "Photo by Yasin Onu\u015f on Pexels"
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Gundula Vogel on Pexels",
+        "Photo by Rajesh S  Balouria on Pexels",
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Cl\u00e9ment Proust on Pexels"
       ],
-      "model": "gemini-3-flash-preview",
-      "verify_problems": [],
-      "refined": true,
-      "page": "out/kestrel-crumb/page.html",
-      "video": "out/kestrel-crumb/video.mp4",
+      "model": "gemini-3.7-flash",
+      "verify_problems": [
+        "banned marketing phrase: 'seamless'"
+      ],
+      "refined": false,
+      "page": "out/norwood-roofworks/page.html",
+      "video": "out/norwood-roofworks/video.mp4",
       "frames": 405,
-      "ts": "2026-09-03T09:57:27"
+      "ts": "2026-09-03T10:33:41"
     }
   ]
 }

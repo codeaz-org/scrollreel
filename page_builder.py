@@ -89,11 +89,27 @@ hours, and an obvious way to make contact. Invent concrete, plausible detail --
 prices, timescales, street names, a founding year. Vague copy is what makes
 these look fake.
 
-THE COMPONENT
-You are given a real MIT-licensed UI component. Rebuild its IDEA in vanilla
-HTML/CSS/JS and use it for this business's one memorable moment, described
-below. It should feel like the site was designed around it -- not like a widget
-dropped into a template. Do not import the component or paste its React.
+THE 3D SCENE -- THE MOST IMPORTANT PART OF THE PAGE
+A finished WebGL scene sits next to your file as scene.html. Do NOT rebuild it,
+describe it, or approximate it in CSS. Embed it exactly like this, as the first
+element in <body>:
+
+    <iframe src="scene.html" id="scene" title="" tabindex="-1" scrolling="no"></iframe>
+
+and style it as a FIXED, full-viewport layer behind everything:
+
+    #scene{position:fixed;inset:0;width:100vw;height:100vh;border:0;
+           z-index:0;pointer-events:none}
+
+Every other element sits above it with position:relative and z-index:1+. The
+scene is real 3D and it is the reason someone stops scrolling, so:
+- The first viewport must be mostly scene. Do not bury it under a solid hero.
+- Keep it visible through the page. Sections that need reading get their own
+  translucent panel (a dark scrim, backdrop-filter: blur(12px), a rounded card)
+  rather than a full-bleed opaque background that hides the 3D entirely.
+- Drive the CONTENT from scroll -- panels rising, pinning, parallax, text
+  assembling -- so the 3D behind and the content above move at different rates.
+- Never put an opaque background on <body> or <html>: it would cover the scene.
 
 CRAFT
 - One page grammar, committed to: filmic one-shot, chaptered editorial,
@@ -113,8 +129,11 @@ Visual tone: {tone}
 Photos available on disk (use these paths exactly, all of them):
 {photos}
 
-Component to build the memorable moment around: {component_name} (from {library}, {license})
-Its source, as design reference only:
+The 3D scene already sitting beside your file, to embed as described:
+  scene.html -- "{scene_name}" (ThreeUI, MIT)
+
+A UI component whose IDEA you may borrow for one smaller moment elsewhere on
+the page (rebuilt in vanilla, not imported): {component_name} ({library}, {license})
 ```tsx
 {code}
 ```
@@ -201,10 +220,14 @@ def verify(html):
             problems.append(f"banned marketing phrase: {banned!r}")
     if re.search(r"<img[^>]+src=[\"']https?://", html):
         problems.append("loads a remote image, which may not paint during capture")
+    if "scene.html" not in html:
+        problems.append("does not embed scene.html -- the 3D scene is the whole point")
+    elif not re.search(r"position\s*:\s*fixed", html):
+        problems.append("scene.html is embedded but not as a fixed background layer")
     return problems
 
 
-def build(business, component, photos, api_key=None, models=None):
+def build(business, component, photos, scene=None, api_key=None, models=None):
     api_key = api_key or os.environ.get("GEMINI_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set")
@@ -218,7 +241,8 @@ def build(business, component, photos, api_key=None, models=None):
         services=", ".join(business["services"]), moment=business["moment"],
         tone=business["tone"], photos=photo_lines,
         component_name=component["name"], library=component["library"],
-        license=component["license"], code=component["code"][:12000],
+        license=component["license"], code=component["code"][:8000],
+        scene_name=(scene or {}).get("name", "none"),
     )
     brief = scrollcraft_brief()
     system = SYSTEM + ("\n\n" + "=" * 60 + "\nThe design standard you are held to "
