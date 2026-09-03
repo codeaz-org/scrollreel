@@ -1,0 +1,29 @@
+<!--{"kind": "panel", "device": "draw", "what": "Accreditations and registrations, set like an engraved certificate. The one block that answers 'are they allowed to do this', which matters more than any adjective for regulated trades.", "slots": {"title": "str, 3-6 words", "body": "str, one sentence", "items": "list of 3-5 objects: {name: the scheme or standard, ref: a membership number or a year}"}}-->
+<section>
+  <div class="panel b-cert" data-sc-in>
+    <div class="b-cert-frame">
+      <div class="b-cert-inner">
+        <h2>{{title}}</h2>
+        <p>{{body}}</p>
+        <dl class="b-cert-list">
+          {{#items}}<div class="b-cert-row"><dt>{{name}}</dt><dd>{{ref}}</dd></div>{{/items}}
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+.b-cert-frame{border:1px solid var(--line);padding:10px;
+  border-radius:calc(var(--radius) * .5)}
+.b-cert-inner{border:1px solid var(--line);padding:34px 36px;
+  border-radius:calc(var(--radius) * .35);
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path 1.3s var(--sc-ease-out,cubic-bezier(.16,.84,.44,1))}
+.sc-in .b-cert-inner{clip-path:inset(0 0 0 0)}
+.b-cert-list{margin:22px 0 0;display:grid;gap:0}
+.b-cert-row{display:flex;justify-content:space-between;gap:18px;padding:13px 0;
+  border-bottom:1px solid var(--line)}
+.b-cert-row dt{font-weight:600;font-size:19px}
+.b-cert-row dd{margin:0;color:var(--muted);font-variant-numeric:tabular-nums;
+  letter-spacing:.06em}
+</style>

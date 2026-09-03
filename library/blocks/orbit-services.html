@@ -1,0 +1,40 @@
+<!--{"kind": "panel", "device": "draw", "what": "The services arranged around the thing they all serve, orbiting slowly. Shows a set as a system rather than as a list, and reads well for trades whose work is one machine or one building.", "slots": {"centre": "str, 1-3 words at the middle, e.g. 'Your roof'", "items": "list of 5-7 short service names"}}-->
+<section>
+  <div class="panel b-orbit" data-sc-in>
+    <div class="b-orbit-stage">
+      <span class="b-orbit-ring b-orbit-ring-a"></span>
+      <span class="b-orbit-ring b-orbit-ring-b"></span>
+      <div class="b-orbit-centre">{{centre}}</div>
+      <div class="b-orbit-spin">
+        {{#items}}<span class="b-orbit-item"><span class="b-orbit-label">{{.}}</span></span>{{/items}}
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* Each chip is placed by rotating it out on a radius, then counter-rotated so
+   the words stay upright while the ring turns. */
+.b-orbit-stage{position:relative;height:440px;display:grid;place-items:center}
+.b-orbit-ring{position:absolute;border:1px dashed var(--line);border-radius:50%;
+  opacity:0;transform:scale(.7);transition:opacity .9s ease,transform 1.1s var(--sc-ease-out,ease)}
+.b-orbit-ring-a{width:290px;height:290px}
+.b-orbit-ring-b{width:410px;height:410px}
+.sc-in .b-orbit-ring{opacity:1;transform:scale(1)}
+.sc-in .b-orbit-ring-b{transition-delay:.15s}
+.b-orbit-centre{position:absolute;font-family:var(--font-display);font-size:26px;font-weight:700;
+  max-width:8ch;text-align:center;line-height:1.1}
+.b-orbit-spin{position:absolute;inset:0;animation:bOrbit 44s linear infinite}
+.b-orbit-item{position:absolute;top:50%;left:50%;width:0;height:0}
+.b-orbit-label{position:absolute;transform:translate(-50%,-50%) rotate(0deg);
+  white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:9px 16px;
+  font-size:16px;background:var(--panel);animation:bOrbitCounter 44s linear infinite}
+.b-orbit-item:nth-child(1) .b-orbit-label{left:0;top:-205px}
+.b-orbit-item:nth-child(2) .b-orbit-label{left:176px;top:-104px}
+.b-orbit-item:nth-child(3) .b-orbit-label{left:176px;top:104px}
+.b-orbit-item:nth-child(4) .b-orbit-label{left:0;top:205px}
+.b-orbit-item:nth-child(5) .b-orbit-label{left:-176px;top:104px}
+.b-orbit-item:nth-child(6) .b-orbit-label{left:-176px;top:-104px}
+.b-orbit-item:nth-child(7) .b-orbit-label{left:-145px;top:0}
+@keyframes bOrbit{to{transform:rotate(360deg)}}
+@keyframes bOrbitCounter{to{transform:translate(-50%,-50%) rotate(-360deg)}}
+</style>

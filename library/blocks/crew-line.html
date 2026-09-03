@@ -1,0 +1,30 @@
+<!--{"kind": "panel", "device": "stagger", "what": "The people who turn up, with their trade and their years. A named crew is the difference between a company and a website, and small businesses win on exactly that.", "slots": {"title": "str, 3-6 words", "items": "list of 3-5 objects: {initials: two letters, name: first name and surname, role: their trade, years: e.g. '18 yrs'}"}}-->
+<section>
+  <div class="panel stack b-crew">
+    <h2>{{title}}</h2>
+    <div class="b-crew-list" data-sc-in data-sc-stagger="100">
+      {{#items}}
+      <div class="b-crew-row">
+        <span class="b-crew-av">{{initials}}</span>
+        <span class="b-crew-name">{{name}}</span>
+        <span class="b-crew-role fine">{{role}}</span>
+        <span class="b-crew-yrs">{{years}}</span>
+      </div>
+      {{/items}}
+    </div>
+  </div>
+</section>
+<style>
+/* Initials, not stock headshots: an invented face on a concept site is the
+   one thing that reads as a lie rather than as a placeholder. */
+.b-crew-list{margin-top:8px;border-top:1px solid var(--line)}
+.b-crew-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;align-items:center;
+  padding:16px 0;border-bottom:1px solid var(--line)}
+.b-crew-av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--line);font-weight:700;font-size:16px;letter-spacing:.04em;
+  color:var(--accent-panel)}
+.b-crew-name{font-size:21px;font-weight:600}
+.b-crew-yrs{font-variant-numeric:tabular-nums;color:var(--muted)}
+@media(max-width:760px){.b-crew-row{grid-template-columns:auto 1fr auto}
+  .b-crew-role{grid-column:2;grid-row:2}}
+</style>

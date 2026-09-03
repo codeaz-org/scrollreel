@@ -126,10 +126,18 @@ def validate(plan, blocks=None):
     if not isinstance(plan, list) or not plan:
         return ["plan is not a non-empty list"]
     names = [p.get("block") for p in plan if isinstance(p, dict)]
-    if names[:1] != ["hero-statement"]:
-        problems.append("first block must be hero-statement")
-    if "contact-hours" not in names:
-        problems.append("no contact-hours block: a business site without contact details is a mock")
+    # Openers and closers are a ROLE, not one named block: there is more than
+    # one way to open a page, and hard-coding hero-statement meant a plan that
+    # opened with word-rotate-hero was rejected as malformed.
+    openers = {n for n, b in blocks.items() if b.get("role") == "opener"}
+    closers = {n for n, b in blocks.items() if b.get("role") == "closer"}
+    if not names or names[0] not in openers:
+        problems.append(f"first block must be an opener ({', '.join(sorted(openers))})")
+    if len(openers & set(names)) > 1:
+        problems.append("more than one opener: a page has one first screen")
+    if not (closers & set(names)):
+        problems.append(f"no closing block ({', '.join(sorted(closers))}): a business "
+                        f"site without contact details is a mock")
     for i, item in enumerate(plan):
         if not isinstance(item, dict):
             problems.append(f"item {i} is not an object")

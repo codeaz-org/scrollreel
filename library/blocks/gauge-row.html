@@ -1,0 +1,36 @@
+<!--{"kind": "panel", "device": "count", "what": "Three dial gauges reading out capacity, response time or load. Reads as instrumentation rather than marketing, so it suits trades that measure things.", "slots": {"title": "str, 3-6 words", "items": "list of exactly 3 objects: {value: whole number 0-100, unit: short e.g. '%' or 'min', label: 2-4 words, note: one short line}"}}-->
+<section>
+  <div class="panel stack b-gauge">
+    <h2>{{title}}</h2>
+    <div class="b-gauge-row" data-sc-in data-sc-stagger="110">
+      {{#items}}
+      <div class="b-gauge-cell" style="--v:{{value}}">
+        <svg class="b-gauge-dial" viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="b-gauge-track" cx="50" cy="50" r="42"></circle>
+          <circle class="b-gauge-arc" cx="50" cy="50" r="42"></circle>
+        </svg>
+        <div class="b-gauge-v"><span data-sc-count="0 {{value}}">0</span>{{unit}}</div>
+        <div class="b-gauge-l">{{label}}</div>
+        <div class="fine">{{note}}</div>
+      </div>
+      {{/items}}
+    </div>
+  </div>
+</section>
+<style>
+/* The arc length is the same number the counter is counting to, so the dial
+   and the digits cannot disagree. */
+.b-gauge-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:6px}
+.b-gauge-cell{position:relative;text-align:center;display:flex;flex-direction:column;gap:4px;
+  align-items:center}
+.b-gauge-dial{width:132px;height:132px;transform:rotate(-90deg)}
+.b-gauge-track{fill:none;stroke:var(--line);stroke-width:7}
+.b-gauge-arc{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;
+  stroke-dasharray:264;stroke-dashoffset:264;
+  transition:stroke-dashoffset 1.4s var(--sc-ease-out,cubic-bezier(.16,.84,.44,1))}
+.sc-in .b-gauge-arc{stroke-dashoffset:calc(264 - 264 * var(--v) / 100)}
+.b-gauge-v{margin-top:-84px;margin-bottom:44px;font-family:var(--font-display);
+  font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent-panel)}
+.b-gauge-l{font-weight:600;font-size:19px}
+@media(max-width:760px){.b-gauge-row{grid-template-columns:1fr}}
+</style>

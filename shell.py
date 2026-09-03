@@ -79,6 +79,25 @@ MOUNT_JS = """
     return;
   }
   ScrollCraft.mount(document.body);
+
+  // Scroll velocity, published as --sc-vel (0..1, smoothed).
+  //
+  // The engine publishes --sc-p, --sc-mx/--sc-my and --sc-seg, but nothing for
+  // speed, and a band that runs faster the faster you scroll needs it. This is
+  // the skill's rule for bespoke behaviour: write it in the page, never in the
+  // engine. Without it, velocity-band silently fell back to a fixed-speed
+  // marquee -- working, but not the thing it claims to be.
+  var last = scrollY, vel = 0, root = document.documentElement;
+  addEventListener("scroll", function () {
+    var d = Math.abs(scrollY - last);
+    last = scrollY;
+    vel = Math.min(1, vel * 0.72 + (d / innerHeight) * 2.2);
+  }, { passive: true });
+  (function tick() {
+    vel *= 0.92;                       // settles when the reader stops
+    root.style.setProperty("--sc-vel", vel.toFixed(3));
+    requestAnimationFrame(tick);
+  })();
 })();
 </script>
 <style>

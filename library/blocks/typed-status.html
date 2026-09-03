@@ -1,0 +1,20 @@
+<!--{"kind": "bleed", "device": "kinetic", "what": "One line that types itself out, like a dispatch note. Short, current, and the only block that should ever mention today. Use once, near the top.", "slots": {"line": "str, 5-12 words, present tense, e.g. 'Two vans out on emergency calls in Leeds today'", "foot": "str, 2-5 words"}}-->
+<section>
+  <div class="bleed b-typed" data-sc-in>
+    <p class="b-typed-t"><span class="b-typed-i">{{line}}</span></p>
+    <div class="fine b-typed-f">{{foot}}</div>
+  </div>
+</section>
+<style>
+/* Typed with a steps() reveal on a clipped inline-block rather than by
+   appending characters: no per-frame DOM writes, and it cannot desync. */
+.b-typed-t{font-family:var(--font-display);font-size:clamp(24px,3vw,40px);margin:0;
+  letter-spacing:var(--track)}
+.b-typed-i{display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;
+  vertical-align:bottom;width:0;border-right:2px solid var(--accent)}
+.sc-in .b-typed-i{animation:bType 2.6s steps(42,end) forwards,bCaret .9s step-end infinite}
+@keyframes bType{to{width:100%}}
+@keyframes bCaret{50%{border-color:transparent}}
+.b-typed-f{margin-top:14px;letter-spacing:.2em;text-transform:uppercase}
+@media (prefers-reduced-motion: reduce){.sc-in .b-typed-i{animation:none;width:100%}}
+</style>

@@ -1,0 +1,27 @@
+<!--{"kind": "bleed", "device": "marquee", "what": "A band of words that runs faster the faster you scroll and drifts when you stop. Reads as energy without saying anything about energy. Texture between two heavy panels.", "slots": {"items": "list of 5-9 short phrases, 1-3 words each"}}-->
+<section class="b-vel-sec">
+  <div class="b-vel" aria-hidden="true">
+    <div class="b-vel-track">
+      {{#items}}<span class="b-vel-item">{{.}}</span><span class="b-vel-sep">/</span>{{/items}}
+      {{#items}}<span class="b-vel-item">{{.}}</span><span class="b-vel-sep">/</span>{{/items}}
+    </div>
+  </div>
+</section>
+<style>
+/* Velocity comes from the engine: --sc-vel is published on the document and
+   already smoothed, so the band accelerates with the wheel and settles when
+   the reader stops, without this block watching scroll itself. */
+.b-vel-sec{padding-block:5vh}
+.b-vel{overflow:hidden;padding:22px 0;border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.b-vel-track{display:flex;gap:20px;align-items:center;width:max-content;
+  animation:bVel 30s linear infinite;
+  animation-duration:calc(30s / (1 + var(--sc-vel, 0) * 6))}
+.b-vel-item{font-family:var(--font-display);font-size:clamp(26px,3.4vw,46px);
+  font-weight:700;white-space:nowrap;letter-spacing:var(--track)}
+.b-vel-sep{color:var(--accent);font-size:22px;opacity:.8}
+@keyframes bVel{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.b-vel-track{animation:none}}
+</style>

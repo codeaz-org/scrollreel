@@ -401,6 +401,87 @@ SKINS = {
                   ".panel{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}"
                   ".b-hero-cta{box-shadow:0 0 40px var(--accent)}"),
     },
+    "skeuo": {
+        "grammar": "live product surface",
+        "what": "Physical controls: inset panels, real bevels, a soft top light. "
+                "Borrowed from ThreeUI's skeuomorphic set. Things look pressable.",
+        "fonts": ["Manrope:wght@500;700;800", "Manrope:wght@400;500"],
+        "display": "'Manrope', system-ui, sans-serif",
+        "body": "'Manrope', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#e9edf2", "--muted": "#94a0ae",
+            "--panel": "rgba(24,28,34,.88)", "--line": "rgba(255,255,255,.13)",
+            "--radius": "16px", "--border": "1px",
+            "--measure": "1000px", "--pad": "32px 34px",
+            "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
+            "--body-size": "19px", "--track": "-.02em", "--case": "none",
+        },
+        "extra": (".panel{box-shadow:inset 0 1px 0 rgba(255,255,255,.10),"
+                  "inset 0 -1px 0 rgba(0,0,0,.5),0 18px 40px rgba(0,0,0,.45)}"
+                  ".b-hero-cta,.b-contact-cta{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),"
+                  "0 6px 0 rgba(0,0,0,.35)}"),
+    },
+    "halftone": {
+        "grammar": "typographic poster",
+        "what": "Print reproduction: a dot screen behind everything, heavy ink, "
+                "two colours only. From ThreeUI's halftone work.",
+        "fonts": ["Familjen+Grotesk:wght@500;700", "Inter:wght@400;500"],
+        "display": "'Familjen Grotesk', system-ui, sans-serif",
+        "body": "'Inter', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#f6f3ec", "--muted": "#a49e93",
+            "--panel": "rgba(12,11,10,.84)", "--line": "rgba(246,243,236,.20)",
+            "--radius": "0px", "--border": "1px",
+            "--measure": "1040px", "--pad": "32px 34px",
+            "--h1": "clamp(54px,7.2vw,90px)", "--h2": "clamp(34px,4.4vw,54px)",
+            "--body-size": "18px", "--track": "-.02em", "--case": "uppercase",
+        },
+        "extra": (".panel{background-image:radial-gradient("
+                  "color-mix(in oklab,var(--accent) 26%,transparent) 1px,transparent 1px);"
+                  "background-size:7px 7px}"
+                  "h1,h2{text-transform:uppercase}"),
+    },
+    "crt": {
+        "grammar": "live product surface",
+        "what": "Cathode tube: scanlines, phosphor glow, slight bloom on the "
+                "accent. From ThreeUI's CRT background. Suits diagnostics.",
+        "fonts": ["VT323", "IBM+Plex+Mono:wght@400;500"],
+        "display": "'VT323', ui-monospace, monospace",
+        "body": "'IBM Plex Mono', ui-monospace, monospace",
+        "tokens": {
+            "--ink": "#d6f7e2", "--muted": "#79ad91",
+            "--panel": "rgba(3,10,7,.86)", "--line": "rgba(120,240,180,.22)",
+            "--radius": "4px", "--border": "1px",
+            "--measure": "1000px", "--pad": "28px 30px",
+            "--h1": "clamp(58px,7.6vw,96px)", "--h2": "clamp(38px,4.8vw,58px)",
+            "--body-size": "17px", "--track": "0em", "--case": "uppercase",
+        },
+        "extra": (".panel{background-image:repeating-linear-gradient(0deg,"
+                  "rgba(0,0,0,.28) 0 1px,transparent 1px 3px)}"
+                  "h1,h2{text-shadow:0 0 18px color-mix(in oklab,var(--accent) 55%,transparent)}"),
+    },
+    "wireframe": {
+        "grammar": "technical drawing",
+        "what": "Nothing filled: outlines, corner ticks and measurements only. "
+                "From ThreeUI's wireframe forms. Everything looks measured.",
+        "fonts": ["Space+Mono:wght@400;700", "Space+Mono:wght@400"],
+        "display": "'Space Mono', ui-monospace, monospace",
+        "body": "'Space Mono', ui-monospace, monospace",
+        "tokens": {
+            "--ink": "#eaf0f4", "--muted": "#8fa0ad",
+            "--panel": "rgba(10,14,18,.55)", "--line": "rgba(234,240,244,.30)",
+            "--radius": "0px", "--border": "1px",
+            "--measure": "1060px", "--pad": "30px 32px",
+            "--h1": "clamp(44px,5.8vw,72px)", "--h2": "clamp(28px,3.6vw,44px)",
+            "--body-size": "16px", "--track": "0em", "--case": "uppercase",
+        },
+        "extra": (".panel{position:relative}"
+                  ".panel::before,.panel::after{content:'';position:absolute;width:12px;height:12px;"
+                  "border:1px solid var(--accent)}"
+                  ".panel::before{left:-1px;top:-1px;border-right:0;border-bottom:0}"
+                  ".panel::after{right:-1px;bottom:-1px;border-left:0;border-top:0}"
+                  "h2{letter-spacing:.06em}"),
+    },
     "signal": {
         "grammar": "live product surface",
         "what": "Tight technical grid, thin rules, numbers everywhere, accent "
@@ -426,14 +507,14 @@ SKINS = {
 # Three to five skins per trade, and every skin is reachable from at least
 # one trade -- a skin nothing can pick is dead weight in the file.
 FITS = {
-    "auto repair shop":      ["brutal", "signal", "industrial", "blueprint", "kiosk"],
-    "artisan bakery":        ["press", "atelier", "clay", "broadsheet", "pastel"],
-    "coffee roastery":       ["press", "atelier", "noir", "vitrine", "zine"],
+    "auto repair shop":      ["brutal", "signal", "industrial", "blueprint", "kiosk", "skeuo"],
+    "artisan bakery":        ["press", "atelier", "clay", "broadsheet", "pastel", "halftone"],
+    "coffee roastery":       ["press", "atelier", "noir", "vitrine", "zine", "halftone"],
     "garden design studio":  ["botanic", "atelier", "press", "field", "pastel"],
-    "roofing contractor":    ["signal", "brutal", "industrial", "field", "ledger"],
-    "dental practice":       ["glass", "pastel", "swiss", "clay", "vitrine"],
+    "roofing contractor":    ["signal", "brutal", "industrial", "field", "ledger", "wireframe"],
+    "dental practice":       ["glass", "pastel", "swiss", "clay", "vitrine", "skeuo"],
     "yoga studio":           ["atelier", "botanic", "pastel", "clay", "luxe"],
-    "electrical contractor": ["blueprint", "signal", "terminal", "industrial", "swiss"],
+    "electrical contractor": ["blueprint", "signal", "terminal", "industrial", "swiss", "crt", "wireframe"],
 }
 
 # The axes a build is fingerprinted on. Two builds sharing a skin share all of
