@@ -60,16 +60,22 @@ PALETTES = {
 DEFAULT_PALETTE = ((0.04, 0.05, 0.07), (0.25, 0.30, 0.42), (0.70, 0.85, 1.00))
 
 # Which shader suits which trade. Every name here must exist in library/.
+# Matched on what the copy will say, not on the trade's colour. A dental
+# practice writing about calm, unhurried care got flowlines and read as
+# lightning; aurora exists for exactly that mismatch.
 FITS = {
-    "auto repair shop": ["embers"],
-    "artisan bakery": ["embers"],
-    "coffee roastery": ["embers"],
-    "garden design studio": ["flowlines"],
-    "roofing contractor": ["flowlines"],
-    "dental practice": ["flowlines"],
-    "yoga studio": ["flowlines"],
-    "electrical contractor": ["flowlines"],
+    "auto repair shop": ["gridfall", "embers"],
+    "artisan bakery": ["motes", "embers"],
+    "coffee roastery": ["embers", "motes"],
+    "garden design studio": ["flowlines", "motes"],
+    "roofing contractor": ["gridfall", "flowlines"],
+    "dental practice": ["aurora", "gridfall"],
+    "yoga studio": ["aurora", "motes"],
+    "electrical contractor": ["gridfall", "flowlines"],
 }
+DEFAULT_PALETTE = ((0.04, 0.05, 0.07), (0.25, 0.30, 0.42), (0.70, 0.85, 1.00))
+
+# Which shader suits which trade. Every name here must exist in library/.
 
 
 def available():

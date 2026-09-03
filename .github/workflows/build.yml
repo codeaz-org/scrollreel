@@ -1,6 +1,10 @@
 name: Build a site video
 
 on:
+  schedule:
+    # One a day. Eight trades and five backdrops: more often than this and the
+    # rotation repeats itself faster than anyone forgets the last one.
+    - cron: "0 9 * * *"
   workflow_dispatch:
     inputs:
       trade:
@@ -11,16 +15,16 @@ on:
         description: "Scroll duration"
         required: false
         default: "12"
-      refine:
-        description: "Second pass that reviews its own scroll (doubles the run)"
-        type: boolean
-        required: false
-        default: false
       post:
         description: "Upload to TikTok drafts when done"
         type: boolean
         required: false
-        default: false
+        default: true
+      refine:
+        description: "Second pass that reviews its own scroll (doubles the run)"
+        type: boolean
+        required: false
+        default: true
 
 jobs:
   build:
@@ -87,16 +91,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ARGS=""
+          # inputs are empty on a schedule, so everything below has a default.
           if [ -n "${{ github.event.inputs.trade }}" ]; then
             ARGS="--trade '${{ github.event.inputs.trade }}'"
           fi
           # Recording is the slow step here -- SwiftShader has no GPU behind it
           # and the refine pass records the page a second time. 36 minutes of
           # the first run was those two passes.
-          if [ "${{ github.event.inputs.refine }}" != "true" ]; then
+          # Refine is ON by default now, including on the schedule: it edits
+          # the plan and re-records, which is the pass that catches a dead
+          # stretch or a panel nobody can read.
+          if [ "${{ github.event.inputs.refine }}" = "false" ]; then
             ARGS="$ARGS --no-refine"
           fi
-          eval python -u main.py $ARGS --seconds "${{ github.event.inputs.seconds }}"
+          SECS="${{ github.event.inputs.seconds }}"
+          eval python -u main.py $ARGS --seconds "${SECS:-12}"
 
       - name: Upload the video and the site
         if: always()
@@ -111,7 +120,10 @@ jobs:
           if-no-files-found: warn
 
       - name: Upload to TikTok drafts
-        if: ${{ github.event.inputs.post == 'true' }}
+        # Default true, and on a schedule inputs are empty -- so a cron run
+        # posts. It lands in the TikTok app's drafts, never public: post.py has
+        # no publish path at all, so the worst case is a draft nobody wants.
+        if: ${{ github.event.inputs.post != 'false' }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
