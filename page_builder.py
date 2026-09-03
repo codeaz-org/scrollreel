@@ -23,13 +23,43 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-# Verified present on the free key. Ordered strongest first; a model that is
-# retired or over quota falls through to the next rather than failing the run.
-MODELS = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-2.5-pro", "gemini-2.5-flash"]
+# Probed against this key on 2026-09-03 rather than taken from the model list:
+# being listed by /models is not the same as answering. 3.8-flash returned 503
+# on every call, 3.6-flash dropped the connection, 2.5-pro 404s and
+# 3.1-pro-preview is rate limited. These four answered.
+MODELS = ["gemini-3.7-flash", "gemini-3.5-flash", "gemini-3-flash-preview",
+          "gemini-2.5-flash"]
+
+SCROLLCRAFT_DIR = os.environ.get("SCROLLCRAFT_DIR", "scrollcraft")
+# Order matters: the brief first, then the standards it refers to.
+SCROLLCRAFT_FILES = [("SKILL.md", 20000), ("taste.md", 14000),
+                     ("feel.md", 12000), ("uniqueness.md", 12000)]
+
+
+def scrollcraft_brief(directory=None):
+    """The actual skill text, not a paraphrase of it.
+
+    The first version of this file compressed ~160KB of design guidance into
+    forty lines of prompt, and the pages that came out were competent and
+    characterless. Gemini has the context window to read the real thing."""
+    directory = directory or SCROLLCRAFT_DIR
+    chunks = []
+    for name, cap in SCROLLCRAFT_FILES:
+        path = os.path.join(directory, name)
+        if not os.path.exists(path):
+            continue
+        with open(path) as f:
+            chunks.append(f"===== scroll-craft: {name} =====\n{f.read()[:cap]}")
+    if not chunks:
+        print(f"[build] no scroll-craft docs in {directory}/ -- "
+              f"design quality will suffer", file=sys.stderr)
+    return "\n\n".join(chunks)
+
 
 SYSTEM = """You design and build websites for real local businesses, and you write each one as ONE self-contained HTML file.
 
@@ -92,11 +122,38 @@ Its source, as design reference only:
 Build {name}'s website. Return only the HTML file."""
 
 
-def _post(model, system, user, api_key, max_tokens=32000):
+def _post(model, system, user, api_key, max_tokens=32000, json_out=False, attempts=3):
+    """Retried in place. Two failures were losing whole runs: a 503 "This model
+    is currently experiencing high demand" (transient, and falling through to a
+    weaker model for it is a waste), and RemoteDisconnected, which is an OSError
+    rather than a URLError so it slipped past the caller's except clause."""
+    last = None
+    for attempt in range(1, attempts + 1):
+        try:
+            return _post_once(model, system, user, api_key, max_tokens, json_out)
+        except Exception as e:  # noqa: BLE001
+            transient = ("503" in str(e) or "429" in str(e)
+                         or isinstance(e, (ConnectionError, TimeoutError)))
+            if attempt == attempts or not transient:
+                raise
+            last = e
+            wait = 5 * attempt
+            print(f"[llm] {model}: {type(e).__name__}, retry {attempt}/{attempts - 1} "
+                  f"in {wait}s", file=sys.stderr)
+            time.sleep(wait)
+    raise last
+
+
+def _post_once(model, system, user, api_key, max_tokens=32000, json_out=False):
+    generation = {"temperature": 1.0, "maxOutputTokens": max_tokens}
+    if json_out:
+        # Without this the model wraps JSON in prose often enough that the
+        # caption fell back to the template for parse failures, not outages.
+        generation["responseMimeType"] = "application/json"
     body = {
         "systemInstruction": {"parts": [{"text": system}]},
         "contents": [{"role": "user", "parts": [{"text": user}]}],
-        "generationConfig": {"temperature": 1.0, "maxOutputTokens": max_tokens},
+        "generationConfig": generation,
     }
     req = urllib.request.Request(
         GEMINI_URL.format(model=model) + f"?key={api_key}",
@@ -163,12 +220,18 @@ def build(business, component, photos, api_key=None, models=None):
         component_name=component["name"], library=component["library"],
         license=component["license"], code=component["code"][:12000],
     )
+    brief = scrollcraft_brief()
+    system = SYSTEM + ("\n\n" + "=" * 60 + "\nThe design standard you are held to "
+                       "follows. It is the scroll-craft skill, verbatim. Where it "
+                       "and the rules above disagree, the rules above win -- they "
+                       "describe this pipeline's constraints (one file, no build "
+                       "step, local photos only).\n\n" + brief if brief else "")
     last = None
     for model in (models or MODELS):
         try:
-            print(f"[build] asking {model}")
-            html = _strip_fences(_post(model, SYSTEM, user, api_key))
-        except (urllib.error.HTTPError, urllib.error.URLError, RuntimeError) as e:
+            print(f"[build] asking {model} ({len(system) // 1000}KB of brief)")
+            html = _strip_fences(_post(model, system, user, api_key))
+        except Exception as e:  # noqa: BLE001 -- one model dying is not the run dying
             detail = e.read()[:200].decode("utf-8", "replace") if hasattr(e, "read") else str(e)
             print(f"[build] {model} failed: {detail}", file=sys.stderr)
             last = e

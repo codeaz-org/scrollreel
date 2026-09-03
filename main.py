@@ -29,6 +29,7 @@ import compose
 import images
 import page_builder
 import record
+import refine
 
 OUT = "out"
 STATE = "state.json"
@@ -56,6 +57,8 @@ def main():
     ap.add_argument("--seconds", type=float, default=14.0)
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--keep-frames", action="store_true")
+    ap.add_argument("--no-refine", action="store_true",
+                    help="skip the look-at-your-own-scroll review pass")
     args = ap.parse_args()
 
     state = load_state()
@@ -107,6 +110,18 @@ def main():
     frames_dir, n = record.record(f"file://{os.path.abspath(page_path)}", work,
                                   seconds=args.seconds, fps=args.fps)
 
+    # scroll-craft's actual method: look at the scroll, then fix the page. A
+    # first draft nobody looked at is how the early builds came out competent
+    # and forgettable. The re-record costs ~40s and is worth it.
+    refined = False
+    if not args.no_refine:
+        improved, refined = refine.refine(built["html"], frames_dir, business)
+        if refined:
+            with open(page_path, "w") as f:
+                f.write(improved)
+            frames_dir, n = record.record(f"file://{os.path.abspath(page_path)}", work,
+                                          seconds=args.seconds, fps=args.fps)
+
     pills = "".join(f'<div class="pill">{s}</div>' for s in business["services"][:4])
     assets = compose.build_assets(
         os.path.join(work, "assets"),
@@ -129,6 +144,7 @@ def main():
         "source_url": component["source_url"],
         "photos": [p.get("credit") for p in photos],
         "model": built["model"], "verify_problems": built["problems"],
+        "refined": refined,
         "page": page_path, "video": video, "frames": n,
         "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
     }

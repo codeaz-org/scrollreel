@@ -22,6 +22,30 @@
       "video": "out/halden-auto/video.mp4",
       "frames": 405,
       "ts": "2026-09-03T09:16:42"
+    },
+    {
+      "business": "Kestrel & Crumb",
+      "trade": "artisan bakery",
+      "city": "Utrecht",
+      "component_id": "magicuidesign/magicui:comic-text",
+      "component": "comic-text",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/comic-text.tsx",
+      "photos": [
+        "Photo by Boys in Bristol Photography on Pexels",
+        "Photo by Yasin Onu\u015f on Pexels",
+        "Photo by ready made on Pexels",
+        "Photo by Furkan Tumer on Pexels",
+        "Photo by Yasin Onu\u015f on Pexels"
+      ],
+      "model": "gemini-3-flash-preview",
+      "verify_problems": [],
+      "refined": true,
+      "page": "out/kestrel-crumb/page.html",
+      "video": "out/kestrel-crumb/video.mp4",
+      "frames": 405,
+      "ts": "2026-09-03T09:57:27"
     }
   ]
 }
