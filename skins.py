@@ -53,9 +53,17 @@ SKINS = {
             "--body-size": "20px", "--track": "-.01em", "--case": "none",
         },
         # Light panels need their own accent and a rule under each heading.
+        # A paper skin sets --ink dark for the panels, and the bleed blocks
+        # inherit it -- which put dark type straight onto the dark backdrop.
+        # The pull quote was legible only as a silhouette. Everything outside a
+        # panel gets the light ink back, and specifically the blocks that set
+        # their own colour from --ink.
         "extra": (".panel h2{border-bottom:1px solid var(--line);padding-bottom:14px}"
                   ".panel a{color:#8a3b12}"
-                  ".bleed{color:#eef2f7}"),
+                  ".bleed, .bleed *{color:#f4f1ec}"
+                  ".bleed .fine, .bleed .b-quote-a{color:#cfc7bb}"
+                  ".bleed .b-quote-t, .bleed .b-guar-p, .bleed .b-hero-h,"
+                  ".bleed .b-open-s{color:#f7f4ee}"),
         "accent_on_panel": "#8a3b12",
     },
     "brutal": {
