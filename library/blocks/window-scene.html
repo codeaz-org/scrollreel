@@ -1,0 +1,30 @@
+<!--{"kind": "panel", "device": "parallax", "what": "One photograph seen through an aperture that is smaller than it is, the picture drifting behind the opening as you pass. Reads as looking through a window rather than at a picture, and it costs one attribute.", "slots": {"photo": "img path, a wide shot with something worth finding in it", "head": "str, 3-6 words", "body": "str, one or two sentences", "caption": "str, 2-5 words, where or when it was taken"}}-->
+<section data-sc-act="flow">
+  <div class="panel b-win">
+    <div class="b-win-grid">
+      <div class="b-win-frame">
+        <img src="{{photo}}" alt="" data-sc-parallax="-0.22">
+        <span class="b-win-cap fine">{{caption}}</span>
+      </div>
+      <div class="stack" data-sc-in>
+        <h2>{{head}}</h2>
+        <p>{{body}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* The image is taller than the aperture and travels inside it, so the crop
+   changes as you scroll. Sized in percentages of the frame rather than the
+   viewport: a fixed overhang either clips to nothing on a phone or runs out of
+   picture on a wide screen. */
+.b-win-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center}
+.b-win-frame{position:relative;overflow:hidden;aspect-ratio:3/4;
+  border-radius:calc(var(--radius) * .7);border:1px solid var(--line)}
+.b-win-frame img{position:absolute;left:0;top:-14%;width:100%;height:128%;
+  object-fit:cover;max-width:none;border-radius:0}
+.b-win-cap{position:absolute;left:14px;bottom:12px;padding:5px 10px;border-radius:99px;
+  background:rgba(0,0,0,.55);color:#f2f4f6;letter-spacing:.1em;text-transform:uppercase}
+@media(max-width:820px){.b-win-grid{grid-template-columns:1fr}
+  .b-win-frame{aspect-ratio:4/3}}
+</style>

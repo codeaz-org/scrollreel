@@ -1,0 +1,39 @@
+<!--{"kind": "panel", "device": "reveal", "what": "The build-up, one layer at a time, each arriving as a band that wipes down onto the one below. Turns a specification into something you watch being assembled, which is what stops a customer treating every quote as the same job at a different price.", "slots": {"title": "str, 3-6 words", "body": "str, one sentence", "bands": "list of exactly 5 objects: {name: 2-5 words, spec: the thickness, grade or material}"}}-->
+<section data-sc-act="pin" data-sc-span="2.6">
+  <div data-sc-stage class="b-build-stage">
+    <div class="panel stack b-build">
+      <h2>{{title}}</h2>
+      <p>{{body}}</p>
+      <div class="b-build-stack">
+        <div class="b-build-band" data-sc-reveal="down" data-sc-reveal-at="0.08 0.26">
+          <b>{{bands.0.name}}</b><span>{{bands.0.spec}}</span></div>
+        <div class="b-build-band" data-sc-reveal="down" data-sc-reveal-at="0.22 0.40">
+          <b>{{bands.1.name}}</b><span>{{bands.1.spec}}</span></div>
+        <div class="b-build-band" data-sc-reveal="down" data-sc-reveal-at="0.36 0.54">
+          <b>{{bands.2.name}}</b><span>{{bands.2.spec}}</span></div>
+        <div class="b-build-band" data-sc-reveal="down" data-sc-reveal-at="0.50 0.68">
+          <b>{{bands.3.name}}</b><span>{{bands.3.spec}}</span></div>
+        <div class="b-build-band b-build-base" data-sc-reveal="down" data-sc-reveal-at="0.64 0.82">
+          <b>{{bands.4.name}}</b><span>{{bands.4.spec}}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* Written out per band rather than looped: the reveal windows overlap by a
+   third, so a band starts arriving while the one above is still landing and the
+   stack builds continuously instead of ticking. A loop cannot express that. */
+.b-build-stage{display:flex;align-items:center}
+.b-build-stage > .panel{width:100%}
+.b-build-stack{margin-top:8px}
+.b-build-band{display:flex;justify-content:space-between;align-items:baseline;gap:18px;
+  padding:18px 22px;border:1px solid var(--line);border-bottom:0;
+  background:color-mix(in oklab, var(--ink) 7%, transparent)}
+.b-build-band:first-child{border-radius:calc(var(--radius) * .6) calc(var(--radius) * .6) 0 0}
+.b-build-base{border-bottom:1px solid var(--line);
+  border-radius:0 0 calc(var(--radius) * .6) calc(var(--radius) * .6);
+  background:color-mix(in oklab, var(--ink) 14%, transparent)}
+.b-build-band b{font-family:var(--font-display);font-weight:600;font-size:21px}
+.b-build-band span{font-variant-numeric:tabular-nums;color:var(--accent-panel);
+  font-size:calc(var(--body-size) * .92);white-space:nowrap}
+</style>

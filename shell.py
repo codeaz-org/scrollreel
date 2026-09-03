@@ -42,7 +42,18 @@ html, body { margin: 0; background: transparent !important; color: var(--ink);
   max-width: var(--measure); margin: 0 auto; }
 #content > section.hero { min-height: 92vh; display: flex; align-items: flex-end;
   padding-bottom: 10vh; }
-.bleed { background: transparent !important; }
+/* A bleed sits on the live backdrop, not on a panel, so it needs the skin's
+   OTHER ink. This is done by re-declaring the tokens on the subtree rather than
+   by recolouring elements, because specificity could not win the argument: a
+   skin's ".bleed *{color:...}" ties with the shell's ".lede" and with any block
+   rule using --ink, and both of those are emitted later in the document, so
+   the hero lede under every paper skin was dark type on a dark scene. Tokens
+   cascade by inheritance instead of by selector weight, so a block written
+   months from now gets this for free. skins.css() defaults the two bleed
+   values to the panel ones, so a dark skin needs to say nothing. */
+.bleed { background: transparent !important;
+  --ink: var(--ink-bleed); --muted: var(--muted-bleed);
+  --accent-panel: var(--accent); color: var(--ink); }
 .panel { background: var(--panel) !important; border: var(--border) solid var(--line);
   border-radius: var(--radius); padding: var(--pad); }
 .stack > * + * { margin-top: 18px; }
@@ -61,6 +72,12 @@ img { max-width: 100%; border-radius: calc(var(--radius) * .7); display: block; 
 /* Panels on a light skin need the accent that reads on paper. */
 .panel a, .panel .b-price-v, .panel .b-stat-v, .panel .b-radius-num,
 .panel .b-step-meta { color: var(--accent-panel); }
+/* A link FILLED with the accent needs the colour that sits on it, not the one
+   that sits beside it. Without this the rule above painted accent-on-accent and
+   the contact button was a blank orange pill under every skin that does not
+   declare accent_on_panel, which is all the dark ones. Later than the rule it
+   overrides and the same weight, so the two do not have to fight. */
+.panel .cta, .bleed .cta { color: var(--on-accent); }
 """
 
 MOUNT_JS = """

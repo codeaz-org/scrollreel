@@ -51,6 +51,7 @@ SKINS = {
             "--measure": "880px", "--pad": "46px 48px",
             "--h1": "clamp(50px,6.4vw,78px)", "--h2": "clamp(32px,4vw,48px)",
             "--body-size": "20px", "--track": "-.01em", "--case": "none",
+            "--ink-bleed": "#f4f1ec", "--muted-bleed": "#cfc7bb",
         },
         # Light panels need their own accent and a rule under each heading.
         # A paper skin sets --ink dark for the panels, and the bleed blocks
@@ -60,10 +61,7 @@ SKINS = {
         # their own colour from --ink.
         "extra": (".panel h2{border-bottom:1px solid var(--line);padding-bottom:14px}"
                   ".panel a{color:#8a3b12}"
-                  ".bleed, .bleed *{color:#f4f1ec}"
-                  ".bleed .fine, .bleed .b-quote-a{color:#cfc7bb}"
-                  ".bleed .b-quote-t, .bleed .b-guar-p, .bleed .b-hero-h,"
-                  ".bleed .b-open-s{color:#f7f4ee}"),
+                  ""),
         "accent_on_panel": "#8a3b12",
     },
     "brutal": {
@@ -118,12 +116,11 @@ SKINS = {
             "--measure": "900px", "--pad": "40px 44px",
             "--h1": "clamp(46px,5.8vw,72px)", "--h2": "clamp(30px,3.6vw,44px)",
             "--body-size": "19px", "--track": "0em", "--case": "none",
+            "--ink-bleed": "#f3efe6", "--muted-bleed": "#c9c0ae",
         },
         "extra": (".panel{box-shadow:0 1px 0 rgba(27,26,23,.25)}"
                   ".panel h2{border-bottom:2px solid var(--ink);padding-bottom:10px}"
-                  ".panel *{font-variant-numeric:tabular-nums}"
-                  ".bleed,.bleed *{color:#f3efe6}"
-                  ".bleed .fine{color:#c9c0ae}"),
+                  ".panel *{font-variant-numeric:tabular-nums}"),
         "accent_on_panel": "#7a2e12",
     },
     "blueprint": {
@@ -179,11 +176,10 @@ SKINS = {
             "--measure": "980px", "--pad": "40px 44px",
             "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
             "--body-size": "20px", "--track": "-.02em", "--case": "none",
+            "--ink-bleed": "#f6eee6", "--muted-bleed": "#cdbfb2",
         },
         "extra": (".panel{box-shadow:0 20px 50px rgba(0,0,0,.35)}"
-                  "h1,h2{font-weight:900}"
-                  ".bleed,.bleed *{color:#f6eee6}"
-                  ".bleed .fine{color:#cdbfb2}"),
+                  "h1,h2{font-weight:900}"),
         "accent_on_panel": "#b1481f",
     },
     "broadsheet": {
@@ -200,11 +196,10 @@ SKINS = {
             "--measure": "1000px", "--pad": "44px 48px",
             "--h1": "clamp(54px,7vw,88px)", "--h2": "clamp(34px,4.4vw,54px)",
             "--body-size": "19px", "--track": "-.01em", "--case": "none",
+            "--ink-bleed": "#faf7f0", "--muted-bleed": "#c8c2b6",
         },
         "extra": (".panel h2{font-weight:900}"
-                  ".panel .grid{column-gap:34px;border-top:2px solid var(--ink);padding-top:18px}"
-                  ".bleed,.bleed *{color:#faf7f0}"
-                  ".bleed .fine{color:#c8c2b6}"),
+                  ".panel .grid{column-gap:34px;border-top:2px solid var(--ink);padding-top:18px}"),
         "accent_on_panel": "#8c2f16",
     },
     "terminal": {
@@ -356,11 +351,10 @@ SKINS = {
             "--measure": "940px", "--pad": "38px 42px",
             "--h1": "clamp(48px,6.4vw,78px)", "--h2": "clamp(31px,3.9vw,48px)",
             "--body-size": "19px", "--track": "-.02em", "--case": "none",
+            "--ink-bleed": "#f2f6fa", "--muted-bleed": "#c4ccd4",
         },
         "extra": (".panel{box-shadow:0 18px 44px rgba(0,0,0,.30)}"
-                  "h1,h2{font-weight:700}"
-                  ".bleed,.bleed *{color:#f2f6fa}"
-                  ".bleed .fine{color:#c4ccd4}"),
+                  "h1,h2{font-weight:700}"),
         "accent_on_panel": "#2b6cb0",
     },
     "kiosk": {
@@ -534,12 +528,13 @@ SKINS = {
             "--measure": "860px", "--pad": "48px 52px",
             "--h1": "clamp(48px,6.2vw,76px)", "--h2": "clamp(31px,3.9vw,48px)",
             "--body-size": "20px", "--track": "0em", "--case": "none",
+            "--ink-bleed": "#f3ece0", "--muted-bleed": "#c6bcaa",
         },
         "extra": (".panel h2{text-shadow:0 1px 0 rgba(255,255,255,.6)}"
                   ".panel h2::after{content:'';display:block;height:3px;margin-top:14px;"
                   "border-top:1px solid var(--line);border-bottom:1px solid var(--line)}"
                   ".fine{font-variant:small-caps;letter-spacing:.14em}"
-                  ".bleed,.bleed *{color:#f3ece0}.bleed .fine{color:#c6bcaa}"),
+                  ""),
         "accent_on_panel": "#8a2d17",
     },
     "manifest": {
@@ -556,11 +551,12 @@ SKINS = {
             "--measure": "980px", "--pad": "32px 34px",
             "--h1": "clamp(42px,5.4vw,66px)", "--h2": "clamp(28px,3.4vw,42px)",
             "--body-size": "17px", "--track": "0em", "--case": "uppercase",
+            "--ink-bleed": "#eaf0e2", "--muted-bleed": "#b9c3b0",
         },
         "extra": (".panel{background-image:repeating-linear-gradient(180deg,"
                   "transparent 0 34px,rgba(120,160,110,.20) 34px 68px)}"
                   "h1,h2{text-transform:uppercase;letter-spacing:.04em}"
-                  ".bleed,.bleed *{color:#eaf0e2}.bleed .fine{color:#b9c3b0}"),
+                  ""),
         "accent_on_panel": "#1f5f2f",
     },
     "patina": {
@@ -616,10 +612,9 @@ SKINS = {
             "--measure": "1020px", "--pad": "40px 44px",
             "--h1": "clamp(52px,6.8vw,84px)", "--h2": "clamp(33px,4.2vw,52px)",
             "--body-size": "20px", "--track": "-.03em", "--case": "none",
+            "--ink-bleed": "#ffffff", "--muted-bleed": "#d6dade",
         },
-        "extra": (".panel{box-shadow:0 24px 60px rgba(0,0,0,.35)}"
-                  ".bleed,.bleed *{color:#ffffff}"
-                  ".bleed .fine{color:#d6dade}"),
+        "extra": (".panel{box-shadow:0 24px 60px rgba(0,0,0,.35)}"),
         "accent_on_panel": "#0b57d0",
     },
     "swatch": {
@@ -637,6 +632,7 @@ SKINS = {
             "--measure": "1000px", "--pad": "0px",
             "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
             "--body-size": "19px", "--track": "-.02em", "--case": "none",
+            "--ink-bleed": "#f7f6f3", "--muted-bleed": "#c9cbcd",
         },
         "extra": (".panel{overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.34)}"
                   ".panel > *{padding-inline:38px}"
@@ -644,7 +640,7 @@ SKINS = {
                   ".panel > :last-child{padding-bottom:34px}"
                   ".panel::before{content:'';display:block;height:14px;"
                   "background:var(--accent)}"
-                  ".bleed,.bleed *{color:#f7f6f3}.bleed .fine{color:#c9cbcd}"),
+                  ""),
         "accent_on_panel": "#1a1c1e",
     },
     "signal": {
@@ -666,20 +662,223 @@ SKINS = {
                   ".panel{border-left:3px solid var(--accent)}"
                   ".fine{letter-spacing:.18em;text-transform:uppercase}"),
     },
+    "riso": {
+        "grammar": "typographic poster",
+        "what": "Risograph: two spot inks on off-white stock, printed one pass "
+                "each and never quite in register. Headings carry the second ink "
+                "a hair off behind them, which is the whole look.",
+        "fonts": ["Epilogue:wght@700;800", "DM+Sans:wght@400;500"],
+        "display": "'Epilogue', system-ui, sans-serif",
+        "body": "'DM Sans', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#191524", "--muted": "#5b5470",
+            "--panel": "rgba(248,245,238,.95)", "--line": "rgba(25,21,36,.20)",
+            "--radius": "0px", "--border": "2px",
+            "--measure": "980px", "--pad": "38px 40px",
+            "--h1": "clamp(50px,6.6vw,82px)", "--h2": "clamp(34px,4.4vw,52px)",
+            "--body-size": "19px", "--track": "-.02em", "--case": "none",
+            "--ink-bleed": "#f6f2ea", "--muted-bleed": "#cdc6bb",
+        },
+        # The misregistration is a text-shadow in the second ink, not a filter:
+        # it has to sit BEHIND the letterform and stay crisp, and a blur reads
+        # as a drop shadow rather than as a second pass through the press.
+        "extra": (".panel h1,.panel h2{text-shadow:3px 3px 0 rgba(255,73,141,.55)}"
+                  ".panel{box-shadow:6px 6px 0 rgba(25,21,36,.16)}"
+                  ".panel a{color:#d81f6a}"
+                  ".bleed h1,.bleed h2,.bleed .b-quote-t,.bleed .b-hero-h,"
+                  ".bleed .b-out-fill{text-shadow:3px 3px 0 rgba(255,73,141,.6)}"),
+        "accent_on_panel": "#d81f6a",
+    },
+    "neon": {
+        "grammar": "live surface",
+        "what": "Wet street at night: near-black, every rule and heading carrying "
+                "a glow, and nothing filled in. The light is the only material.",
+        "fonts": ["Unbounded:wght@600;800", "Sora:wght@400;600"],
+        "display": "'Unbounded', system-ui, sans-serif",
+        "body": "'Sora', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#eef6ff", "--muted": "#8ea3bd",
+            "--panel": "rgba(6,8,14,.72)", "--line": "rgba(120,200,255,.32)",
+            "--radius": "14px", "--border": "1px",
+            "--measure": "1060px", "--pad": "34px 36px",
+            "--h1": "clamp(40px,5.2vw,68px)", "--h2": "clamp(28px,3.4vw,44px)",
+            "--body-size": "18px", "--track": "-.03em", "--case": "none",
+        },
+        "extra": ("h1,h2{text-shadow:0 0 18px rgba(120,200,255,.55),"
+                  "0 0 44px rgba(120,200,255,.28)}"
+                  ".panel{box-shadow:0 0 0 1px rgba(120,200,255,.14),"
+                  "0 0 40px rgba(60,140,220,.16) inset}"
+                  "hr,.panel h2{border-color:rgba(120,200,255,.4)}"),
+    },
+    "tape": {
+        "grammar": "rhythmic cutlist",
+        "what": "Kraft board and packing tape: brown stock, stencil display, and "
+                "a strip of tape holding each section down at an angle.",
+        "fonts": ["Staatliches", "Work+Sans:wght@400;600"],
+        "display": "'Staatliches', system-ui, sans-serif",
+        "body": "'Work Sans', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#2a1f14", "--muted": "#6b5946",
+            "--panel": "rgba(206,178,138,.94)", "--line": "rgba(42,31,20,.26)",
+            "--radius": "2px", "--border": "1px",
+            "--measure": "960px", "--pad": "40px 40px",
+            "--h1": "clamp(52px,7vw,88px)", "--h2": "clamp(36px,4.6vw,56px)",
+            "--body-size": "19px", "--track": ".01em", "--case": "uppercase",
+            "--ink-bleed": "#f3e9d8", "--muted-bleed": "#c9b79c",
+        },
+        # The tape is a pseudo-element on the panel rather than a background
+        # image, so it holds its angle at any panel height and costs no request.
+        "extra": (".panel{position:relative}"
+                  ".panel::before{content:'';position:absolute;top:-13px;left:34px;"
+                  "width:132px;height:30px;transform:rotate(-3.5deg);"
+                  "background:rgba(226,214,186,.55);"
+                  "box-shadow:0 1px 3px rgba(42,31,20,.28)}"
+                  "h1,h2,h3{letter-spacing:.02em}"
+                  ".panel a{color:#9a3f10}"),
+        "accent_on_panel": "#9a3f10",
+    },
+    "specimen": {
+        "grammar": "gallery",
+        "what": "A type specimen sheet: the letterforms are the furniture, sizes "
+                "printed in the margin, everything else deliberately plain.",
+        "fonts": ["Abril+Fatface", "Public+Sans:wght@400;600"],
+        "display": "'Abril Fatface', Georgia, serif",
+        "body": "'Public Sans', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#111013", "--muted": "#5d5b64",
+            "--panel": "rgba(252,251,249,.96)", "--line": "rgba(17,16,19,.16)",
+            "--radius": "0px", "--border": "1px",
+            "--measure": "1000px", "--pad": "52px 48px",
+            "--h1": "clamp(62px,8.6vw,116px)", "--h2": "clamp(42px,5.6vw,72px)",
+            "--body-size": "17px", "--track": "-.03em", "--case": "none",
+            "--ink-bleed": "#faf8f5", "--muted-bleed": "#c6c1ba",
+        },
+        # Every heading is annotated with its own point size, the way a specimen
+        # sheet labels its showings. Set in the margin, in the text face, so the
+        # annotation never competes with the thing it is annotating.
+        "extra": (".panel h2{position:relative;padding-right:180px}"
+                  ".panel h2::after{content:'Abril Fatface';position:absolute;right:0;"
+                  "top:.55em;font:500 11px var(--font-body);letter-spacing:.22em;"
+                  "text-transform:uppercase;color:var(--muted);white-space:nowrap}"
+                  ".panel h3{border-top:1px solid var(--line);padding-top:12px}"
+                  ".panel a{color:#8c1d2f}"),
+        "accent_on_panel": "#8c1d2f",
+    },
+    "transit": {
+        "grammar": "split stage",
+        "what": "Wayfinding: one family at every size, thick coloured route rules "
+                "with round caps, and interchange dots where sections meet.",
+        "fonts": ["Overpass:wght@400;600;700;900"],
+        "display": "'Overpass', system-ui, sans-serif",
+        "body": "'Overpass', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#f4f6f8", "--muted": "#9aa7b4",
+            "--panel": "rgba(14,20,28,.80)", "--line": "rgba(255,255,255,.16)",
+            "--radius": "26px", "--border": "0px",
+            "--measure": "1020px", "--pad": "34px 38px",
+            "--h1": "clamp(46px,6vw,76px)", "--h2": "clamp(30px,3.8vw,48px)",
+            "--body-size": "19px", "--track": "-.015em", "--case": "none",
+        },
+        # One family throughout is the point, not a shortcut: signage systems buy
+        # their consistency by changing weight and size, never the face.
+        "extra": ("h1,h2,h3{font-weight:900}"
+                  "#content>section+section{position:relative}"
+                  "#content>section+section::before{content:'';position:absolute;"
+                  "top:0;left:50%;width:6px;height:5vh;margin-left:-3px;border-radius:99px;"
+                  "background:var(--accent)}"
+                  ".panel{box-shadow:inset 0 0 0 2px rgba(255,255,255,.06)}"),
+    },
+    "darkroom": {
+        "grammar": "filmic one-shot",
+        "what": "A contact sheet under a safelight: frames keylined in white, "
+                "everything numbered, and red the only colour in the room.",
+        "fonts": ["Newsreader:opsz,wght@6..72,400;6..72,600",
+                  "Fira+Sans:wght@400;500"],
+        "display": "'Newsreader', Georgia, serif",
+        "body": "'Fira Sans', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#ece7e2", "--muted": "#8b8177",
+            "--panel": "rgba(8,7,7,.82)", "--line": "rgba(236,231,226,.34)",
+            "--radius": "0px", "--border": "1px",
+            "--measure": "1000px", "--pad": "26px 28px",
+            "--h1": "clamp(48px,6.4vw,80px)", "--h2": "clamp(32px,4vw,50px)",
+            "--body-size": "18px", "--track": "-.01em", "--case": "none",
+        },
+        # A contact sheet is keyline and number. The panel gets both: a white
+        # frame line offset inside its own edge, and a frame number in the
+        # corner that reads as a marking on the sheet rather than as content.
+        "extra": (".panel{position:relative;box-shadow:inset 0 0 0 1px rgba(236,231,226,.16)}"
+                  ".panel::after{content:'\\2192 24A';position:absolute;right:12px;bottom:8px;"
+                  "font:500 10px var(--font-body);letter-spacing:.26em;color:#b4362e}"
+                  "h1,h2{font-style:italic}"
+                  ".fine{letter-spacing:.16em;text-transform:uppercase}"),
+    },
+    "ceramic": {
+        "grammar": "soft stage",
+        "what": "Glazed tile: every panel is a slab with grout around it and a "
+                "wet highlight along its top edge. Nothing is flat.",
+        "fonts": ["Zilla+Slab:wght@500;700", "Rubik:wght@400;500"],
+        "display": "'Zilla Slab', Georgia, serif",
+        "body": "'Rubik', system-ui, sans-serif",
+        "tokens": {
+            "--ink": "#0f2a2e", "--muted": "#436164",
+            "--panel": "rgba(214,231,226,.95)", "--line": "rgba(15,42,46,.18)",
+            "--radius": "10px", "--border": "0px",
+            "--measure": "980px", "--pad": "36px 38px",
+            "--h1": "clamp(46px,6vw,76px)", "--h2": "clamp(32px,4vw,48px)",
+            "--body-size": "19px", "--track": "-.01em", "--case": "none",
+            "--ink-bleed": "#eaf4f1", "--muted-bleed": "#a9c4bf",
+        },
+        "extra": (".panel{box-shadow:0 1px 0 rgba(255,255,255,.85) inset,"
+                  "0 -2px 0 rgba(15,42,46,.10) inset,"
+                  "0 14px 30px rgba(15,42,46,.22),0 0 0 7px rgba(226,239,235,.35)}"
+                  ".panel a{color:#0d6f6a}"),
+        "accent_on_panel": "#0d6f6a",
+    },
+    "almanac": {
+        "grammar": "chaptered editorial",
+        "what": "A folk almanac: cream stock, everything centred and symmetrical, "
+                "ornamental rules between sections and small caps throughout.",
+        "fonts": ["EB+Garamond:wght@500;700", "Crimson+Pro:wght@400;600"],
+        "display": "'EB Garamond', Georgia, serif",
+        "body": "'Crimson Pro', Georgia, serif",
+        "tokens": {
+            "--ink": "#241d13", "--muted": "#5f5240",
+            "--panel": "rgba(245,238,222,.95)", "--line": "rgba(36,29,19,.22)",
+            "--radius": "0px", "--border": "1px",
+            "--measure": "820px", "--pad": "48px 52px",
+            "--h1": "clamp(46px,6vw,74px)", "--h2": "clamp(32px,4vw,48px)",
+            "--body-size": "21px", "--track": "0em", "--case": "none",
+            "--ink-bleed": "#f5efe2", "--muted-bleed": "#cbbfa8",
+        },
+        # Centred on purpose, and the only skin that is: scroll-craft bans
+        # centred copy in EVERY act, not centred as a page grammar, and an
+        # almanac that ranges left is not an almanac.
+        "extra": (".panel{text-align:center}"
+                  ".panel .stack > *{margin-inline:auto}"
+                  ".panel li,.panel .b-menu-row,.panel .b-stock-row,"
+                  ".panel .b-dock-list li,.panel .b-warr-row{text-align:left}"
+                  ".panel p{margin-inline:auto}"
+                  ".panel h2::after{content:'\\2766';display:block;margin:16px auto 0;"
+                  "font-size:20px;color:var(--muted)}"
+                  ".panel a{color:#7a4218}"
+                  ".fine{font-variant:small-caps;letter-spacing:.08em}"),
+        "accent_on_panel": "#7a4218",
+    },
 }
 
 # Which skins suit which trade. Two or three each, so the choice still varies.
 # Three to five skins per trade, and every skin is reachable from at least
 # one trade -- a skin nothing can pick is dead weight in the file.
 FITS = {
-    "auto repair shop":      ["brutal", "signal", "industrial", "blueprint", "kiosk", "skeuo", "enamel", "manifest", "patina"],
-    "artisan bakery":        ["press", "atelier", "clay", "broadsheet", "pastel", "halftone", "chalkboard", "letterpress", "daylight"],
-    "coffee roastery":       ["press", "atelier", "noir", "vitrine", "zine", "halftone", "chalkboard", "letterpress"],
-    "garden design studio":  ["botanic", "atelier", "press", "field", "pastel", "swatch", "daylight"],
-    "roofing contractor":    ["signal", "brutal", "industrial", "field", "ledger", "wireframe", "patina", "manifest", "enamel"],
-    "dental practice":       ["glass", "pastel", "swiss", "clay", "vitrine", "skeuo", "daylight", "enamel"],
-    "yoga studio":           ["atelier", "botanic", "pastel", "clay", "luxe", "timetable", "daylight"],
-    "electrical contractor": ["blueprint", "signal", "terminal", "industrial", "swiss", "crt", "wireframe", "manifest", "timetable"],
+    "auto repair shop":      ["brutal", "signal", "industrial", "blueprint", "kiosk", "skeuo", "enamel", "manifest", "patina", "transit", "tape"],
+    "artisan bakery":        ["press", "atelier", "clay", "broadsheet", "pastel", "halftone", "chalkboard", "letterpress", "daylight", "almanac", "ceramic"],
+    "coffee roastery":       ["press", "atelier", "noir", "vitrine", "zine", "halftone", "chalkboard", "letterpress", "riso", "darkroom", "tape"],
+    "garden design studio":  ["botanic", "atelier", "press", "field", "pastel", "swatch", "daylight", "almanac", "ceramic", "specimen"],
+    "roofing contractor":    ["signal", "brutal", "industrial", "field", "ledger", "wireframe", "patina", "manifest", "enamel", "tape", "transit"],
+    "dental practice":       ["glass", "pastel", "swiss", "clay", "vitrine", "skeuo", "daylight", "enamel", "ceramic", "transit"],
+    "yoga studio":           ["atelier", "botanic", "pastel", "clay", "luxe", "timetable", "daylight", "almanac", "specimen", "ceramic"],
+    "electrical contractor": ["blueprint", "signal", "terminal", "industrial", "swiss", "crt", "wireframe", "manifest", "timetable", "transit", "neon"],
 }
 
 # The axes a build is fingerprinted on. Two builds sharing a skin share all of
@@ -737,7 +936,17 @@ def css(skin_name, accent):
     imports = "".join(
         f"@import url('https://fonts.googleapis.com/css2?family={f}&display=swap');"
         for f in s["fonts"])
-    tokens = "".join(f"{k}:{v};" for k, v in s["tokens"].items())
+    t = dict(s["tokens"])
+    # Every skin gets a bleed ink, defaulting to its panel ink. A dark skin
+    # wants the same colour in both places; a paper skin does not, and this is
+    # where that difference is declared once instead of chased through
+    # selectors. See the .bleed rule in shell.SHELL_CSS for how it applies.
+    t.setdefault("--ink-bleed", t["--ink"])
+    t.setdefault("--muted-bleed", t["--muted"])
+    # Type that sits ON the accent, not next to it. Near-black suits every
+    # accent in use; a skin with a very dark accent can override it.
+    t.setdefault("--on-accent", "#0b0d10")
+    tokens = "".join(f"{k}:{v};" for k, v in t.items())
     on_panel = s.get("accent_on_panel", accent)
     return f"""{imports}
 :root{{{tokens}--accent:{accent};--accent-panel:{on_panel};

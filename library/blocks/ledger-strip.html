@@ -1,0 +1,38 @@
+<!--{"kind": "bleed", "device": "marquee", "what": "Recent jobs running past as a single line: date, place, what it was. Proof rather than decoration, and it works because it is dull, specific and clearly not written by a copywriter.", "slots": {"jobs": "list of 6-9 objects: {when: e.g. '12 Sep', place: a district or street, what: 3-6 words, plainly described}"}}-->
+<section>
+  <div class="bleed b-led">
+    <div class="b-led-track">
+      <div class="b-led-run">
+        {{#jobs}}
+        <span class="b-led-item">
+          <b>{{when}}</b><i>{{place}}</i><span>{{what}}</span>
+        </span>
+        {{/jobs}}
+      </div>
+      <div class="b-led-run" aria-hidden="true">
+        {{#jobs}}
+        <span class="b-led-item">
+          <b>{{when}}</b><i>{{place}}</i><span>{{what}}</span>
+        </span>
+        {{/jobs}}
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* Two identical runs and a translate of exactly -50% of the pair, so the seam
+   lands on a duplicate and the loop has no jump to hide. Slower than the other
+   marquees on purpose: this one is meant to be read, not felt. */
+.b-led{border-block:1px solid var(--line);padding:18px 0;overflow:hidden;
+  margin-inline:calc(50% - 50vw);width:100vw}
+.b-led-track{display:flex;width:max-content;animation:b-led-roll 44s linear infinite}
+.b-led-run{display:flex;gap:52px;padding-right:52px}
+.b-led-item{display:inline-flex;align-items:baseline;gap:12px;white-space:nowrap}
+.b-led-item b{font-variant-numeric:tabular-nums;letter-spacing:.08em;
+  font-size:calc(var(--body-size) * .78);color:var(--accent)}
+.b-led-item i{font-style:normal;font-family:var(--font-display);
+  font-size:calc(var(--body-size) * .98)}
+.b-led-item span{color:var(--muted);font-size:calc(var(--body-size) * .88)}
+@keyframes b-led-roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.b-led-track{animation:none}}
+</style>

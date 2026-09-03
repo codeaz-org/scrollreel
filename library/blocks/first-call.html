@@ -1,0 +1,30 @@
+<!--{"kind": "panel", "device": "pin", "what": "The first phone call, printed as it actually goes. Every trade page promises good service; this one shows the four questions they ask, which is checkable and which no competitor will copy because they do not ask them.", "slots": {"title": "str, 3-6 words", "lines": "list of exactly 5 objects: {who: 'them' for the caller or 'us' for the business, said: one spoken line, plain, no marketing}", "foot": "str, one line, what happens after the call"}}-->
+<section data-sc-act="pin" data-sc-span="2.6">
+  <div data-sc-stage class="b-call-stage">
+    <div class="panel stack b-call">
+      <h2>{{title}}</h2>
+      <div class="b-call-thread">
+        <p class="b-call-line b-call-{{lines.0.who}}" data-sc-cue="0.04 1 0.4 0">{{lines.0.said}}</p>
+        <p class="b-call-line b-call-{{lines.1.who}}" data-sc-cue="0.18 1 0.4 0">{{lines.1.said}}</p>
+        <p class="b-call-line b-call-{{lines.2.who}}" data-sc-cue="0.32 1 0.4 0">{{lines.2.said}}</p>
+        <p class="b-call-line b-call-{{lines.3.who}}" data-sc-cue="0.46 1 0.4 0">{{lines.3.said}}</p>
+        <p class="b-call-line b-call-{{lines.4.who}}" data-sc-cue="0.60 1 0.4 0">{{lines.4.said}}</p>
+      </div>
+      <p class="fine" data-sc-cue="0.74 1 0.4 0">{{foot}}</p>
+    </div>
+  </div>
+</section>
+<style>
+/* Lines are addressed by index rather than looped because each carries its own
+   cue, and they all hold to the end: a conversation that erases itself as it
+   goes is not a conversation. */
+.b-call-stage{display:flex;align-items:center}
+.b-call-stage > .panel{width:100%}
+.b-call-thread{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.b-call-line{max-width:44ch;padding:14px 18px;border-radius:calc(var(--radius) * .7);
+  font-size:calc(var(--body-size) * .98);line-height:1.45}
+.b-call-them{align-self:flex-start;border:1px solid var(--line);color:var(--muted)}
+.b-call-us{align-self:flex-end;text-align:right;
+  background:color-mix(in oklab, var(--accent) 16%, transparent);
+  border:1px solid color-mix(in oklab, var(--accent) 40%, transparent);color:var(--ink)}
+</style>

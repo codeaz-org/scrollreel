@@ -1,0 +1,23 @@
+<!--{"kind": "panel", "device": "flow", "what": "The questions everyone rings to ask, answered in full with nothing folded away. No accordion: a question worth answering is worth showing, and hiding four answers behind four clicks is how a page pretends to be tidy. A quiet section, deliberately.", "slots": {"title": "str, 2-5 words", "pairs": "list of 4-5 objects: {q: the question in the customer's words, a: two sentences, specific, no hedging}"}}-->
+<section>
+  <div class="panel b-ans" data-sc-in data-sc-stagger="90">
+    <h2 class="b-ans-title">{{title}}</h2>
+    {{#pairs}}
+    <div class="b-ans-pair">
+      <h3 class="b-ans-q">{{q}}</h3>
+      <p class="b-ans-a">{{a}}</p>
+    </div>
+    {{/pairs}}
+  </div>
+</section>
+<style>
+/* data-sc-stagger works on the DIRECT children of the [data-sc-in] element, so
+   the heading and each pair are siblings here rather than the pairs sitting in
+   a wrapper. Wrapping them would stagger one thing. */
+.b-ans-title{margin-bottom:6px}
+.b-ans-pair{display:grid;grid-template-columns:1fr 1.25fr;gap:28px;align-items:baseline;
+  padding:22px 0;border-top:1px solid var(--line)}
+.b-ans-q{font-size:23px;line-height:1.2;max-width:22ch}
+.b-ans-a{max-width:56ch}
+@media(max-width:760px){.b-ans-pair{grid-template-columns:1fr;gap:10px}}
+</style>
