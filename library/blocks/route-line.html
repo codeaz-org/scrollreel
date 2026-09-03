@@ -1,0 +1,33 @@
+<!--{"kind": "panel", "device": "draw", "what": "The van's actual round, drawn as a line between the places it stops. Answers 'do you come out to me' with geography instead of a sentence, and the drawing is the proof it is a real route and not a list of towns copied off a map.", "slots": {"title": "str, 3-6 words", "body": "str, one sentence on the round", "stops": "list of exactly 5 place names, in the order the van reaches them"}}-->
+<section>
+  <div class="panel stack b-route" data-sc-in>
+    <h2>{{title}}</h2>
+    <p>{{body}}</p>
+    <div class="b-route-map">
+      <svg viewBox="0 0 900 220" preserveAspectRatio="none" aria-hidden="true">
+        <path class="b-route-path" d="M40 168 C 150 60, 230 190, 330 118 S 520 40, 620 132 S 790 176, 862 74"
+              fill="none" stroke="var(--accent-panel)" stroke-width="3"
+              stroke-linecap="round" pathLength="100"/>
+      </svg>
+      <ol class="b-route-stops">
+        {{#stops}}<li><span class="b-route-dot"></span>{{.}}</li>{{/stops}}
+      </ol>
+    </div>
+  </div>
+</section>
+<style>
+/* The line draws with stroke-dashoffset over pathLength="100", so the geometry
+   can change without retuning the animation. */
+.b-route-map{position:relative;margin-top:6px}
+.b-route-map svg{display:block;width:100%;height:200px;overflow:visible}
+.b-route-path{stroke-dasharray:100;stroke-dashoffset:100;
+  transition:stroke-dashoffset 2.1s cubic-bezier(.22,.7,.2,1)}
+.b-route.sc-in .b-route-path{stroke-dashoffset:0}
+.b-route-stops{list-style:none;display:flex;justify-content:space-between;gap:12px;
+  margin:14px 0 0;padding:0}
+.b-route-stops li{display:flex;align-items:center;gap:8px;font-size:calc(var(--body-size) * .9);
+  color:var(--muted);white-space:nowrap}
+.b-route-dot{width:9px;height:9px;border-radius:50%;background:var(--accent-panel);flex:0 0 auto}
+@media(max-width:760px){.b-route-stops{flex-wrap:wrap;row-gap:8px;justify-content:flex-start}
+  .b-route-stops li{width:48%}}
+</style>

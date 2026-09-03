@@ -1,0 +1,27 @@
+<!--{"kind": "bleed", "device": "kinetic", "what": "One word at poster scale in outline only, filling with colour as it crosses the screen. Pure typography, no card, no image. The loudest moment on a page, so use it once and not next to another bleed.", "slots": {"word": "str, ONE word, 4-12 characters", "line": "str, one sentence saying what the word costs or takes"}}-->
+<section data-sc-act="pin" data-sc-span="1.8">
+  <div data-sc-stage class="bleed b-out">
+    <div class="b-out-stack">
+      <div class="b-out-ghost" aria-hidden="true">{{word}}</div>
+      <h2 class="b-out-fill">{{word}}</h2>
+    </div>
+    <p class="lede b-out-line" data-sc-cue="0.22 0.96 0.3 0.1">{{line}}</p>
+  </div>
+</section>
+<style>
+/* Two copies in one grid cell: an outlined one underneath and a filled one
+   clipped from the left by act progress. Stacking them in the same cell rather
+   than positioning the second by hand is what keeps the letters registered when
+   the type scale changes with the viewport. The fill travels with the scroll,
+   so stopping mid-word holds mid-fill. */
+.b-out{display:flex;flex-direction:column;justify-content:center;min-height:74vh;gap:8vh}
+.b-out-stack{display:grid}
+.b-out-ghost,.b-out-fill{grid-area:1/1;font-family:var(--font-display);
+  font-size:clamp(64px,13vw,190px);line-height:.92;margin:0;letter-spacing:-.03em;
+  text-transform:uppercase}
+.b-out-ghost{-webkit-text-stroke:2px color-mix(in oklab, var(--ink) 55%, transparent);
+  color:transparent}
+.b-out-fill{color:var(--accent);
+  clip-path:inset(0 calc(100% - var(--sc-p, 0) * 100%) 0 0)}
+.b-out-line{max-width:44ch}
+</style>

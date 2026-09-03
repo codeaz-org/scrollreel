@@ -1,0 +1,37 @@
+<!--{"kind": "panel", "device": "parallax", "what": "The booking flow shown in a phone held at a slight angle, drifting against the scroll. Proves the thing works on a phone, which is where every enquiry actually comes from.", "slots": {"title": "str, 3-6 words", "body": "str, one or two sentences on why the phone came first", "app_title": "str, 2-4 words shown in the phone", "steps": "list of exactly 3 short lines, the flow in order"}}-->
+<section data-sc-act="flow">
+  <div class="panel b-dev" data-sc-in>
+    <div class="b-dev-grid">
+      <div class="stack">
+        <h2>{{title}}</h2>
+        <p>{{body}}</p>
+      </div>
+      <div class="b-dev-phone" data-sc-parallax="-0.09">
+        <div class="b-dev-screen">
+          <div class="b-dev-notch"></div>
+          <div class="b-dev-app">{{app_title}}</div>
+          {{#steps}}<div class="b-dev-step">{{.}}</div>{{/steps}}
+          <div class="b-dev-cta">Confirm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* The handset body is drawn from the skin's own ink, not a hard black: on the
+   paper skins a black slab is the only pure black on the page and it reads as
+   a pasted-in stock mockup rather than part of the site. */
+.b-dev-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+.b-dev-phone{width:246px;height:498px;border-radius:36px;padding:11px;
+  background:color-mix(in oklab, var(--ink) 82%, transparent);
+  box-shadow:0 40px 90px rgba(0,0,0,.45);transform:rotate(-3deg)}
+.b-dev-screen{height:100%;border-radius:26px;background:var(--panel);
+  border:1px solid var(--line);padding:16px 15px;display:flex;flex-direction:column;gap:10px}
+.b-dev-notch{width:70px;height:5px;border-radius:99px;background:var(--line);margin:2px auto 6px}
+.b-dev-app{font-family:var(--font-display);font-weight:700;font-size:19px;margin-bottom:2px}
+.b-dev-step{border:1px solid var(--line);border-radius:10px;padding:12px 13px;font-size:15px;
+  color:var(--muted)}
+.b-dev-cta{margin-top:auto;text-align:center;border-radius:10px;padding:13px;
+  background:var(--accent);color:#0b0d10;font-weight:700;font-size:16px}
+@media(max-width:760px){.b-dev-grid{grid-template-columns:1fr}.b-dev-phone{margin-inline:auto}}
+</style>

@@ -1,0 +1,29 @@
+<!--{"kind": "panel", "device": "draw", "what": "What is covered and for how long, drawn as a bar per item. Turns a guarantee from an adjective into a measurement, and the differing lengths are the honest part.", "slots": {"title": "str, 3-6 words", "note": "str, one line of terms", "items": "list of 3-5 objects: {name: what is covered, years: whole number, span: percent width 0-100 relative to the longest}"}}-->
+<section>
+  <div class="panel stack b-warr">
+    <h2>{{title}}</h2>
+    <div class="b-warr-list" data-sc-in data-sc-stagger="100">
+      {{#items}}
+      <div class="b-warr-row" style="--w:{{span}}">
+        <span class="b-warr-name">{{name}}</span>
+        <span class="b-warr-bar"><i></i></span>
+        <span class="b-warr-yrs">{{years}} yr</span>
+      </div>
+      {{/items}}
+    </div>
+    <p class="fine">{{note}}</p>
+  </div>
+</section>
+<style>
+.b-warr-list{margin-top:6px}
+.b-warr-row{display:grid;grid-template-columns:minmax(140px,1fr) 2fr auto;gap:16px;
+  align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.b-warr-name{font-size:19px}
+.b-warr-bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.b-warr-bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--accent);
+  transition:width 1.2s var(--sc-ease-out,cubic-bezier(.16,.84,.44,1))}
+.sc-in .b-warr-bar i{width:calc(var(--w) * 1%)}
+.b-warr-yrs{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+@media(max-width:760px){.b-warr-row{grid-template-columns:1fr auto}
+  .b-warr-bar{grid-column:1/-1;order:3}}
+</style>

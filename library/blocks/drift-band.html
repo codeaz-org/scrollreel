@@ -1,11 +1,24 @@
-<!--{"kind":"bleed","device":"drift","what":"A short band where the page ground shifts colour as you pass through it. Use once, to mark the turn in the argument. Nothing else competes with it.","slots":{"line":"str, 5-12 words, the turn stated plainly","ground":"a hex colour the page drifts to, dark enough for white type, e.g. '#1a0f0a'"}}-->
-<section data-sc-act="flow" data-sc-drift="{{ground}}">
+<!--{"kind":"bleed","device":"drift","what":"A short band where the ground under the type washes to another colour as you pass through it. Use once, to mark the turn in the argument. Nothing else competes with it.","slots":{"line":"str, 5-12 words, the turn stated plainly","ground":"a hex colour the band washes to, dark enough for white type, e.g. '#1a0f0a'"}}-->
+<section data-sc-act="flow" data-sc-drift="{{ground}}" class="b-drift-act">
   <div class="bleed b-drift" data-sc-in>
     <p class="b-drift-t">{{line}}</p>
   </div>
 </section>
 <style>
+/* The engine's drift writes --sc-canvas on the root and expects the page ground
+   to use it. Here the ground is a live WebGL backdrop that shell.py pins behind
+   everything with background:transparent !important, so the root never repaints
+   and the device did nothing at all. The band paints the colour itself instead:
+   same value, same timing, applied where it can actually be seen. Feathered top
+   and bottom so the backdrop is still the thing either side of it. */
+.b-drift-act{position:relative;isolation:isolate}
+.b-drift-act::before{content:"";position:absolute;inset:-6vh -50vw;z-index:-1;
+  background:linear-gradient(to bottom, transparent 0%, var(--sc-canvas, transparent) 22%,
+    var(--sc-canvas, transparent) 78%, transparent 100%)}
 .b-drift{padding:14vh 0}
+/* Colour is pinned rather than inherited: the ground here is the block's own
+   dark wash, so a light skin's ink would put dark type on it. */
 .b-drift-t{font-family:var(--font-display);font-size:clamp(38px,5.2vw,72px);
-  line-height:1.06;letter-spacing:var(--track);max-width:18ch;margin:0}
+  line-height:1.06;letter-spacing:var(--track);max-width:18ch;margin:0;
+  color:#f6f3ee}
 </style>

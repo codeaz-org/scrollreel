@@ -1,0 +1,27 @@
+<!--{"kind": "panel", "device": "stagger", "what": "What the business does across the year, month by month. Answers 'is now the right time to call' and gives seasonal trades a reason to be booked in the quiet months.", "slots": {"title": "str, 3-6 words", "items": "list of exactly 4 objects: {season: e.g. 'Dec - Feb', head: 2-4 words, body: one short line}"}}-->
+<section>
+  <div class="panel stack b-season">
+    <h2>{{title}}</h2>
+    <div class="b-season-row" data-sc-in data-sc-stagger="110">
+      {{#items}}
+      <div class="b-season-cell">
+        <div class="b-season-when fine">{{season}}</div>
+        <h3 class="b-season-head">{{head}}</h3>
+        <p class="fine">{{body}}</p>
+      </div>
+      {{/items}}
+    </div>
+  </div>
+</section>
+<style>
+.b-season-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:6px;
+  border-top:1px solid var(--line)}
+.b-season-cell{padding:22px 20px;border-right:1px solid var(--line);
+  display:flex;flex-direction:column;gap:8px}
+.b-season-cell:last-child{border-right:0}
+.b-season-when{letter-spacing:.18em;text-transform:uppercase;color:var(--accent-panel)}
+.b-season-head{font-size:22px}
+@media(max-width:860px){.b-season-row{grid-template-columns:repeat(2,1fr)}
+  .b-season-cell:nth-child(2){border-right:0}
+  .b-season-cell:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+</style>

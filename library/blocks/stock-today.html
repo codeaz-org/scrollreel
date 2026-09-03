@@ -1,0 +1,25 @@
+<!--{"kind": "panel", "device": "stagger", "what": "What is actually available right now, with the sold-out ones struck through. Honest scarcity for anything made in batches: bread, roasts, plants, cuts.", "slots": {"title": "str, 3-6 words", "note": "str, one short line with a time, e.g. 'Counted at 08:00, updated as it goes'", "items": "list of 4-7 objects: {name: the item, qty: e.g. '12 left' or 'Sold out', state: 'in' or 'out'}"}}-->
+<section>
+  <div class="panel stack b-stock">
+    <h2>{{title}}</h2>
+    <p class="fine">{{note}}</p>
+    <ul class="b-stock-list" data-sc-in data-sc-stagger="70">
+      {{#items}}
+      <li class="b-stock-row b-stock-{{state}}">
+        <span class="b-stock-name">{{name}}</span>
+        <span class="b-stock-qty">{{qty}}</span>
+      </li>
+      {{/items}}
+    </ul>
+  </div>
+</section>
+<style>
+.b-stock-list{list-style:none;margin:8px 0 0;padding:0;border-top:1px solid var(--line)}
+.b-stock-row{display:flex;justify-content:space-between;gap:18px;align-items:baseline;
+  padding:14px 0;border-bottom:1px solid var(--line)}
+.b-stock-name{font-size:20px}
+.b-stock-qty{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent-panel)}
+.b-stock-out{opacity:.5}
+.b-stock-out .b-stock-name{text-decoration:line-through;text-decoration-thickness:1px}
+.b-stock-out .b-stock-qty{color:var(--muted);font-weight:400}
+</style>
