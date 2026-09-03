@@ -27,6 +27,32 @@
       "video": "out/rowan-coffee-roasters/video.mp4",
       "frames": 375,
       "ts": "2026-09-03T12:52:17"
+    },
+    {
+      "business": "Verrick & Crumb",
+      "trade": "artisan bakery",
+      "city": "Cork",
+      "component_id": "magicuidesign/magicui:text-animate",
+      "component": "text-animate",
+      "scene": "embers",
+      "scene_source": "library/backdrops/embers.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/text-animate.tsx",
+      "photos": [
+        "Photo by Boys in Bristol Photography on Pexels",
+        "Photo by Yasin Onu\u015f on Pexels",
+        "Photo by ready made on Pexels",
+        "Photo by Furkan Tumer on Pexels",
+        "Photo by Yasin Onu\u015f on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "refined": false,
+      "page": "out/verrick-crumb/page.html",
+      "video": "out/verrick-crumb/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-03T15:22:28"
     }
   ]
 }
