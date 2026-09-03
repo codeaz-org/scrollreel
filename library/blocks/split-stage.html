@@ -1,0 +1,44 @@
+<!--{"kind":"panel","what":"One photograph held still while the words beside it change as you scroll. The image pins, the copy advances -- the clearest way to walk through three points without three sections.","slots":{"img":"img path","items":"list of exactly 3 objects: {head: 3-6 words, body: one or two sentences}"}}-->
+<section>
+  <div class="panel b-split">
+    <div class="b-split-grid">
+      <div class="b-split-media"><img src="{{img}}" alt=""></div>
+      <div class="b-split-steps">
+        {{#items}}
+        <div class="b-split-step">
+          <h3>{{head}}</h3>
+          <p>{{body}}</p>
+        </div>
+        {{/items}}
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+.b-split-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+.b-split-media{position:sticky;top:12vh;border-radius:14px;overflow:hidden}
+.b-split-media img{width:100%;height:52vh;object-fit:cover;border-radius:0}
+.b-split-step{padding:11vh 0;opacity:.28;transform:translateY(10px);
+  transition:opacity .55s ease,transform .55s cubic-bezier(.16,.84,.44,1)}
+.b-split-step.on{opacity:1;transform:none}
+.b-split-step:first-child{padding-top:2vh}
+.b-split-step p{margin-top:12px}
+@media(max-width:760px){.b-split-grid{grid-template-columns:1fr}
+  .b-split-media{position:static}.b-split-step{padding:5vh 0}}
+</style>
+<script>
+(function(){
+  // Whichever step is nearest the middle of the screen is the live one.
+  var steps=[].slice.call(document.querySelectorAll(".b-split-step"));
+  if(!steps.length)return;
+  function tick(){
+    var mid=innerHeight*0.45,best=null,bestD=1e9;
+    steps.forEach(function(s){
+      var r=s.getBoundingClientRect(),c=r.top+r.height/2,d=Math.abs(c-mid);
+      if(d<bestD){bestD=d;best=s;}
+    });
+    steps.forEach(function(s){s.classList.toggle("on",s===best);});
+  }
+  addEventListener("scroll",tick,{passive:true});addEventListener("resize",tick);tick();
+})();
+</script>

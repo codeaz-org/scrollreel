@@ -35,19 +35,55 @@ import blocks
 import shell
 
 OUT = "out"
-STATE = "state.json"
+
+# CI commits state.json back after every run, and so did local runs -- which
+# meant every push hit a conflict on a generated file. Local runs now write
+# their own, gitignored, and BOTH are read when deciding what has been used, so
+# a local build still will not repeat what CI just made.
+STATE = "state.json" if os.environ.get("CI") else "state.local.json"
+STATE_FILES = ["state.json", "state.local.json"]
 
 
 def load_state():
+    """This run's state file, for writing."""
     if not os.path.exists(STATE):
         return {"built": []}
     with open(STATE) as f:
         return json.load(f)
 
 
+def all_built():
+    """Everything built anywhere -- CI's record and this machine's -- so the
+    'do not repeat' checks see both."""
+    out = []
+    for path in STATE_FILES:
+        if os.path.exists(path):
+            try:
+                with open(path) as f:
+                    out += json.load(f).get("built", [])
+            except (OSError, json.JSONDecodeError):
+                pass
+    return out
+
+
 def save_state(state):
     with open(STATE, "w") as f:
         json.dump(state, f, indent=2)
+
+
+def least_recently_used(options, used):
+    """Whichever option has gone longest without being picked; never-used wins.
+
+    Written out rather than done inline because the inline version was
+    backwards -- min() on "distance since last use" returns the MOST recent,
+    so the rotation locked onto one template after three builds.
+    """
+    recent = list(used)[::-1]
+
+    def age(option):
+        return recent.index(option) if option in recent else len(recent) + 1
+
+    return max(sorted(options), key=age)
 
 
 def slugify(text):
@@ -65,8 +101,9 @@ def main():
     args = ap.parse_args()
 
     state = load_state()
-    used_trades = {b.get("trade") for b in state["built"]}
-    used_components = {b.get("component_id") for b in state["built"]}
+    history = all_built()
+    used_trades = {b.get("trade") for b in history}
+    used_components = {b.get("component_id") for b in history}
 
     if args.trade:
         niche = next((n for n in businesses.NICHES if n["trade"] == args.trade), None)
@@ -107,7 +144,7 @@ def main():
     # The scene is copied in, never generated. It is a finished WebGL file and
     # the reason anyone stops scrolling; a model asked to "rebuild the idea in
     # CSS" returns a fade-in, which is what the first dozen builds were.
-    used_scenes = {b.get("scene") for b in state["built"]}
+    used_scenes = {b.get("scene") for b in history}
     # Ours, not ThreeUI's. Their files are finished demo pages and only five of
     # seventy worked as a backdrop; these are shaders we own, tinted per trade.
     scene = backdrops.pick(business["trade"], used=used_scenes)
@@ -166,6 +203,12 @@ def main():
         print(f"[main] scene visible on {share:.0%} of the first screen"
               + ("" if ok else "  <-- too covered"))
 
+    # Rotate the presentation too, so a week of builds is not one video made
+    # seven times. Least-recently-used rather than random: random repeats.
+    used_templates = [b.get("template") for b in history if b.get("template")]
+    template = least_recently_used(compose.TEMPLATES, used_templates)
+    print(f"[main] template: {template}")
+
     pills = "".join(f'<div class="pill">{s}</div>' for s in business["services"][:4])
     assets = compose.build_assets(
         os.path.join(work, "assets"),
@@ -177,6 +220,7 @@ def main():
         stack=pills,
         built_note="concept site",
         outro_line="This site was built by CodeAZ",
+        template=template,
     )
     video = compose.compose(frames_dir, os.path.join(work, "video.mp4"), assets, fps=args.fps)
     print(f"[main] video: {video}")
@@ -185,6 +229,7 @@ def main():
         "business": business["name"], "trade": business["trade"], "city": business["city"],
         "component_id": component["id"], "component": component["name"],
         "scene": (scene or {}).get("name"),
+        "template": template,
         "scene_source": (scene or {}).get("source_url"),
         "library": component["library"], "license": component["license"],
         "source_url": component["source_url"],

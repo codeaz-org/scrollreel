@@ -20,25 +20,40 @@ from playwright.sync_api import sync_playwright
 
 W, H = 1080, 1920
 
-# The browser window in the artwork. Everything else is derived from this, and
-# the same numbers drive the CSS and the ffmpeg overlay position.
+# Three ways of presenting the same footage. One is chosen per build, so a
+# week of videos does not look like one video made seven times.
 #
-# Sized and placed so the window occupies the middle band with the title above
-# and a caption below. The first pass put a 960x600 window at y=470 and left
-# the bottom third of a 1920px canvas empty, which on a phone reads as a small
-# picture floating in a lot of nothing -- the same failure the clipping
-# pipeline had with its letterboxed 16:9 sources.
-WIN_X, WIN_Y = 40, 470
-WIN_W = W - (WIN_X * 2)          # 1000
-BAR_H = 44                        # title bar height
+#   window     a browser chrome with a title bar. Reads as "a real site".
+#   flush      no chrome, footage larger and rounded. Reads as a product shot.
+#   editorial  title beneath the footage, which sits high. Reads as a magazine.
+#
+# Geometry is per template and shared by the CSS and the ffmpeg overlay, so the
+# artwork and the video underneath it cannot drift apart.
+TEMPLATES = {
+    "window":    {"x": 40, "y": 470, "bar": 44, "title_top": 110, "title_at": "top"},
+    "flush":     {"x": 24, "y": 430, "bar": 0,  "title_top": 96,  "title_at": "top"},
+    "editorial": {"x": 40, "y": 190, "bar": 0,  "title_top": 0,   "title_at": "bottom"},
+}
 BORDER = 2
-INNER_X = WIN_X + BORDER
-INNER_Y = WIN_Y + BAR_H
-INNER_W = WIN_W - (BORDER * 2)
 # Source viewport ratio, held exactly so the page is never distorted.
 SRC_W, SRC_H = 1024, 850   # must match record.VIEWPORT
-INNER_H = round(INNER_W * SRC_H / SRC_W)
-WIN_BOTTOM = WIN_Y + BAR_H + INNER_H + BORDER
+
+
+def geometry(template="window"):
+    """Every number the CSS and the overlay both need, derived from one place."""
+    t = TEMPLATES.get(template, TEMPLATES["window"])
+    win_x, win_y, bar = t["x"], t["y"], t["bar"]
+    win_w = W - win_x * 2
+    inner_w = win_w - BORDER * 2
+    inner_h = round(inner_w * SRC_H / SRC_W)
+    return {
+        **t, "template": template,
+        "WIN_X": win_x, "WIN_Y": win_y, "WIN_W": win_w, "BAR_H": bar,
+        "INNER_X": win_x + BORDER, "INNER_Y": win_y + bar,
+        "INNER_W": inner_w, "INNER_H": inner_h,
+        "WIN_BOTTOM": win_y + bar + inner_h + BORDER,
+    }
+
 
 FONT = "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif"
 
@@ -52,17 +67,27 @@ def _shell(html, path, transparent=False):
         b.close()
 
 
-def _bg_html(title, subtitle, stack="", kicker="Website concept", built_note="concept site"):
-    caption_top = WIN_BOTTOM + 56
+def _bg_html(title, subtitle, stack="", kicker="Website concept",
+             built_note="concept site", g=None):
+    g = g or geometry()
+    W_, H_ = W, H
+    if g["title_at"] == "bottom":
+        # editorial: footage high, the naming underneath it.
+        wrap_top = g["WIN_BOTTOM"] + 70
+        caption_top = wrap_top + 300
+    else:
+        wrap_top = g["title_top"]
+        caption_top = g["WIN_BOTTOM"] + 56
+    title_size = 82 if len(title) < 22 else 66
     return f"""
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
   *{{margin:0;box-sizing:border-box}}
   body{{width:{W}px;height:{H}px;font-family:{FONT};color:#e8ecf1;
        background:radial-gradient(120% 80% at 50% 0%,#1d2634 0%,#0b0d10 60%)}}
-  .wrap{{padding:110px 64px 0}}
+  .wrap{{position:absolute;top:{wrap_top}px;left:0;right:0;padding:0 64px}}
   .kicker{{font-size:26px;letter-spacing:.28em;text-transform:uppercase;color:#7f8ea3;font-weight:600}}
-  h1{{font-size:82px;line-height:1.02;font-weight:800;margin-top:24px;letter-spacing:-.025em}}
+  h1{{font-size:{title_size}px;line-height:1.02;font-weight:800;margin-top:24px;letter-spacing:-.025em}}
   .sub{{font-size:31px;color:#9fb0c3;margin-top:24px;font-weight:400}}
   /* Sits in what used to be dead canvas under the window. */
   .caption{{position:absolute;top:{caption_top}px;left:64px;right:64px;
@@ -84,9 +109,23 @@ def _bg_html(title, subtitle, stack="", kicker="Website concept", built_note="co
 """
 
 
-def _chrome_html():
+def _chrome_html(g=None):
     """Window bezel only. The inner rect stays transparent so the recorded
-    footage shows through when this is overlaid on top of it."""
+    footage shows through when this is overlaid on top of it.
+
+    With bar=0 (flush, editorial) there is no title bar and the frame is just
+    a rounded edge and a shadow -- the footage reads as a product shot rather
+    than as a browser."""
+    g = g or geometry()
+    WIN_X, WIN_Y, WIN_W = g["WIN_X"], g["WIN_Y"], g["WIN_W"]
+    BAR_H, INNER_H = g["BAR_H"], g["INNER_H"]
+    bar = ("""
+  <div class="bar">
+    <div class="dot" style="background:#ff5f57"></div>
+    <div class="dot" style="background:#febc2e"></div>
+    <div class="dot" style="background:#28c840"></div>
+    <div class="url">localhost:4500</div>
+  </div>""" if BAR_H else "")
     return f"""
 <style>
   *{{margin:0;box-sizing:border-box}}
@@ -100,14 +139,7 @@ def _chrome_html():
   .dot{{width:12px;height:12px;border-radius:50%}}
   .url{{margin-left:16px;font:500 15px {FONT};color:#7f8ea3}}
 </style>
-<div class="win">
-  <div class="bar">
-    <div class="dot" style="background:#ff5f57"></div>
-    <div class="dot" style="background:#febc2e"></div>
-    <div class="dot" style="background:#28c840"></div>
-    <div class="url">localhost:4500</div>
-  </div>
-</div>
+<div class="win">{bar}</div>
 """
 
 
@@ -132,24 +164,28 @@ def _outro_html(component, source_url, outro_line="This site was built by CodeAZ
 """
 
 
-def build_assets(out_dir, title, subtitle, component, source_url, stack="", kicker="Website concept", outro_line="This site was built by CodeAZ",
-                 built_note="concept site"):
+def build_assets(out_dir, title, subtitle, component, source_url, stack="",
+                 kicker="Website concept", outro_line="This site was built by CodeAZ",
+                 built_note="concept site", template="window"):
+    g = geometry(template)
     os.makedirs(out_dir, exist_ok=True)
     paths = {
         "bg": os.path.join(out_dir, "bg.png"),
         "chrome": os.path.join(out_dir, "chrome.png"),
         "outro": os.path.join(out_dir, "outro.png"),
     }
-    _shell(_bg_html(title, subtitle, stack, kicker, built_note), paths["bg"])
-    _shell(_chrome_html(), paths["chrome"], transparent=True)
+    _shell(_bg_html(title, subtitle, stack, kicker, built_note, g), paths["bg"])
+    _shell(_chrome_html(g), paths["chrome"], transparent=True)
     _shell(_outro_html(component, source_url, outro_line), paths["outro"])
+    paths["geometry"] = g
     return paths
 
 
-def compose(frames_dir, out_path, assets, fps=30, outro_seconds=2.5):
+def compose(frames_dir, out_path, assets, fps=30, outro_seconds=2.5, g=None):
     """One ffmpeg pass: scale footage into the window, stack the layers, then
     concat the outro. Done as a single filtergraph so there is no intermediate
     re-encode to lose quality to."""
+    g = g or assets.get("geometry") or geometry()
     body = os.path.join(os.path.dirname(out_path), "_body.mp4")
     cmd = [
         "ffmpeg", "-y", "-loglevel", "error",
@@ -157,8 +193,8 @@ def compose(frames_dir, out_path, assets, fps=30, outro_seconds=2.5):
         "-framerate", str(fps), "-i", os.path.join(frames_dir, "f%05d.png"),
         "-loop", "1", "-i", assets["chrome"],
         "-filter_complex",
-        (f"[1:v]scale={INNER_W}:{INNER_H}[page];"
-         f"[0:v][page]overlay={INNER_X}:{INNER_Y}:shortest=1[withpage];"
+        (f"[1:v]scale={g['INNER_W']}:{g['INNER_H']}[page];"
+         f"[0:v][page]overlay={g['INNER_X']}:{g['INNER_Y']}:shortest=1[withpage];"
          f"[withpage][2:v]overlay=0:0:shortest=1,format=yuv420p[v]"),
         "-map", "[v]", "-r", str(fps),
         "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-movflags", "+faststart",

@@ -119,6 +119,11 @@ def validate(plan, blocks=None):
         for slot in (blocks[name].get("slots") or {}):
             if slot not in data or data[slot] in ("", None, []):
                 problems.append(f"item {i} ({name}): missing slot {slot!r}")
+    # Texture blocks earn their place once. A second marquee before the
+    # contact block added nothing to the dental build.
+    for once in ("marquee-strip", "quote-bleed"):
+        if names.count(once) > 1:
+            problems.append(f"{once} used {names.count(once)} times; once is enough")
     # Two bleeds in a row is a screen of type floating on nothing.
     kinds = [blocks[n]["kind"] for n in names if n in blocks]
     for a, b in zip(kinds, kinds[1:]):
