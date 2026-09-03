@@ -20,12 +20,26 @@ import json
 import os
 import sys
 
+import caption as caption_writer
 import tiktok
 
 
 def caption_for(meta):
-    """The copy that sells the service, not the component. The component is an
-    implementation detail nobody outside this repo cares about."""
+    """Per-business copy from caption.py, falling back to a template.
+
+    The template said the same thing every time -- fine once, invisible by the
+    fifth video. caption.py was written for this and then never wired in, so
+    every draft so far shipped the template."""
+    try:
+        written = caption_writer.generate(meta)
+        return caption_writer.full_text(written)
+    except Exception as e:  # noqa: BLE001 -- copy must never block a post
+        print(f"[post] caption generation failed ({e}); using the template",
+              file=sys.stderr)
+    return _template_caption(meta)
+
+
+def _template_caption(meta):
     trade = meta["trade"]
     # "a auto repair shop" shipped in the first staged draft. Vowel test, not a
     # dictionary: every trade in businesses.py is a plain noun phrase.

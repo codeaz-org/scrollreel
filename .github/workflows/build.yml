@@ -1,0 +1,114 @@
+name: Build a site video
+
+on:
+  workflow_dispatch:
+    inputs:
+      trade:
+        description: "Trade to build for (blank = a fresh one)"
+        required: false
+        default: ""
+      seconds:
+        description: "Scroll duration"
+        required: false
+        default: "12"
+      post:
+        description: "Upload to TikTok drafts when done"
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write   # the Persist state step commits state.json back
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install playwright requests
+
+      - name: Check what the runner actually has
+        run: |
+          # record.py drives the INSTALLED Chrome (channel="chrome"), not a
+          # Playwright-downloaded Chromium, and compose.py shells out to
+          # ffmpeg. Fail here with a clear message rather than 20 minutes in.
+          google-chrome --version || { echo "::error::no Chrome on this runner"; exit 1; }
+          ffmpeg -version | head -1 || { echo "::error::no ffmpeg"; exit 1; }
+
+      - name: Prove WebGL works headless
+        run: |
+          # No GPU here, so the backdrops rely on SwiftShader. If this prints
+          # anything other than a real renderer, every video is a black frame
+          # and it is better to know now.
+          python - <<'PY'
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              b = p.chromium.launch(channel="chrome", args=[
+                  "--use-gl=angle", "--use-angle=swiftshader",
+                  "--enable-unsafe-swiftshader"])
+              pg = b.new_page()
+              info = pg.evaluate("""() => {
+                  const c = document.createElement('canvas');
+                  const gl = c.getContext('webgl');
+                  if (!gl) return 'NO WEBGL';
+                  const d = gl.getExtension('WEBGL_debug_renderer_info');
+                  return d ? gl.getParameter(d.UNMASKED_RENDERER_WEBGL) : 'webgl, renderer unknown';
+              }""")
+              print("renderer:", info)
+              b.close()
+              if info == "NO WEBGL":
+                  raise SystemExit("::error::no WebGL on this runner")
+          PY
+
+      - name: Build
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.trade }}" ]; then
+            ARGS="--trade '${{ github.event.inputs.trade }}'"
+          fi
+          eval python -u main.py $ARGS --seconds "${{ github.event.inputs.seconds }}"
+
+      - name: Upload the video and the site
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-build
+          path: |
+            out/*/video.mp4
+            out/*/page.html
+            out/*/scene.html
+            out/*/meta.json
+          if-no-files-found: warn
+
+      - name: Upload to TikTok drafts
+        if: ${{ github.event.inputs.post == 'true' }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
+          TIKTOK_CLIENT_SECRET: ${{ secrets.TIKTOK_CLIENT_SECRET }}
+          TIKTOK_REFRESH_TOKEN_CODEAZ: ${{ secrets.TIKTOK_REFRESH_TOKEN_CODEAZ }}
+        run: |
+          DIR=$(ls -td out/*/ | head -1)
+          echo "posting $DIR"
+          python post.py "$DIR" --yes
+
+      - name: Persist state
+        if: success()
+        run: |
+          # state.json is what stops the next run repeating a trade, a
+          # component or a backdrop.
+          git config user.name "scrollreel-bot"
+          git config user.email "actions@github.com"
+          git add state.json
+          git diff --cached --quiet || git commit -m "chore: build $(date -u +%F_%H:%M)"
+          git push || echo "push failed (non-fatal)"

@@ -50,8 +50,16 @@ def record(url, out_dir, seconds=12.0, fps=30, settle_ms=400,
     written = 0
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(channel="chrome", args=["--hide-scrollbars",
-                                                            "--force-device-scale-factor=1"])
+        # SwiftShader flags matter on CI: a GitHub runner has no GPU, and
+        # without a software GL backend every WebGL backdrop records as a black
+        # frame. Harmless on a machine that does have one.
+        browser = p.chromium.launch(channel="chrome", args=[
+            "--hide-scrollbars",
+            "--force-device-scale-factor=1",
+            "--use-gl=angle",
+            "--use-angle=swiftshader",
+            "--enable-unsafe-swiftshader",
+        ])
         page = browser.new_page(viewport=VIEWPORT, device_scale_factor=2)
         page.goto(url, wait_until="networkidle")
         # Fonts and lazy assets land after networkidle often enough to matter.

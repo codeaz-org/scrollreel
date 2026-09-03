@@ -20,6 +20,26 @@ import os
 import random
 import re
 
+PARENT_BRIDGE = """
+<script id="scrollreel-parent-bridge">
+(function () {
+  var f = document.getElementById("scene") || document.querySelector("iframe");
+  if (!f) return;
+  function push() {
+    var max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    var r = Math.min(1, Math.max(0, window.scrollY / max));
+    try { f.contentWindow.postMessage({ scrollreel: r }, "*"); } catch (e) {}
+  }
+  addEventListener("scroll", push, { passive: true });
+  addEventListener("resize", push);
+  f.addEventListener("load", push);
+  setTimeout(push, 300);
+  push();
+})();
+</script>
+"""
+
+
 DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "library", "backdrops")
 
 # Palettes are (base, mid, accent) as 0..1 RGB. Picked per trade so the same

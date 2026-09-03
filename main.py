@@ -31,7 +31,6 @@ import page_builder
 import record
 import refine
 import backdrops
-import scenes
 import shell
 
 OUT = "out"
@@ -128,7 +127,7 @@ def main():
     sections = built["html"]
     html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}")
     if scene:
-        html = re.sub(r"</body>", scenes.PARENT_BRIDGE + "</body>", html,
+        html = re.sub(r"</body>", backdrops.PARENT_BRIDGE + "</body>", html,
                       count=1, flags=re.I)
 
     page_path = os.path.join(work, "page.html")
@@ -150,7 +149,7 @@ def main():
         if refined:
             html = shell.wrap(improved, title=f"{business['name']} — {business['trade']}")
             if scene:
-                html = re.sub(r"</body>", scenes.PARENT_BRIDGE + "</body>", html,
+                html = re.sub(r"</body>", backdrops.PARENT_BRIDGE + "</body>", html,
                               count=1, flags=re.I)
             with open(page_path, "w") as f:
                 f.write(html)
