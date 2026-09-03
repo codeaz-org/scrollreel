@@ -41,10 +41,18 @@ so it has to.
 ./.venv/bin/python post.py out/halden-auto
 ```
 
-Drafts only, and that is enforced rather than configured: `post.py` refuses to
-run unless `BUFFER_DRAFT=1`. Building and publishing are two separate decisions
-on purpose — the clipping pipeline this grew out of posted three clips nobody
-had watched, and they had to be deleted by hand.
+The video lands in the **TikTok app's own drafts** (inbox), not in Buffer.
+There is no publish path in `post.py` at all — you open TikTok, add audio, and
+post it yourself. Building and publishing are two separate decisions on
+purpose: the clipping pipeline this grew out of posted three clips nobody had
+watched, and they had to be deleted by hand.
+
+**The caption is not pre-filled.** Measured live: `content/init` (the endpoint
+that carries `post_info`) rejects `FILE_UPLOAD` with *"Invalid media_type or
+post_mode"*, so uploads fall back to `inbox/video/init`, whose body accepts
+only `source_info`. Paste the caption `post.py` prints, or host the mp4 and
+verify that domain under Content Posting API → URL properties to use
+`PULL_FROM_URL` with `post_info` instead.
 
 ## Things that will bite
 

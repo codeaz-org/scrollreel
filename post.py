@@ -1,13 +1,16 @@
-"""Stage a finished video on TikTok as a Buffer DRAFT.
+"""Put a finished video into the account's own TikTok drafts.
 
 Separate command, never called by main.py. The clipping pipeline taught this
 the expensive way: it posted three clips nobody had watched, and they had to be
 deleted by hand. Here the build and the publish are two decisions.
 
-Drafts only, enforced rather than configured. These pages are concept sites for
-invented businesses; a draft means a person approves each one before it appears
-on the account. Setting BUFFER_MODE=shareNow does not override it -- the check
-below refuses to run.
+A TikTok draft, not a Buffer draft: the video lands unpublished in the TikTok
+app itself, caption pre-filled, and a person adds audio and posts it. Buffer's
+draft would only ever sit in Buffer.
+
+Uploading is the only mode offered here -- there is no publish path in this
+file at all. These are concept sites for invented businesses, so a human
+approving each one is the point rather than a limitation.
 
   python post.py out/halden-auto           # stage that build
   python post.py out/halden-auto --caption "..."   # override the copy
@@ -17,7 +20,7 @@ import json
 import os
 import sys
 
-import buffer_client
+import tiktok
 
 
 def caption_for(meta):
@@ -52,29 +55,24 @@ def main():
     if not os.path.exists(video):
         sys.exit(f"video missing: {video}")
 
-    if not buffer_client.enabled():
-        sys.exit("BUFFER_ACCESS_TOKEN is not set")
-    draft = (os.environ.get("BUFFER_DRAFT") or "").strip().lower() in ("1", "true", "yes")
-    if not draft:
-        sys.exit("BUFFER_DRAFT must be 1: scrollreel stages drafts, it does not publish. "
-                 "Approve the post in Buffer once you have watched it.")
+    suffix = os.environ.get("TIKTOK_ENV_SUFFIX", "CODEAZ")
+    if not tiktok.enabled(suffix):
+        sys.exit(f"TikTok not configured: needs TIKTOK_CLIENT_KEY, TIKTOK_CLIENT_SECRET "
+                 f"and TIKTOK_REFRESH_TOKEN_{suffix.upper()}")
 
     caption = args.caption or caption_for(meta)
     print(f"video   : {video}")
     print(f"business: {meta['business']} ({meta['trade']}, {meta['city']})")
     print("caption :\n" + caption)
     if not args.yes:
-        if input("\nstage this as a Buffer draft? [y/N] ").strip().lower() != "y":
+        if input("\nupload to TikTok drafts? [y/N] ").strip().lower() != "y":
             sys.exit("cancelled")
 
-    hosted = buffer_client.host_file(video)
-    post_id = buffer_client.publish(
-        video, caption, title=meta["business"], video_url=hosted,
-        env_suffix=os.environ.get("BUFFER_ENV_SUFFIX", "codeaz"),
-    )
-    print(f"staged as Buffer draft: {post_id}")
+    publish_id = tiktok.publish_draft(video, caption, title=meta["business"], suffix=suffix)
+    print(f"in TikTok drafts: {publish_id}")
+    print("Open TikTok -> inbox notification -> add audio -> post.")
 
-    meta.setdefault("posts", []).append({"buffer_post_id": post_id, "draft": True})
+    meta.setdefault("posts", []).append({"tiktok_publish_id": publish_id, "draft": True})
     with open(meta_path, "w") as f:
         json.dump(meta, f, indent=2)
 
