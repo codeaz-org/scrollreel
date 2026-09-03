@@ -31,8 +31,11 @@ the code intends.
 
 {verify}
 
-Report and then FIX. Return the complete corrected HTML file and nothing else:
-no markdown fences, no commentary, no explanation of the changes.
+Report and then FIX. Return the corrected SECTIONS and nothing else -- the same
+shape you were given: <section> elements plus at most one <style>. No
+<!DOCTYPE>, no <html>, no <body>: the document, the fixed WebGL scene layer
+behind your sections, and the .panel/.bleed classes are supplied around you and
+must not be rewritten. No markdown fences, no commentary.
 
 Priorities, in this order:
 1. Anything blank, overlapping, cut off, or obviously broken in a frame.
@@ -41,6 +44,9 @@ Priorities, in this order:
 3. Text too small or too low contrast to read on a phone.
 4. Motion that has no weight: things appearing without easing or settling.
 5. Sections that could be on any business's site rather than this one.
+6. The 3D scene being invisible: if every frame is wall-to-wall card, thin the
+   panels out and give the scene room. Roughly a third of a screen should be
+   scene.
 
 Keep everything that already works. Do not restructure a page that is fine."""
 
@@ -100,7 +106,7 @@ def refine(html, frames_dir, business, api_key=None, scrollcraft_dir="scrollcraf
             verify = f.read()[:18000]
 
     text = (f"This is the site for {business['name']}, {business['trade']} in "
-            f"{business['city']}.\n\nCurrent HTML:\n\n{html}\n\n"
+            f"{business['city']}.\n\nCurrent sections:\n\n{html}\n\n"
             f"{len(image_parts)} frames follow, in scroll order.")
 
     for model in page_builder.MODELS:

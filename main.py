@@ -31,6 +31,7 @@ import page_builder
 import record
 import refine
 import scenes
+import shell
 
 OUT = "out"
 STATE = "state.json"
@@ -119,13 +120,13 @@ def main():
 
     # Injected rather than requested: the model does not have to remember to
     # drive the scene, and a build that forgets would ship a frozen 3D layer.
-    html = built["html"]
-    if scene and "scrollreel-parent-bridge" not in html:
-        if "</body>" in html.lower():
-            html = re.sub(r"</body>", scenes.PARENT_BRIDGE + "</body>", html,
-                          count=1, flags=re.I)
-        else:
-            html += scenes.PARENT_BRIDGE
+    # shell.py owns the document; the model only supplied sections. This is
+    # what stops a build burying the scene under opaque cards.
+    sections = built["html"]
+    html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}")
+    if scene:
+        html = re.sub(r"</body>", scenes.PARENT_BRIDGE + "</body>", html,
+                      count=1, flags=re.I)
 
     page_path = os.path.join(work, "page.html")
     with open(page_path, "w") as f:
@@ -140,15 +141,23 @@ def main():
     # and forgettable. The re-record costs ~40s and is worth it.
     refined = False
     if not args.no_refine:
-        improved, refined = refine.refine(html, frames_dir, business)
+        # Refine works on the SECTIONS, not the document: the shell is ours and
+        # a rewrite that returned a whole page would take the scene layer with it.
+        improved, refined = refine.refine(sections, frames_dir, business)
         if refined:
-            if scene and "scrollreel-parent-bridge" not in improved:
-                improved = re.sub(r"</body>", scenes.PARENT_BRIDGE + "</body>",
-                                  improved, count=1, flags=re.I)
+            html = shell.wrap(improved, title=f"{business['name']} — {business['trade']}")
+            if scene:
+                html = re.sub(r"</body>", scenes.PARENT_BRIDGE + "</body>", html,
+                              count=1, flags=re.I)
             with open(page_path, "w") as f:
-                f.write(improved)
+                f.write(html)
             frames_dir, n = record.record(f"file://{os.path.abspath(page_path)}", work,
                                           seconds=args.seconds, fps=args.fps)
+
+    if scene:
+        ok, share = shell.verify_visible(page_path)
+        print(f"[main] scene visible on {share:.0%} of the first screen"
+              + ("" if ok else "  <-- too covered"))
 
     pills = "".join(f'<div class="pill">{s}</div>' for s in business["services"][:4])
     assets = compose.build_assets(

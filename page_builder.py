@@ -67,11 +67,20 @@ The page is a website a business owner would pay for. Not a component demo, not
 a SaaS landing page, not a design experiment. Someone should look at it and
 think "that garage looks like it knows what it's doing".
 
+WHAT YOU RETURN
+Not a document -- the SECTIONS that go inside one. No <!DOCTYPE>, no <html>,
+<head> or <body>: those already exist and embed a live WebGL scene as a fixed
+layer behind your content. Return a sequence of <section> elements, plus at
+most one <style> block for section-specific rules.
+
 HARD REQUIREMENTS
-- Output ONLY the HTML. No markdown fences, no commentary.
-- One file. Inline <style> and <script>. No imports, no build step, no React.
-- Tailwind is NOT available. Write real CSS.
+- Output ONLY the markup. No markdown fences, no commentary.
+- No imports, no build step, no React. Tailwind is NOT available.
 - 3.5 to 5 viewport heights tall at 1024x850. Not shorter.
+- NEVER set a background on body, html, #content or a <section>. The 3D scene
+  is behind them and a background hides it. Solid colours you write are
+  rewritten to translucent automatically, so writing one only costs you
+  control of the result.
 - Animation is driven by scroll position (IntersectionObserver or scroll
   listener), never by a timer: the video scrubs the page, and a timed animation
   has already finished before its section is on screen.
@@ -89,27 +98,24 @@ hours, and an obvious way to make contact. Invent concrete, plausible detail --
 prices, timescales, street names, a founding year. Vague copy is what makes
 these look fake.
 
-THE 3D SCENE -- THE MOST IMPORTANT PART OF THE PAGE
-A finished WebGL scene sits next to your file as scene.html. Do NOT rebuild it,
-describe it, or approximate it in CSS. Embed it exactly like this, as the first
-element in <body>:
+THE 3D SCENE -- THE REASON ANYONE WATCHES
+A live WebGL scene is already running as a fixed full-viewport layer behind
+your sections, and it is driven by the page's scroll. Your job is to let it be
+seen. Roughly a third of any screenful should be scene, not card.
 
-    <iframe src="scene.html" id="scene" title="" tabindex="-1" scrolling="no"></iframe>
+Classes you have. Use them; do not reinvent them:
+  .panel   translucent blurred card. ALL body copy goes in one of these.
+  .bleed   no background at all. For a headline sitting directly on the scene.
+  .grid    two-column grid inside a panel.
+  .stack   vertical rhythm.  .lede  large intro.  .fine  small print.
 
-and style it as a FIXED, full-viewport layer behind everything:
-
-    #scene{position:fixed;inset:0;width:100vw;height:100vh;border:0;
-           z-index:0;pointer-events:none}
-
-Every other element sits above it with position:relative and z-index:1+. The
-scene is real 3D and it is the reason someone stops scrolling, so:
-- The first viewport must be mostly scene. Do not bury it under a solid hero.
-- Keep it visible through the page. Sections that need reading get their own
-  translucent panel (a dark scrim, backdrop-filter: blur(12px), a rounded card)
-  rather than a full-bleed opaque background that hides the 3D entirely.
-- Drive the CONTENT from scroll -- panels rising, pinning, parallax, text
-  assembling -- so the 3D behind and the content above move at different rates.
-- Never put an opaque background on <body> or <html>: it would cover the scene.
+- The FIRST section must have class "hero" and contain a .bleed only: a
+  headline, one line of copy, one call to action. No card, no photo. It is the
+  frame that stops the scroll and it should be mostly scene.
+- After that, alternate: a .panel of substance, then a .bleed statement over
+  open scene. Never two full panels back to back covering the whole screen.
+- Panels are cards, not bands: keep them under ~70% of viewport height so the
+  scene stays visible above and below.
 
 CRAFT
 - One page grammar, committed to: filmic one-shot, chaptered editorial,
@@ -207,8 +213,13 @@ def verify(html):
     Returns a list of problems; empty means it passed."""
     problems = []
     low = html.lower()
-    if "<html" not in low or "</html>" not in low:
-        problems.append("not a complete HTML document")
+    # The model returns sections now; shell.py supplies the document, so a
+    # full document coming back means it ignored the contract and would bring
+    # its own <body> background over the scene.
+    if "<!doctype" in low or "<html" in low or "<body" in low:
+        problems.append("returned a whole document instead of sections")
+    if "<section" not in low:
+        problems.append("no <section> elements")
     if len(html) < 4000:
         problems.append(f"suspiciously short ({len(html)} chars) -- likely truncated")
     if "cdn.tailwindcss.com" in low or "class=\"flex " in low and "<style" not in low:
@@ -220,10 +231,10 @@ def verify(html):
             problems.append(f"banned marketing phrase: {banned!r}")
     if re.search(r"<img[^>]+src=[\"']https?://", html):
         problems.append("loads a remote image, which may not paint during capture")
-    if "scene.html" not in html:
-        problems.append("does not embed scene.html -- the 3D scene is the whole point")
-    elif not re.search(r"position\s*:\s*fixed", html):
-        problems.append("scene.html is embedded but not as a fixed background layer")
+    if re.search(r"(body|html|#content)\s*\{[^}]*background", html, re.I):
+        problems.append("sets a background on body/html/#content, which hides the scene")
+    if "hero" not in low:
+        problems.append("no hero section")
     return problems
 
 

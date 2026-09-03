@@ -1,32 +1,30 @@
 {
   "built": [
     {
-      "business": "Norwood Roofworks",
-      "trade": "roofing contractor",
-      "city": "Ghent",
-      "component_id": "magicuidesign/magicui:animated-grid-pattern",
-      "component": "animated-grid-pattern",
-      "scene": "constellation-field",
-      "scene_source": "https://github.com/MengTo/threeui/blob/main/src/shaders/neuform-isolated/sources/constellation-field.html",
+      "business": "Thistle Coffee Co.",
+      "trade": "coffee roastery",
+      "city": "Utrecht",
+      "component_id": "magicuidesign/magicui:particles",
+      "component": "particles",
+      "scene": "amber-halftone",
+      "scene_source": "https://github.com/MengTo/threeui/blob/main/src/shaders/neuform-isolated/sources/amber-halftone.html",
       "library": "Magic UI",
       "license": "MIT",
-      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/animated-grid-pattern.tsx",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/particles.tsx",
       "photos": [
-        "Photo by Ryan  Stephens on Pexels",
-        "Photo by Gundula Vogel on Pexels",
-        "Photo by Rajesh S  Balouria on Pexels",
-        "Photo by Ryan  Stephens on Pexels",
-        "Photo by Cl\u00e9ment Proust on Pexels"
+        "Photo by Hebert  Santos on Pexels",
+        "Photo by FOX ^.\u11bd.^= \u222b on Pexels",
+        "Photo by Sevde Alt\u0131nta\u015f on Pexels",
+        "Photo by M\u00e9lodie Lochon on Pexels",
+        "Photo by Tony  Wu on Pexels"
       ],
-      "model": "gemini-3.7-flash",
-      "verify_problems": [
-        "banned marketing phrase: 'seamless'"
-      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
       "refined": false,
-      "page": "out/norwood-roofworks/page.html",
-      "video": "out/norwood-roofworks/video.mp4",
-      "frames": 405,
-      "ts": "2026-09-03T10:33:41"
+      "page": "out/thistle-coffee-co/page.html",
+      "video": "out/thistle-coffee-co/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-03T12:24:33"
     }
   ]
 }
