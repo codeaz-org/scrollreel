@@ -27,45 +27,43 @@ import re
 
 SCRIM_ALPHA = 0.62
 
-SHELL_CSS = f"""
-:root {{
-  --ink: #eef2f7; --muted: #a9b6c6; --line: rgba(255,255,255,.10);
-  --panel: rgba(9,11,15,{SCRIM_ALPHA}); --accent: #ff6a2b;
-}}
-*, *::before, *::after {{ box-sizing: border-box; }}
-html, body {{ margin: 0; background: transparent !important; color: var(--ink);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif; }}
-/* The scene: fixed, behind everything, never covered by the page itself. */
-#scene {{ position: fixed !important; inset: 0 !important; width: 100vw !important;
+SHELL_CSS = """
+/* Structure only. Every look decision -- type, colour, radius, measure,
+   whether headings shout -- comes from the skin's tokens, so the same markup
+   is a different website under a different skin rather than a recolour. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; background: transparent !important; color: var(--ink);
+  font-family: var(--font-body); font-size: var(--body-size); }
+#scene { position: fixed !important; inset: 0 !important; width: 100vw !important;
   height: 100vh !important; border: 0 !important; z-index: 0 !important;
-  pointer-events: none !important; }}
-#content {{ position: relative; z-index: 1; background: transparent !important; }}
-#content > section {{ background: transparent !important; padding: 7vh 5vw;
-  max-width: 1100px; margin: 0 auto; }}
-/* A hero that is mostly scene: this is the frame that stops the scroll. */
-#content > section.hero {{ min-height: 92vh; display: flex; align-items: flex-end;
-  padding-bottom: 10vh; }}
-.bleed {{ background: transparent !important; }}
-.panel {{ background: var(--panel) !important; backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px); border: 1px solid var(--line);
-  border-radius: 18px; padding: 34px 36px; }}
-.stack > * + * {{ margin-top: 18px; }}
-h1 {{ font-size: clamp(52px, 7vw, 86px); line-height: 1.02; letter-spacing: -.03em;
-  margin: 0; text-shadow: 0 2px 40px rgba(0,0,0,.55); }}
-h2 {{ font-size: clamp(34px, 4.4vw, 54px); line-height: 1.08; letter-spacing: -.02em;
-  margin: 0; }}
-h3 {{ font-size: 26px; margin: 0; }}
-p, li {{ font-size: 20px; line-height: 1.55; color: var(--muted); margin: 0; }}
-.lede {{ font-size: 25px; color: var(--ink); }}
-.fine {{ font-size: 16px; color: var(--muted); }}
-a {{ color: var(--accent); }}
-img {{ max-width: 100%; border-radius: 12px; display: block; }}
-.grid {{ display: grid; gap: 22px; grid-template-columns: repeat(2, 1fr); }}
-@media (max-width: 760px) {{ .grid {{ grid-template-columns: 1fr; }} }}
-/* Sections rise as they enter. Scroll-driven, not timed. */
-#content .rise {{ opacity: 0; transform: translateY(34px);
-  transition: opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1); }}
-#content .rise.in {{ opacity: 1; transform: none; }}
+  pointer-events: none !important; }
+#content { position: relative; z-index: 1; background: transparent !important; }
+#content > section { background: transparent !important; padding: 7vh 5vw;
+  max-width: var(--measure); margin: 0 auto; }
+#content > section.hero { min-height: 92vh; display: flex; align-items: flex-end;
+  padding-bottom: 10vh; }
+.bleed { background: transparent !important; }
+.panel { background: var(--panel) !important; border: var(--border) solid var(--line);
+  border-radius: var(--radius); padding: var(--pad); }
+.stack > * + * { margin-top: 18px; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; }
+h1 { font-size: var(--h1); line-height: 1.02; letter-spacing: var(--track);
+  text-shadow: 0 2px 40px rgba(0,0,0,.45); }
+h2 { font-size: var(--h2); line-height: 1.08; letter-spacing: var(--track); }
+h3 { font-size: 26px; }
+p, li { font-size: var(--body-size); line-height: 1.55; color: var(--muted); margin: 0; }
+.lede { font-size: calc(var(--body-size) * 1.25); color: var(--ink); }
+.fine { font-size: calc(var(--body-size) * .82); color: var(--muted); }
+a { color: var(--accent); }
+img { max-width: 100%; border-radius: calc(var(--radius) * .7); display: block; }
+.grid { display: grid; gap: 22px; grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+/* Panels on a light skin need the accent that reads on paper. */
+.panel a, .panel .b-price-v, .panel .b-stat-v, .panel .b-radius-num,
+.panel .b-step-meta { color: var(--accent-panel); }
+#content .rise { opacity: 0; transform: translateY(34px);
+  transition: opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1); }
+#content .rise.in { opacity: 1; transform: none; }
 """
 
 REVEAL_JS = """
@@ -93,12 +91,17 @@ def _hex_to_rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
-def translucify(text, alpha=SCRIM_ALPHA):
+def translucify(text, alpha=SCRIM_ALPHA, skin=None):
     """Any solid background the model wrote becomes the same colour at alpha.
 
     Blunt on purpose. A section that sets #0a0d12 is not making a design
     decision we need to respect -- it is hiding the one thing the video is
     for."""
+    # On a paper skin the panels are meant to be opaque; softening them there
+    # turns the page to fog and the type stops being readable.
+    if skin in ("press",):
+        return text
+
     def hexsub(m):
         r, g, b = _hex_to_rgb(m.group(2))
         return f"background{m.group(1) or ''}: rgba({r},{g},{b},{alpha})"
@@ -110,19 +113,22 @@ def translucify(text, alpha=SCRIM_ALPHA):
     return _RGB.sub(rgbsub, _HEX.sub(hexsub, text))
 
 
-def wrap(sections_html, scene_file="scene.html", title="", fonts=""):
-    """Assemble the finished document around the model's sections."""
-    body = translucify(sections_html)
-    font_link = fonts or ("<link rel='preconnect' href='https://fonts.googleapis.com'>"
-                          "<link href='https://fonts.googleapis.com/css2?family=Inter:"
-                          "wght@400;600;800&display=swap' rel='stylesheet'>")
+def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
+         accent="#ff6a2b"):
+    """Assemble the finished document: skin tokens first, structure second."""
+    import skins as skins_mod
+
+    body = translucify(sections_html, skin=skin)
+    skin_css = skins_mod.css(skin, accent)
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-skin="{skin}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
-{font_link}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style id="scrollreel-skin">{skin_css}</style>
 <style id="scrollreel-shell">{SHELL_CSS}</style>
 </head>
 <body>

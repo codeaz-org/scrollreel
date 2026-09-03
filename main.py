@@ -33,6 +33,7 @@ import refine
 import backdrops
 import blocks
 import shell
+import skins
 
 OUT = "out"
 
@@ -156,6 +157,16 @@ def main():
     else:
         print("[main] no 3D scene available; the page will be flat", file=sys.stderr)
 
+    # A skin is a whole design system, not a palette: type pairing, panel
+    # treatment, radius, measure, whether headings shout. Fingerprinted against
+    # the last few builds so two consecutive sites cannot converge.
+    recent_skins = [b.get("skin") for b in history if b.get("skin")]
+    skin = skins.pick(business["trade"], recent=recent_skins)
+    accent = "#%02x%02x%02x" % tuple(
+        int(max(0.0, min(1.0, v)) * 255) for v in
+        backdrops.PALETTES.get(business["trade"], backdrops.DEFAULT_PALETTE)[2])
+    print(f"[main] skin: {skin} ({skins.SKINS[skin]['grammar']}), accent {accent}")
+
     built = page_builder.build(business, component, photos, scene=scene)
     sections_html = blocks.render(built["plan"])
 
@@ -164,7 +175,8 @@ def main():
     # shell.py owns the document; the model only supplied sections. This is
     # what stops a build burying the scene under opaque cards.
     sections = sections_html
-    html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}")
+    html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}",
+                      skin=skin, accent=accent)
     if scene:
         html = re.sub(r"</body>", backdrops.PARENT_BRIDGE + "</body>", html,
                       count=1, flags=re.I)
@@ -189,7 +201,8 @@ def main():
         plan, refined = refine.refine(plan, frames_dir, business)
         if refined:
             sections = blocks.render(plan)
-            html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}")
+            html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}",
+                              skin=skin, accent=accent)
             if scene:
                 html = re.sub(r"</body>", backdrops.PARENT_BRIDGE + "</body>", html,
                               count=1, flags=re.I)
@@ -230,6 +243,8 @@ def main():
         "component_id": component["id"], "component": component["name"],
         "scene": (scene or {}).get("name"),
         "template": template,
+        "skin": skin,
+        "grammar": skins.SKINS[skin]["grammar"],
         "scene_source": (scene or {}).get("source_url"),
         "library": component["library"], "license": component["license"],
         "source_url": component["source_url"],

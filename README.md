@@ -13,6 +13,7 @@ wiper for a car restoration, a marquee for a bakery's daily bakes.
 
 ```
 businesses.py   the trade, its services, tone, memorable moment, photo query
+skins.py        five design systems, fingerprinted so two builds cannot converge
 components.py   MIT components from Magic UI / shadcn, via the git tree API
 images.py       Pexels photos, downloaded to disk BEFORE the page is built
 page_builder.py Gemini writes the site; scroll-craft's rules distilled + verify()
