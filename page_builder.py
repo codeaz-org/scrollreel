@@ -61,90 +61,52 @@ def scrollcraft_brief(directory=None):
     return "\n\n".join(chunks)
 
 
-SYSTEM = """You design and build websites for real local businesses, and you write each one as ONE self-contained HTML file.
+SYSTEM = """You are the art director and copywriter for a website a local business would pay for.
 
-The page is a website a business owner would pay for. Not a component demo, not
-a SaaS landing page, not a design experiment. Someone should look at it and
-think "that garage looks like it knows what it's doing".
+You do NOT write HTML or CSS. The sections are finished code -- markup, styles
+and scroll-driven animation, written by hand and known to work. Your job is to
+choose which sections the page is made of, in what order, and to write every
+word in them.
 
-WHAT YOU RETURN
-Not a document -- the SECTIONS that go inside one. No <!DOCTYPE>, no <html>,
-<head> or <body>: those already exist and embed a live WebGL scene as a fixed
-layer behind your content. Return a sequence of <section> elements, plus at
-most one <style> block for section-specific rules.
+RETURN
+A JSON array and nothing else. No markdown fences, no commentary.
+Each element: {"block": "<block name>", "data": { ...that block's slots... }}
 
-HARD REQUIREMENTS
-- Output ONLY the markup. No markdown fences, no commentary.
-- No imports, no build step, no React. Tailwind is NOT available.
-- 3.5 to 5 viewport heights tall at 1024x850. Not shorter.
-- NEVER set a background on body, html, #content or a <section>. The 3D scene
-  is behind them and a background hides it. Solid colours you write are
-  rewritten to translucent automatically, so writing one only costs you
-  control of the result.
-- Animation is driven by scroll position (IntersectionObserver or scroll
-  listener), never by a timer: the video scrubs the page, and a timed animation
-  has already finished before its section is on screen.
-- Use ONLY the local photo files listed below, referenced exactly as given
-  (e.g. <img src="img/p0.jpg">). Never link a remote image: it records blank.
-- Body text 19px minimum, headlines 64px+, and never set long paragraphs
-  below 19px. The video is watched on a phone.
-- Fonts from fonts.googleapis.com are allowed. Nothing else external.
+RULES
+- First element is always hero-statement. Last is always contact-hours.
+- 6 to 8 blocks. Fewer is a thin page; more and the video outruns its length.
+- Alternate: a panel of substance, then a bleed over the open backdrop. Never
+  two bleeds in a row -- that is a screen of type floating on nothing.
+- Use each block at most twice, and only where it earns its place.
+- Photo slots take ONLY the local files listed in the brief, exactly as given.
 
-WHAT A LOCAL BUSINESS SITE ACTUALLY NEEDS
-Include, worked into the design rather than stacked as boxes: what the business
-does and for whom, the services with real specifics, proof (years in trade,
-guarantees, accreditations, a job walked through), the service area, opening
-hours, and an obvious way to make contact. Invent concrete, plausible detail --
-prices, timescales, street names, a founding year. Vague copy is what makes
-these look fake.
+THE COPY IS THE JOB
+- Invent concrete, checkable detail: a founding year, a street, a price, a
+  timescale, a tolerance, a material, a certification. "Quality workmanship"
+  is what makes these look fake; "plus or minus 2mm on a 6m ridge line" is
+  what makes them look real.
+- Write the way the trade talks. A roofer says standing seam and Code 5 lead.
+  A baker says levain and 78% hydration. Use the vocabulary.
+- Never: "Elevate", "Seamless", "Unlock", "Transform your", "Level up",
+  "passion for excellence". No emoji. No exclamation marks.
 
-THE 3D SCENE -- THE REASON ANYONE WATCHES
-A live WebGL scene is already running as a fixed full-viewport layer behind
-your sections, and it is driven by the page's scroll. Your job is to let it be
-seen. Roughly a third of any screenful should be scene, not card.
+THE BLOCKS AVAILABLE
+{catalogue}
+"""
 
-Classes you have. Use them; do not reinvent them:
-  .panel   translucent blurred card. ALL body copy goes in one of these.
-  .bleed   no background at all. For a headline sitting directly on the scene.
-  .grid    two-column grid inside a panel.
-  .stack   vertical rhythm.  .lede  large intro.  .fine  small print.
-
-- The FIRST section must have class "hero" and contain a .bleed only: a
-  headline, one line of copy, one call to action. No card, no photo. It is the
-  frame that stops the scroll and it should be mostly scene.
-- After that, alternate: a .panel of substance, then a .bleed statement over
-  open scene. Never two full panels back to back covering the whole screen.
-- Panels are cards, not bands: keep them under ~70% of viewport height so the
-  scene stays visible above and below.
-
-CRAFT
-- One page grammar, committed to: filmic one-shot, chaptered editorial,
-  split stage, or typographic poster.
-- Motion has weight. Things ease, overshoot slightly and settle. Nothing
-  linear, nothing that snaps.
-- Banned because they read as generated: a three-card feature row with icons,
-  a "Trusted by" logo strip, a pricing table, an FAQ accordion, stock
-  testimonials with invented headshots, and the words "Elevate", "Seamless",
-  "Unlock", "Revolutionize", "Transform your"."""
-
-USER = """Business: {name} -- a {trade} in {city}
+USER = """Business: {name} -- {an} {trade} in {city}
 Services: {services}
 The one memorable moment: {moment}
 Visual tone: {tone}
 
-Photos available on disk (use these paths exactly, all of them):
+Photos on disk (use these paths exactly; do not invent others):
 {photos}
 
-The 3D scene already sitting beside your file, to embed as described:
-  scene.html -- "{scene_name}" (ThreeUI, MIT)
+Behind every section is a live 3D backdrop ({scene_name}) that reacts to
+scroll. Panels are translucent so it shows through -- lean on that, and let the
+bleed blocks give it room.
 
-A UI component whose IDEA you may borrow for one smaller moment elsewhere on
-the page (rebuilt in vanilla, not imported): {component_name} ({library}, {license})
-```tsx
-{code}
-```
-
-Build {name}'s website. Return only the HTML file."""
+Return the JSON plan for {name}'s website."""
 
 
 def _post(model, system, user, api_key, max_tokens=32000, json_out=False, attempts=3):
@@ -205,93 +167,69 @@ def _strip_fences(text):
     return text.strip()
 
 
-def verify(html):
-    """The cheap half of scroll-craft's verification: things that are provably
-    wrong from the source alone. The expensive half -- does it actually look
-    good -- is what the recorded contact sheet is for.
-
-    Returns a list of problems; empty means it passed."""
-    problems = []
-    low = html.lower()
-    # The model returns sections now; shell.py supplies the document, so a
-    # full document coming back means it ignored the contract and would bring
-    # its own <body> background over the scene.
-    if "<!doctype" in low or "<html" in low or "<body" in low:
-        problems.append("returned a whole document instead of sections")
-    if "<section" not in low:
-        problems.append("no <section> elements")
-    if len(html) < 4000:
-        problems.append(f"suspiciously short ({len(html)} chars) -- likely truncated")
-    if "cdn.tailwindcss.com" in low or "class=\"flex " in low and "<style" not in low:
-        problems.append("looks like it assumed Tailwind, which is not available")
-    if not re.search(r"(IntersectionObserver|scrollY|getBoundingClientRect|scroll)", html):
-        problems.append("no scroll-driven behaviour found")
-    for banned in ("elevate your", "seamless", "unlock the power", "revolutioniz"):
-        if banned in low:
-            problems.append(f"banned marketing phrase: {banned!r}")
-    if re.search(r"<img[^>]+src=[\"']https?://", html):
-        problems.append("loads a remote image, which may not paint during capture")
-    if re.search(r"(body|html|#content)\s*\{[^}]*background", html, re.I):
-        problems.append("sets a background on body/html/#content, which hides the scene")
-    if "hero" not in low:
-        problems.append("no hero section")
-    return problems
-
-
 def build(business, component, photos, scene=None, api_key=None, models=None):
+    """A validated block plan, plus which model produced it.
+
+    Returns {"plan": [...], "model": str, "problems": [...]}. The plan is data,
+    not markup: blocks.render() turns it into sections. That is the whole point
+    of the change -- the animation is code we wrote, and a weak generation
+    costs us copy rather than a broken page.
+    """
+    import blocks as blocks_mod
+
     api_key = api_key or os.environ.get("GEMINI_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not set")
+
+    catalogue = blocks_mod.load()
     if photos:
         photo_lines = "\n".join(f"- {p['file']} : {p['alt']}" for p in photos)
     else:
-        photo_lines = ("(none available -- draw everything in CSS/SVG and do not "
-                       "leave image placeholders)")
+        photo_lines = "(none -- do not use any block with a photo slot)"
+
+    system = SYSTEM.replace("{catalogue}", blocks_mod.catalogue(catalogue))
     user = USER.format(
-        name=business["name"], trade=business["trade"], city=business["city"],
+        name=business["name"], an=("an" if business["trade"][:1].lower() in "aeiou" else "a"),
+        trade=business["trade"], city=business["city"],
         services=", ".join(business["services"]), moment=business["moment"],
         tone=business["tone"], photos=photo_lines,
-        component_name=component["name"], library=component["library"],
-        license=component["license"], code=component["code"][:8000],
         scene_name=(scene or {}).get("name", "none"),
     )
-    brief = scrollcraft_brief()
-    system = SYSTEM + ("\n\n" + "=" * 60 + "\nThe design standard you are held to "
-                       "follows. It is the scroll-craft skill, verbatim. Where it "
-                       "and the rules above disagree, the rules above win -- they "
-                       "describe this pipeline's constraints (one file, no build "
-                       "step, local photos only).\n\n" + brief if brief else "")
+
     last = None
     for model in (models or MODELS):
         try:
-            print(f"[build] asking {model} ({len(system) // 1000}KB of brief)")
-            html = _strip_fences(_post(model, system, user, api_key))
+            print(f"[build] planning with {model}")
+            raw = _post(model, system, user, api_key, max_tokens=12000, json_out=True)
         except Exception as e:  # noqa: BLE001 -- one model dying is not the run dying
-            detail = e.read()[:200].decode("utf-8", "replace") if hasattr(e, "read") else str(e)
-            print(f"[build] {model} failed: {detail}", file=sys.stderr)
+            print(f"[build] {model} failed: {str(e)[:160]}", file=sys.stderr)
             last = e
             continue
-        problems = verify(html)
+        try:
+            plan = json.loads(_strip_fences(raw))
+        except json.JSONDecodeError as e:
+            print(f"[build] {model} returned unparseable JSON: {e}", file=sys.stderr)
+            continue
+        if isinstance(plan, dict):          # some models wrap it in {"plan": [...]}
+            plan = plan.get("plan") or plan.get("blocks") or []
+        problems = blocks_mod.validate(plan, catalogue)
         if problems:
-            # Report rather than silently shipping: a page that fails these is
-            # a page the video will expose anyway.
-            print(f"[build] {model} output has issues: {problems}", file=sys.stderr)
-        print(f"[build] {model} produced {len(html)} chars, {len(problems)} issue(s)")
-        return {"html": html, "model": model, "problems": problems}
-    raise RuntimeError(f"every model failed; last error: {last}")
+            # A plan that fails validation cannot be assembled, so unlike the
+            # old freeform mode there is no "ship it with issues" path.
+            print(f"[build] {model}'s plan is invalid: {problems[:4]}", file=sys.stderr)
+            continue
+        names = [b["block"] for b in plan]
+        print(f"[build] {model} planned {len(plan)} blocks: {', '.join(names)}")
+        return {"plan": plan, "model": model, "problems": []}
+    raise RuntimeError(f"no model produced a valid plan; last error: {last}")
 
 
 if __name__ == "__main__":
     import businesses, components, images
     biz = businesses.pick()
     comp = components.pick()
-    if not comp:
-        sys.exit("no component")
     print(f"business : {biz['name']} ({biz['trade']}, {biz['city']})")
-    print(f"component: {comp['library']} / {comp['name']}")
     os.makedirs("lab", exist_ok=True)
     photos = images.fetch(biz["photo_query"], "lab")
-    result = build(biz, comp, photos)
-    with open("lab/page.html", "w") as f:
-        f.write(result["html"])
-    print("wrote lab/page.html")
+    result = build(biz, comp, photos, scene={"name": "embers"})
+    print(json.dumps(result["plan"], indent=2)[:1200])

@@ -31,6 +31,7 @@ import page_builder
 import record
 import refine
 import backdrops
+import blocks
 import shell
 
 OUT = "out"
@@ -119,12 +120,13 @@ def main():
         print("[main] no 3D scene available; the page will be flat", file=sys.stderr)
 
     built = page_builder.build(business, component, photos, scene=scene)
+    sections_html = blocks.render(built["plan"])
 
     # Injected rather than requested: the model does not have to remember to
     # drive the scene, and a build that forgets would ship a frozen 3D layer.
     # shell.py owns the document; the model only supplied sections. This is
     # what stops a build burying the scene under opaque cards.
-    sections = built["html"]
+    sections = sections_html
     html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}")
     if scene:
         html = re.sub(r"</body>", backdrops.PARENT_BRIDGE + "</body>", html,
@@ -142,7 +144,11 @@ def main():
     # first draft nobody looked at is how the early builds came out competent
     # and forgettable. The re-record costs ~40s and is worth it.
     refined = False
-    if not args.no_refine:
+    # The refine pass rewrote SECTIONS. With blocks, sections are assembled
+    # from validated data, so a critique has to edit the PLAN instead --
+    # otherwise its rewrite bypasses the blocks and loses their animation.
+    # Left off until it is plan-aware rather than silently regressing.
+    if False and not args.no_refine:
         # Refine works on the SECTIONS, not the document: the shell is ours and
         # a rewrite that returned a whole page would take the scene layer with it.
         improved, refined = refine.refine(sections, frames_dir, business)
@@ -185,6 +191,7 @@ def main():
         "source_url": component["source_url"],
         "photos": [p.get("credit") for p in photos],
         "model": built["model"], "verify_problems": built["problems"],
+        "blocks": [b["block"] for b in built["plan"]],
         "refined": refined,
         "page": page_path, "video": video, "frames": n,
         "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),

@@ -1,0 +1,23 @@
+<!--{"kind":"bleed","what":"Opening screen: a headline sitting directly on the backdrop, nothing behind it. Always first.","slots":{"eyebrow":"str, 2-5 words, e.g. 'Est. 2008 · Cork'","headline":"str, 4-9 words, the promise","line":"str, one sentence","cta":"str, 2-4 words, e.g. 'Book a survey'"}}-->
+<section class="hero">
+  <div class="bleed b-hero">
+    <div class="b-hero-eyebrow">{{eyebrow}}</div>
+    <h1 class="b-hero-h">{{headline}}</h1>
+    <p class="b-hero-line lede">{{line}}</p>
+    <a class="b-hero-cta" href="#contact">{{cta}}</a>
+  </div>
+</section>
+<style>
+.b-hero-eyebrow{font-size:19px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:26px}
+.b-hero-h{max-width:15ch}
+/* Assembles line by line as the page opens, then settles. */
+.b-hero-h,.b-hero-line,.b-hero-cta,.b-hero-eyebrow{opacity:0;transform:translateY(26px);
+  animation:bHeroIn .9s cubic-bezier(.16,.84,.44,1) forwards}
+.b-hero-h{animation-delay:.06s}.b-hero-line{animation-delay:.16s}.b-hero-cta{animation-delay:.26s}
+@keyframes bHeroIn{to{opacity:1;transform:none}}
+.b-hero-line{max-width:52ch;margin-top:22px}
+.b-hero-cta{display:inline-block;margin-top:34px;padding:17px 30px;border-radius:999px;
+  background:var(--accent);color:#0b0d10;font-weight:700;font-size:19px;text-decoration:none;
+  box-shadow:0 14px 40px rgba(0,0,0,.45);transition:transform .25s cubic-bezier(.16,.84,.44,1)}
+.b-hero-cta:hover{transform:translateY(-2px)}
+</style>

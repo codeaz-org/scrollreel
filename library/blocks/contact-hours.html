@@ -1,0 +1,29 @@
+<!--{"kind":"panel","what":"Closing block: how to reach them, where they are, when they are open. Always last. A business site without this is a mock.","slots":{"title":"str, 3-6 words","phone":"str, plausible local format","email":"str","address":"str, street and city","hours":"list of 2-4 objects: {days: e.g. 'Mon - Fri', time: e.g. '08:00 - 17:30'}","cta":"str, 2-4 words"}}-->
+<section id="contact">
+  <div class="panel stack b-contact">
+    <h2>{{title}}</h2>
+    <div class="grid">
+      <div class="stack">
+        <div><div class="fine b-contact-k">Phone</div><div class="b-contact-v">{{phone}}</div></div>
+        <div><div class="fine b-contact-k">Email</div><div class="b-contact-v">{{email}}</div></div>
+        <div><div class="fine b-contact-k">Workshop</div><div class="b-contact-v">{{address}}</div></div>
+      </div>
+      <div class="stack">
+        <div class="fine b-contact-k">Opening hours</div>
+        {{#hours}}
+        <div class="b-contact-row"><span>{{days}}</span><span class="b-contact-time">{{time}}</span></div>
+        {{/hours}}
+        <a class="b-contact-cta" href="#contact">{{cta}}</a>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+.b-contact-k{letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px}
+.b-contact-v{font-size:23px;font-weight:600}
+.b-contact-row{display:flex;justify-content:space-between;gap:18px;padding:11px 0;
+  border-bottom:1px solid var(--line);font-size:19px;color:var(--muted)}
+.b-contact-time{font-variant-numeric:tabular-nums;color:var(--ink)}
+.b-contact-cta{display:inline-block;margin-top:20px;padding:15px 26px;border-radius:999px;
+  background:var(--accent);color:#0b0d10;font-weight:700;text-decoration:none;font-size:18px}
+</style>

@@ -1,0 +1,48 @@
+<!--{"kind":"panel","what":"Two photos with a wipe between them, driven by scroll: the job before and after. The strongest block for trades where the result is visible.","slots":{"title":"str, 3-6 words","body":"str, one or two sentences","before":"img path, e.g. img/p0.jpg","after":"img path, e.g. img/p1.jpg","before_label":"str, 1-2 words","after_label":"str, 1-2 words"}}-->
+<section>
+  <div class="panel stack b-ba">
+    <h2>{{title}}</h2>
+    <p>{{body}}</p>
+    <div class="b-ba-frame">
+      <img class="b-ba-img" src="{{before}}" alt="">
+      <div class="b-ba-top"><img class="b-ba-img" src="{{after}}" alt=""></div>
+      <div class="b-ba-handle"></div>
+      <span class="b-ba-tag b-ba-tag-l">{{before_label}}</span>
+      <span class="b-ba-tag b-ba-tag-r">{{after_label}}</span>
+    </div>
+  </div>
+</section>
+<style>
+.b-ba-frame{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:16/9;background:#000}
+.b-ba-img{width:100%;height:100%;object-fit:cover;border-radius:0;display:block}
+.b-ba-top{position:absolute;inset:0;width:50%;overflow:hidden}
+.b-ba-top .b-ba-img{width:100vw;max-width:none;height:100%}
+.b-ba-handle{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--accent);
+  box-shadow:0 0 24px rgba(0,0,0,.6)}
+.b-ba-handle::after{content:"";position:absolute;top:50%;left:50%;width:42px;height:42px;
+  transform:translate(-50%,-50%);border-radius:50%;background:var(--accent);
+  box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.b-ba-tag{position:absolute;bottom:14px;font-size:15px;letter-spacing:.14em;text-transform:uppercase;
+  background:rgba(0,0,0,.55);padding:7px 12px;border-radius:999px}
+.b-ba-tag-l{left:14px}.b-ba-tag-r{right:14px}
+</style>
+<script>
+(function(){
+  // The wipe is scroll position, not a drag: nobody drags anything in a
+  // recorded video, and a slider that never moves is a still image.
+  var frames=[].slice.call(document.querySelectorAll(".b-ba-frame"));
+  if(!frames.length)return;
+  function tick(){
+    frames.forEach(function(f){
+      var r=f.getBoundingClientRect();
+      // 0 as it enters the lower half, 1 by the time it leaves the upper half.
+      var p=1-(r.top+r.height*0.5)/innerHeight;
+      p=Math.max(0,Math.min(1,(p-0.15)/0.6));
+      var pct=(12+p*76).toFixed(2)+"%";
+      f.querySelector(".b-ba-top").style.width=pct;
+      f.querySelector(".b-ba-handle").style.left=pct;
+    });
+  }
+  addEventListener("scroll",tick,{passive:true});addEventListener("resize",tick);tick();
+})();
+</script>

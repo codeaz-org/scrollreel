@@ -1,0 +1,36 @@
+<!--{"kind":"panel","what":"What things cost or how long they take, as rows. Specific numbers are what make a concept site look real; never write 'from POA'.","slots":{"title":"str, 3-6 words","note":"str, one short line under the title","items":"list of 3-6 objects: {name: 2-5 words, detail: one short line, price: e.g. '€5.80' or '48h' or 'from €1,400'}"}}-->
+<section>
+  <div class="panel stack b-price">
+    <h2>{{title}}</h2>
+    <p class="fine">{{note}}</p>
+    <div class="b-price-rows">
+      {{#items}}
+      <div class="b-price-row">
+        <div><div class="b-price-name">{{name}}</div><div class="fine">{{detail}}</div></div>
+        <div class="b-price-v">{{price}}</div>
+      </div>
+      {{/items}}
+    </div>
+  </div>
+</section>
+<style>
+.b-price-rows{margin-top:10px;border-top:1px solid var(--line)}
+.b-price-row{display:flex;justify-content:space-between;align-items:baseline;gap:24px;
+  padding:20px 0;border-bottom:1px solid var(--line);
+  opacity:0;transform:translateY(16px);
+  transition:opacity .55s cubic-bezier(.16,.84,.44,1),transform .55s cubic-bezier(.16,.84,.44,1)}
+.b-price-row.on{opacity:1;transform:none}
+.b-price-name{font-size:23px;font-weight:600}
+.b-price-v{font-size:27px;font-weight:800;color:var(--accent);white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+</style>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;
+    var rows=[].slice.call(e.target.parentNode.children);
+    setTimeout(function(){e.target.classList.add("on")},rows.indexOf(e.target)*70);
+    io.unobserve(e.target);});},{threshold:.3});
+  document.querySelectorAll(".b-price-row").forEach(function(r){io.observe(r)});
+})();
+</script>

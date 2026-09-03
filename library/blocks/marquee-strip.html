@@ -1,0 +1,19 @@
+<!--{"kind":"bleed","what":"An endless sideways band of short phrases. Reads as range of work without a list. No background, so the backdrop shows through.","slots":{"items":"list of 5-9 short phrases, 1-3 words each"}}-->
+<section>
+  <div class="b-marquee" aria-hidden="true">
+    <div class="b-marquee-track">
+      {{#items}}<span class="b-marquee-item">{{.}}</span><span class="b-marquee-dot">&bull;</span>{{/items}}
+      {{#items}}<span class="b-marquee-item">{{.}}</span><span class="b-marquee-dot">&bull;</span>{{/items}}
+    </div>
+  </div>
+</section>
+<style>
+.b-marquee{overflow:hidden;padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.b-marquee-track{display:flex;gap:22px;align-items:center;width:max-content;
+  animation:bMarquee 26s linear infinite}
+.b-marquee-item{font-size:34px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.b-marquee-dot{color:var(--accent);font-size:24px}
+@keyframes bMarquee{to{transform:translateX(-50%)}}
+</style>

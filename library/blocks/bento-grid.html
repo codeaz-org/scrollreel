@@ -1,0 +1,42 @@
+<!--{"kind":"panel","what":"A four-cell grid of photos with short labels. Shows breadth of work without a paragraph. Cells lift in one after another.","slots":{"title":"str, 3-6 words","items":"list of exactly 4 objects: {img: img path, label: 1-3 words, note: short line}"}}-->
+<section>
+  <div class="panel stack b-bento">
+    <h2>{{title}}</h2>
+    <div class="b-bento-grid">
+      {{#items}}
+      <figure class="b-bento-cell">
+        <img src="{{img}}" alt="">
+        <figcaption><span class="b-bento-label">{{label}}</span><span class="fine">{{note}}</span></figcaption>
+      </figure>
+      {{/items}}
+    </div>
+  </div>
+</section>
+<style>
+.b-bento-grid{display:grid;gap:16px;grid-template-columns:1.3fr 1fr;grid-auto-rows:200px;margin-top:6px}
+.b-bento-cell{position:relative;margin:0;overflow:hidden;border-radius:14px;
+  opacity:0;transform:translateY(26px) scale(.985);
+  transition:opacity .7s cubic-bezier(.16,.84,.44,1),transform .7s cubic-bezier(.16,.84,.44,1)}
+.b-bento-cell.on{opacity:1;transform:none}
+.b-bento-cell:nth-child(1){grid-row:span 2}
+.b-bento-cell img{width:100%;height:100%;object-fit:cover;border-radius:0;
+  transition:transform 1.2s cubic-bezier(.16,.84,.44,1)}
+.b-bento-cell.on img{transform:scale(1.04)}
+.b-bento-cell figcaption{position:absolute;left:0;right:0;bottom:0;padding:16px;
+  display:flex;flex-direction:column;gap:3px;
+  background:linear-gradient(transparent,rgba(0,0,0,.78))}
+.b-bento-label{font-weight:700;font-size:21px}
+@media(max-width:760px){.b-bento-grid{grid-template-columns:1fr}.b-bento-cell:nth-child(1){grid-row:auto}}
+</style>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){
+      var cells=[].slice.call(e.target.parentNode.children);
+      // Stagger by position so they arrive as a sequence, not a block.
+      setTimeout(function(){e.target.classList.add("on")},cells.indexOf(e.target)*90);
+      io.unobserve(e.target);
+    }});},{threshold:.2});
+  document.querySelectorAll(".b-bento-cell").forEach(function(c){io.observe(c)});
+})();
+</script>
