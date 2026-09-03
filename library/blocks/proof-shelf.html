@@ -22,10 +22,15 @@
    scene needs. */
 .b-shelf-head{padding-inline:5vw}
 .b-shelf-head h2{text-shadow:0 2px 34px rgba(0,0,0,.5)}
-/* The rail needs a clipping viewport of its own: the engine translates it by
+/* The rail needs a clipping viewport of its own, and it is masked rather than
+   cut: a hard edge slices a card in half mid-word, which reads as a layout
+   bug rather than as more cards continuing off-screen.
+    the engine translates it by
    (scrollWidth - viewport), which puts the tail off the right edge, and
    without a clip that becomes horizontal scroll on the whole page. */
-.b-shelf-vp{overflow:clip}
+.b-shelf-vp{overflow:clip;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
 .b-shelf-rail{display:flex;gap:20px;padding-inline:5vw;width:max-content}
 .b-shelf-card{width:290px;flex:0 0 auto;border:1px solid var(--line);
   border-radius:calc(var(--radius) * .8);padding:26px 22px;background:var(--panel);

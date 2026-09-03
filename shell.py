@@ -61,9 +61,6 @@ img { max-width: 100%; border-radius: calc(var(--radius) * .7); display: block; 
 /* Panels on a light skin need the accent that reads on paper. */
 .panel a, .panel .b-price-v, .panel .b-stat-v, .panel .b-radius-num,
 .panel .b-step-meta { color: var(--accent-panel); }
-#content .rise { opacity: 0; transform: translateY(34px);
-  transition: opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1); }
-#content .rise.in { opacity: 1; transform: none; }
 """
 
 MOUNT_JS = """
@@ -108,18 +105,18 @@ MOUNT_JS = """
 </style>
 """
 
-REVEAL_JS = """
-<script id="scrollreel-reveal">
-(function () {
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add("in"); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll("#content .panel, #content .bleed").forEach(function (el) {
-    el.classList.add("rise"); io.observe(el);
-  });
-})();
-</script>
-"""
+# There is deliberately no second reveal pass here any more.
+#
+# The shell used to add a .rise class to every .panel and .bleed and fade it in
+# on its own IntersectionObserver. That predates the engine, and once blocks
+# started declaring data-sc-in the two fought: a block could be revealed by the
+# engine and still held at opacity 0 by .rise, whose 0.7s transition is 21
+# frames at 30fps. It cost a full second of dead video in the middle of a build
+# -- a frame with a faint empty rectangle where a section should be.
+#
+# The engine owns reveals now. A block that wants an entry declares data-sc-in;
+# a block that does not is simply visible, which is the right answer for a
+# price list.
 
 # Solid colours in the model's own CSS, which would sit on top of the scene.
 _HEX = re.compile(r"background(-color)?\s*:\s*(#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3})\b")
@@ -200,7 +197,6 @@ html,body,.sc-page{background:transparent !important}
 </main>
 <script src="{engine_dir}/scrollcraft.js"></script>
 {MOUNT_JS}
-{REVEAL_JS}
 </body>
 </html>
 """
@@ -244,3 +240,60 @@ def verify_visible(page_path, min_scene=0.18, viewport=(1024, 850)):
         finally:
             b.close()
     return float(share or 0.0) >= min_scene, float(share or 0.0)
+
+
+def dead_scroll(page_path, viewport=(1024, 850), samples=48, min_ink=0.012):
+    """Scroll positions where the page has almost nothing to look at.
+
+    The one failure a still cannot show you. Every screenshot of the Kelvin
+    build looked fine; the video had a second of empty card in it, because the
+    last pinned act owned 1360px of scroll and did not start its copy until 36%
+    of the way through. Nobody reviews 675 frames, so this walks the page and
+    reports the positions where the visible text area falls through the floor.
+
+    Returns [(scroll_y, ink_fraction)], worst first. `ink` is the share of the
+    viewport covered by text that is actually painted -- opacity is read off the
+    element, so a cue still waiting to fire counts as nothing, which is exactly
+    what it looks like.
+    """
+    from playwright.sync_api import sync_playwright
+    import os
+    w, h = viewport
+    with sync_playwright() as p:
+        b = p.chromium.launch(channel="chrome")
+        pg = b.new_page(viewport={"width": w, "height": h})
+        pg.goto("file://" + os.path.abspath(page_path), wait_until="load")
+        pg.wait_for_timeout(1200)
+        travel = pg.evaluate("() => document.documentElement.scrollHeight - innerHeight")
+        found = []
+        for i in range(samples):
+            y = round(travel * i / max(samples - 1, 1))
+            pg.evaluate(f"scrollTo(0, {y})")
+            pg.wait_for_timeout(220)
+            ink = pg.evaluate("""() => {
+              let area = 0;
+              const seen = new WeakSet();
+              const paints = el =>
+                el.matches('img, svg, video, canvas') ||
+                (!el.children.length && el.textContent.trim());
+              document.querySelectorAll('#content *').forEach(el => {
+                // Pictures count. before-after is two photographs and four words,
+                // and a text-only measure called its best moment dead.
+                if (!paints(el)) return;
+                let node = el, o = 1;
+                while (node && node !== document.body) {
+                  o *= parseFloat(getComputedStyle(node).opacity);
+                  node = node.parentElement;
+                }
+                if (o < 0.25) return;
+                const r = el.getBoundingClientRect();
+                const top = Math.max(r.top, 0), bot = Math.min(r.bottom, innerHeight);
+                if (bot <= top) return;
+                area += (bot - top) * Math.min(r.width, innerWidth);
+              });
+              return area / (innerWidth * innerHeight);
+            }""")
+            if ink < min_ink:
+                found.append((y, round(ink, 4)))
+        b.close()
+    return sorted(found, key=lambda r: r[1])
