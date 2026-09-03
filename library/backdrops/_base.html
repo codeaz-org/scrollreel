@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>backdrop</title>
+<style>
+  html, body { margin: 0; height: 100%; background: __BG__; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+// A full-screen quad and one fragment shader. No three.js and no CDN: the
+// page is recorded from file:// and a dependency that has not loaded by
+// screenshot time records as a black frame.
+//
+// Two uniforms carry everything: u_time for drift that never stops, and
+// u_scroll (0..1) which the parent page feeds in. Scroll drives the
+// composition -- depth, density, colour mix -- so scrolling pays the viewer
+// back rather than just moving text past a loop.
+(function () {
+  const canvas = document.getElementById("c");
+  const gl = canvas.getContext("webgl", { antialias: true, alpha: false,
+                                          powerPreference: "high-performance" });
+  if (!gl) { document.body.style.background = "__BG__"; return; }
+
+  const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
+  const FRAG = `__FRAG__`;
+
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.error(gl.getShaderInfoLog(s));
+    }
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(prog); gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER,
+    new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, "p");
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+  const uRes = gl.getUniformLocation(prog, "u_res");
+  const uTime = gl.getUniformLocation(prog, "u_time");
+  const uScroll = gl.getUniformLocation(prog, "u_scroll");
+  const uC1 = gl.getUniformLocation(prog, "u_c1");
+  const uC2 = gl.getUniformLocation(prog, "u_c2");
+  const uC3 = gl.getUniformLocation(prog, "u_c3");
+
+  let scroll = 0, target = 0;
+  addEventListener("message", function (e) {
+    if (e.data && typeof e.data.scrollreel === "number") target = e.data.scrollreel;
+  });
+
+  function size() {
+    // Cap the device ratio: the recorder captures at 2x and a 4x buffer on a
+    // heavy shader was the difference between 12fps and 3fps of capture.
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  addEventListener("resize", size); size();
+
+  const t0 = performance.now();
+  (function frame() {
+    // Ease toward the target so a stepped scroll (which is how the recorder
+    // moves) still reads as continuous motion rather than snapping.
+    scroll += (target - scroll) * 0.12;
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, (performance.now() - t0) / 1000);
+    gl.uniform1f(uScroll, scroll);
+    gl.uniform3fv(uC1, __C1__);
+    gl.uniform3fv(uC2, __C2__);
+    gl.uniform3fv(uC3, __C3__);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    requestAnimationFrame(frame);
+  })();
+})();
+</script>
+</body>
+</html>

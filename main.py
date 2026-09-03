@@ -30,6 +30,7 @@ import images
 import page_builder
 import record
 import refine
+import backdrops
 import scenes
 import shell
 
@@ -107,12 +108,14 @@ def main():
     # the reason anyone stops scrolling; a model asked to "rebuild the idea in
     # CSS" returns a fade-in, which is what the first dozen builds were.
     used_scenes = {b.get("scene") for b in state["built"]}
-    scene = scenes.pick(business["trade"], used=used_scenes)
+    # Ours, not ThreeUI's. Their files are finished demo pages and only five of
+    # seventy worked as a backdrop; these are shaders we own, tinted per trade.
+    scene = backdrops.pick(business["trade"], used=used_scenes)
     if scene:
         with open(os.path.join(work, "scene.html"), "w") as f:
             f.write(scene["html"])
-        print(f"[main] scene: {scene['name']} "
-              f"({'fitted' if scene['fitted'] else 'random'}, {len(scene['html']) // 1000}KB)")
+        print(f"[main] backdrop: {scene['name']} "
+              f"({'fitted' if scene['fitted'] else 'any'}, {len(scene['html']) // 1000}KB)")
     else:
         print("[main] no 3D scene available; the page will be flat", file=sys.stderr)
 

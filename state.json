@@ -1,13 +1,13 @@
 {
   "built": [
     {
-      "business": "Thistle Coffee Co.",
+      "business": "Rowan Coffee Roasters",
       "trade": "coffee roastery",
-      "city": "Utrecht",
+      "city": "Bristol",
       "component_id": "magicuidesign/magicui:particles",
       "component": "particles",
-      "scene": "amber-halftone",
-      "scene_source": "https://github.com/MengTo/threeui/blob/main/src/shaders/neuform-isolated/sources/amber-halftone.html",
+      "scene": "embers",
+      "scene_source": "library/backdrops/embers.frag (CodeAZ)",
       "library": "Magic UI",
       "license": "MIT",
       "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/particles.tsx",
@@ -19,12 +19,14 @@
         "Photo by Tony  Wu on Pexels"
       ],
       "model": "gemini-3.5-flash",
-      "verify_problems": [],
+      "verify_problems": [
+        "sets a background on body/html/#content, which hides the scene"
+      ],
       "refined": false,
-      "page": "out/thistle-coffee-co/page.html",
-      "video": "out/thistle-coffee-co/video.mp4",
+      "page": "out/rowan-coffee-roasters/page.html",
+      "video": "out/rowan-coffee-roasters/video.mp4",
       "frames": 375,
-      "ts": "2026-09-03T12:24:33"
+      "ts": "2026-09-03T12:52:17"
     }
   ]
 }
