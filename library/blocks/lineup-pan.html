@@ -1,0 +1,23 @@
+<!--{"kind":"panel","device":"pan","what":"A lineup that travels sideways while the page scrolls down. Lateral movement reads as breadth, so use it for a range of services or products, never for a ranking.","slots":{"title":"str, 3-6 words","items":"list of 5-7 objects: {name: 2-4 words, note: one short line, meta: a price, a time or a size}"}}-->
+<section data-sc-act="pan" data-sc-span="2.2">
+  <div data-sc-stage class="panel b-lineup">
+    <h2>{{title}}</h2>
+    <div class="b-lineup-rail" data-sc-pan="0.55">
+      {{#items}}
+      <article class="b-lineup-card">
+        <h3>{{name}}</h3>
+        <p class="fine">{{note}}</p>
+        <div class="b-lineup-meta">{{meta}}</div>
+      </article>
+      {{/items}}
+    </div>
+  </div>
+</section>
+<style>
+.b-lineup{overflow:hidden}
+.b-lineup-rail{display:flex;gap:18px;width:max-content;margin-top:18px;will-change:transform}
+.b-lineup-card{flex:0 0 300px;border:1px solid var(--line);border-radius:calc(var(--radius) * .7);
+  padding:24px 26px;display:flex;flex-direction:column;gap:8px}
+.b-lineup-meta{margin-top:auto;padding-top:14px;font-weight:700;font-size:22px;
+  color:var(--accent-panel);font-variant-numeric:tabular-nums}
+</style>

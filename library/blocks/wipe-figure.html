@@ -1,0 +1,18 @@
+<!--{"kind":"panel","device":"reveal","what":"A photograph uncovered by a clip-path wipe as it enters, with a caption that reads like a job record rather than a slogan.","slots":{"img":"img path","title":"str, 3-6 words","body":"str, one or two sentences","record":"str, short, like a job number, a date or a street"}}-->
+<section>
+  <div class="panel stack b-wipe" data-sc-in>
+    <h2>{{title}}</h2>
+    <div class="b-wipe-frame"><img src="{{img}}" alt="" data-sc-reveal="left"></div>
+    <div class="b-wipe-row">
+      <p>{{body}}</p>
+      <div class="fine b-wipe-rec">{{record}}</div>
+    </div>
+  </div>
+</section>
+<style>
+.b-wipe-frame{overflow:hidden;border-radius:calc(var(--radius) * .7)}
+.b-wipe-frame img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+.b-wipe-row{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
+.b-wipe-rec{letter-spacing:.18em;text-transform:uppercase;white-space:nowrap}
+@media(max-width:760px){.b-wipe-row{grid-template-columns:1fr}}
+</style>

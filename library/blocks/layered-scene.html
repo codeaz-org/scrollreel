@@ -1,0 +1,18 @@
+<!--{"kind":"bleed","device":"parallax","what":"Two photographs at different depths moving at different rates behind a line of type. Differential movement is the cheapest premium signal there is.","slots":{"back":"img path, the wider shot","front":"img path, the closer shot","line":"str, 5-10 words"}}-->
+<section class="b-layers">
+  <div class="b-layers-stack">
+    <img class="b-layer b-layer-back" src="{{back}}" alt="" data-sc-parallax="-0.18">
+    <img class="b-layer b-layer-front" src="{{front}}" alt="" data-sc-parallax="0.12">
+    <p class="b-layers-t" data-sc-in>{{line}}</p>
+  </div>
+</section>
+<style>
+.b-layers-stack{position:relative;height:76vh;border-radius:var(--radius);overflow:hidden}
+.b-layer{position:absolute;inset:-12% -4%;width:108%;height:124%;object-fit:cover;border-radius:0}
+.b-layer-back{filter:brightness(.55) saturate(.9)}
+.b-layer-front{width:44%;height:52%;inset:auto auto 8% 6%;object-fit:cover;
+  border-radius:calc(var(--radius) * .7);box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.b-layers-t{position:absolute;right:6%;top:14%;max-width:14ch;margin:0;
+  font-family:var(--font-display);font-size:clamp(32px,4.2vw,56px);line-height:1.1;
+  color:#fff;text-shadow:0 2px 40px rgba(0,0,0,.7)}
+</style>

@@ -1,0 +1,19 @@
+<!--{"kind":"bleed","device":"kinetic","what":"A claim that assembles line by line while the frame holds still, then closes. Type is the whole event: no card, no image. Use where the page should slow down and be read.","slots":{"claim":"str, 8-16 words, one sentence, no em dash","foot":"str, 3-6 words, who stands behind it"}}-->
+<section data-sc-act="pin" data-sc-span="1.6">
+  <div data-sc-stage class="bleed b-kclaim">
+    <p class="b-kclaim-t" data-sc-kinetic="lines" data-sc-cue="0.04 0.92">{{claim}}</p>
+    <div class="b-kclaim-f fine" data-sc-cue="0.35 0.95">{{foot}}</div>
+  </div>
+</section>
+<style>
+/* Span 1.6, not 1: below ~1.2 a pinned act's travel is a pixel, progress jumps
+   0 to 1 between two scroll notches, and every cue inside it snaps instead of
+   running. Cues close at <1 because only the LAST act on a page may hold -- a
+   middle act that holds stays lit through its whole un-pin slide and overlaps
+   whatever follows. */
+.b-kclaim{display:flex;flex-direction:column;justify-content:center;min-height:70vh}
+.b-kclaim-t{font-family:var(--font-display);font-size:clamp(34px,4.4vw,58px);
+  line-height:1.14;letter-spacing:var(--track);max-width:20ch;margin:0;
+  text-shadow:0 2px 40px rgba(0,0,0,.55)}
+.b-kclaim-f{margin-top:20px;letter-spacing:.2em;text-transform:uppercase}
+</style>

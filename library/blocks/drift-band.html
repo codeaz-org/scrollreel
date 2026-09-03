@@ -1,0 +1,11 @@
+<!--{"kind":"bleed","device":"drift","what":"A short band where the page ground shifts colour as you pass through it. Use once, to mark the turn in the argument. Nothing else competes with it.","slots":{"line":"str, 5-12 words, the turn stated plainly","ground":"a hex colour the page drifts to, dark enough for white type, e.g. '#1a0f0a'"}}-->
+<section data-sc-act="flow" data-sc-drift="{{ground}}">
+  <div class="bleed b-drift" data-sc-in>
+    <p class="b-drift-t">{{line}}</p>
+  </div>
+</section>
+<style>
+.b-drift{padding:14vh 0}
+.b-drift-t{font-family:var(--font-display);font-size:clamp(38px,5.2vw,72px);
+  line-height:1.06;letter-spacing:var(--track);max-width:18ch;margin:0}
+</style>

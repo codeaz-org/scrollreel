@@ -1,0 +1,20 @@
+<!--{"kind":"panel","device":"count","what":"One number, large, blooming as it enters, with the sentence that gives it meaning beside it. One figure lands harder than a row of four.","slots":{"value":"the number alone, digits only, e.g. '1420'","prefix":"str, '' or a currency symbol","suffix":"str, '' or '+' or '%' or 'km'","label":"str, 3-8 words explaining what it counts","body":"str, one sentence of context"}}-->
+<section>
+  <div class="panel b-fig" data-sc-in>
+    <div class="b-fig-n">
+      <span class="b-fig-pre">{{prefix}}</span><span data-sc-count="0 {{value}}">0</span><span class="b-fig-suf">{{suffix}}</span>
+    </div>
+    <div class="stack">
+      <h3 class="b-fig-l">{{label}}</h3>
+      <p>{{body}}</p>
+    </div>
+  </div>
+</section>
+<style>
+.b-fig{display:grid;grid-template-columns:auto 1fr;gap:34px;align-items:center}
+.b-fig-n{font-family:var(--font-display);font-size:clamp(62px,9vw,124px);font-weight:800;
+  line-height:.9;color:var(--accent-panel);font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.b-fig-pre,.b-fig-suf{font-size:.5em;vertical-align:super;opacity:.8}
+.b-fig-l{font-family:var(--font-display)}
+@media(max-width:760px){.b-fig{grid-template-columns:1fr;gap:14px}}
+</style>

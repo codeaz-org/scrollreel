@@ -65,7 +65,8 @@ def catalogue(blocks=None):
     lines = []
     for b in blocks.values():
         slots = "\n".join(f"      {k}: {v}" for k, v in (b.get("slots") or {}).items())
-        lines.append(f"  {b['name']}  [{b.get('kind', 'panel')}]\n"
+        lines.append(f"  {b['name']}  [{b.get('kind', 'panel')}, "
+                     f"device: {b.get('device', 'flow')}]\n"
                      f"    {b.get('what', '').strip()}\n"
                      f"    slots:\n{slots}")
     return "\n\n".join(lines)
@@ -130,6 +131,19 @@ def validate(plan, blocks=None):
         if a == "bleed" and b == "bleed":
             problems.append("two bleed blocks in a row")
             break
+
+    # scroll-craft's rule, and the one that decides whether a page reads as one
+    # idea or several: "at least four device families, never the same one twice
+    # in a row". Five sections that behave identically are one section shown
+    # five times.
+    fams = [blocks[n].get("device", "flow") for n in names if n in blocks]
+    for a, b in zip(fams, fams[1:]):
+        if a == b:
+            problems.append(f"two {a} blocks in a row: vary the device")
+            break
+    if len(set(fams)) < 4:
+        problems.append(f"only {len(set(fams))} device families "
+                        f"({', '.join(sorted(set(fams)))}); use at least four")
     return problems
 
 

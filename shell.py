@@ -66,6 +66,29 @@ img { max-width: 100%; border-radius: calc(var(--radius) * .7); display: block; 
 #content .rise.in { opacity: 1; transform: none; }
 """
 
+MOUNT_JS = """
+<script id="scrollreel-mount">
+// The engine does not auto-init: it exposes ScrollCraft.mount and waits. The
+// first build with it loaded looked fine and was not -- kinetic type was never
+// split, and a [data-sc-in] section sat at opacity 0 because the engine's CSS
+// had hidden it ready for a reveal that never came. Invisible content, and no
+// console error to find it by.
+(function () {
+  if (!window.ScrollCraft) {
+    document.documentElement.classList.add("sc-noengine");
+    return;
+  }
+  ScrollCraft.mount(document.body);
+})();
+</script>
+<style>
+/* If the engine ever fails to load, show what it would have revealed rather
+   than shipping a page with holes in it. */
+.sc-noengine [data-sc-in], .sc-noengine [data-sc-cue] { opacity: 1 !important;
+  transform: none !important; }
+</style>
+"""
+
 REVEAL_JS = """
 <script id="scrollreel-reveal">
 (function () {
@@ -114,12 +137,30 @@ def translucify(text, alpha=SCRIM_ALPHA, skin=None):
 
 
 def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
-         accent="#ff6a2b"):
-    """Assemble the finished document: skin tokens first, structure second."""
+         accent="#ff6a2b", engine_dir="engine"):
+    """Assemble the finished document: engine, skin tokens, then structure.
+
+    The engine is scroll-craft's, vendored and unmodified. Blocks declare what
+    they want with data-sc-* and it drives all of them from one scroll value on
+    one rAF loop -- instead of a dozen blocks each running their own listener
+    with its own slightly different easing.
+    """
     import skins as skins_mod
 
     body = translucify(sections_html, skin=skin)
     skin_css = skins_mod.css(skin, accent)
+    # The engine themes off --sc-* tokens; map ours onto them so a skin drives
+    # the engine's own surfaces too rather than fighting them.
+    bridge = """
+:root{
+  --sc-canvas:transparent; --sc-surface:var(--panel);
+  --sc-ink:var(--ink); --sc-ink-soft:var(--muted);
+  --sc-accent:var(--accent); --sc-accent-ink:#0b0d10;
+  --sc-font-display:var(--font-display); --sc-font-text:var(--font-body);
+}
+/* The engine paints a ground; ours is the live backdrop behind it. */
+html,body,.sc-page{background:transparent !important}
+"""
     return f"""<!DOCTYPE html>
 <html lang="en" data-skin="{skin}">
 <head>
@@ -128,7 +169,9 @@ def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
 <title>{title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="{engine_dir}/scrollcraft.css">
 <style id="scrollreel-skin">{skin_css}</style>
+<style id="scrollreel-engine-bridge">{bridge}</style>
 <style id="scrollreel-shell">{SHELL_CSS}</style>
 </head>
 <body>
@@ -136,6 +179,8 @@ def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
 <main id="content">
 {body}
 </main>
+<script src="{engine_dir}/scrollcraft.js"></script>
+{MOUNT_JS}
 {REVEAL_JS}
 </body>
 </html>

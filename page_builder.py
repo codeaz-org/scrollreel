@@ -77,6 +77,10 @@ RULES
 - 6 to 8 blocks. Fewer is a thin page; more and the video outruns its length.
 - Alternate: a panel of substance, then a bleed over the open backdrop. Never
   two bleeds in a row -- that is a screen of type floating on nothing.
+- Never the same DEVICE twice in a row, and use at least four device families
+  across the page. Each block lists its device. Five sections that behave the
+  same way are one section shown five times, and that is the single thing that
+  makes a page read as generated.
 - Use each block at most twice, and only where it earns its place.
 - Photo slots take ONLY the local files listed in the brief, exactly as given.
 
@@ -89,6 +93,15 @@ THE COPY IS THE JOB
   A baker says levain and 78% hydration. Use the vocabulary.
 - Never: "Elevate", "Seamless", "Unlock", "Transform your", "Level up",
   "passion for excellence". No emoji. No exclamation marks.
+
+RULES FROM THE DESIGN FLOOR (scroll-craft), which the page is held to
+- No em dash anywhere visible. Period, comma, colon or parentheses.
+- No "scroll" prompt, arrow or mouse icon in any copy. They are already looking.
+- No section counters like "01 / 06". Sequence is not information here.
+- At most one eyebrow line per three sections. A heading carries itself.
+- Vary where copy sits. Not every section centred, not every section leading.
+- Numbers must be ones the business could actually state. A figure you cannot
+  justify is worse than no figure, so leave the block out rather than invent.
 
 THE BLOCKS AVAILABLE
 {catalogue}

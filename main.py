@@ -18,6 +18,7 @@ before you watch removes the judging.
 """
 import argparse
 import json
+import shutil
 import os
 import re
 import sys
@@ -140,6 +141,11 @@ def main():
     work = os.path.join(OUT, slug)
     os.makedirs(work, exist_ok=True)
 
+    # The engine is loaded relatively by the page, so it has to sit beside it.
+    engine_dst = os.path.join(work, "engine")
+    shutil.rmtree(engine_dst, ignore_errors=True)
+    shutil.copytree(os.path.join("library", "engine"), engine_dst)
+
     photos = images.fetch(business["photo_query"], work)
 
     # The scene is copied in, never generated. It is a finished WebGL file and
@@ -259,7 +265,6 @@ def main():
         json.dump(meta, f, indent=2)
 
     if not args.keep_frames:
-        import shutil
         shutil.rmtree(frames_dir, ignore_errors=True)   # ~2MB each at 2x
 
     state["built"].append(meta)
