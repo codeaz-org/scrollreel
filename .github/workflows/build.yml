@@ -4,7 +4,13 @@ on:
   schedule:
     # One a day. Eight trades and five backdrops: more often than this and the
     # rotation repeats itself faster than anyone forgets the last one.
-    - cron: "0 9 * * *"
+    #
+    # 08:23, not 09:00. GitHub's scheduler queues every repo asking for the top
+    # of the hour and drops or delays what it cannot fit: the sibling clipping
+    # repo asks for 14:00 and has been starting at 17:30. An odd minute off the
+    # hour is the standard mitigation. Expect drift regardless; this is a daily
+    # build, not a cron job anyone is waiting on.
+    - cron: "23 8 * * *"
   workflow_dispatch:
     inputs:
       trade:

@@ -222,6 +222,16 @@ def main():
         print(f"[main] scene visible on {share:.0%} of the first screen"
               + ("" if ok else "  <-- too covered"))
 
+    # Positions where the page has nothing to look at. The one defect a still
+    # cannot show you: the Kelvin build was fine in every screenshot and had a
+    # second of empty card in the video, because the last pinned act owned 1360px
+    # of scroll and did not start its copy until 36% of the way through. Nobody
+    # reviews 675 frames, so this walks the page instead.
+    holes = shell.dead_scroll(page_path)
+    if holes:
+        print(f"[main] dead scroll at {len(holes)} position(s): "
+              + ", ".join(f"y={y} ({ink:.1%} ink)" for y, ink in holes[:4]))
+
     # Rotate the presentation too, so a week of builds is not one video made
     # seven times. Least-recently-used rather than random: random repeats.
     used_templates = [b.get("template") for b in history if b.get("template")]
@@ -258,6 +268,7 @@ def main():
         "model": built["model"], "verify_problems": built["problems"],
         "blocks": [b["block"] for b in plan],
         "refined": refined,
+        "dead_scroll": [{"y": y, "ink": ink} for y, ink in holes],
         "page": page_path, "video": video, "frames": n,
         "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
     }
