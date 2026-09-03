@@ -24,8 +24,11 @@ def caption_for(meta):
     """The copy that sells the service, not the component. The component is an
     implementation detail nobody outside this repo cares about."""
     trade = meta["trade"]
+    # "a auto repair shop" shipped in the first staged draft. Vowel test, not a
+    # dictionary: every trade in businesses.py is a plain noun phrase.
+    article = "an" if trade[0].lower() in "aeiou" else "a"
     return (
-        f"A website concept for {meta['business']} — a {trade} in {meta['city']}.\n\n"
+        f"A website concept for {meta['business']} — {article} {trade} in {meta['city']}.\n\n"
         f"Built from scratch by CodeAZ: scroll-driven, real content, "
         f"loads fast, works on a phone.\n\n"
         f"Want one for your business? Get in touch.\n\n"
