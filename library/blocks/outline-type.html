@@ -1,24 +1,42 @@
-<!--{"kind": "bleed", "device": "kinetic", "what": "One word at poster scale in outline only, filling with colour as it crosses the screen. Pure typography, no card, no image. The loudest moment on a page, so use it once and not next to another bleed.", "slots": {"word": "str, ONE word, 4-12 characters", "line": "str, one sentence saying what the word costs or takes"}}-->
+<!--{"kind": "bleed", "device": "kinetic", "what": "One word at poster scale in outline only, filling with colour as it crosses the screen. Pure typography, no card, no image. The loudest moment on a page, so use it once and not next to another bleed.", "slots": {"word": "str, ONE word, 4-12 characters. Longer sets smaller, so a short strong word hits hardest", "line": "str, one sentence saying what the word costs or takes"}}-->
 <section data-sc-act="pin" data-sc-span="1.8">
   <div data-sc-stage class="bleed b-out">
-    <div class="b-out-stack">
-      <div class="b-out-ghost" aria-hidden="true">{{word}}</div>
-      <h2 class="b-out-fill">{{word}}</h2>
-    </div>
+    <h2 class="b-out-word" style="--n:{{word|len}}">
+      <span class="b-out-ghost" aria-hidden="true">{{word}}</span>
+      <span class="b-out-fill">{{word}}</span>
+    </h2>
     <p class="lede b-out-line" data-sc-cue="0.22 0.96 0.3 0.1">{{line}}</p>
   </div>
 </section>
 <style>
-/* Two copies in one grid cell: an outlined one underneath and a filled one
-   clipped from the left by act progress. Stacking them in the same cell rather
-   than positioning the second by hand is what keeps the letters registered when
-   the type scale changes with the viewport. The fill travels with the scroll,
-   so stopping mid-word holds mid-fill. */
-.b-out{display:flex;flex-direction:column;justify-content:center;min-height:74vh;gap:8vh}
-.b-out-stack{display:grid}
-.b-out-ghost,.b-out-fill{grid-area:1/1;font-family:var(--font-display);
-  font-size:clamp(64px,13vw,190px);line-height:.92;margin:0;letter-spacing:-.03em;
-  text-transform:uppercase}
+/* Two copies of the word in ONE heading, as sibling spans.
+   They were an h2 and a div before, and that was the bug: a div inherits
+   weight 400 from the body while an h2 is bold, so the orange copy was set in
+   a fatter cut than the outline it was supposed to be filling and its glyphs
+   spilled outside the strokes. Anything a skin does to h2 now reaches both
+   spans or neither, which is the only arrangement that cannot drift.
+
+   Size is capped by character count AND by how wide the face sets:
+
+     --n            the character count, from the templater's |len filter,
+                    because CSS cannot count glyphs
+     --display-adv  the MEASURED uppercase advance of this skin's display face.
+                    The faces in use run from 0.34 em per character to 1.09, so
+                    no constant covers both: one divisor either runs the wide
+                    faces off the screen or wastes half of it on the narrow ones
+
+   In container units, not viewport units. The cap was written in vw first and
+   still overflowed under half the skins, because seven layouts put the content
+   in seven different places: a word sized to 86% of the VIEWPORT runs off the
+   right edge the moment the layout has already indented it. cqi is a percentage
+   of this block's own box, which is the only width that means anything here. */
+.b-out{container-type:inline-size;display:flex;flex-direction:column;
+  justify-content:center;min-height:74vh;gap:8vh}
+.b-out-word{display:grid;margin:0;
+  font-size:min(15cqi, 190px, calc(97cqi / (var(--n, 8) * var(--display-adv, .62))));
+  line-height:.92;letter-spacing:-.03em;text-transform:uppercase}
+.b-out-ghost,.b-out-fill{grid-area:1/1;justify-self:start;font:inherit;
+  letter-spacing:inherit;text-transform:inherit;white-space:nowrap}
 .b-out-ghost{-webkit-text-stroke:2px color-mix(in oklab, var(--ink) 55%, transparent);
   color:transparent}
 .b-out-fill{color:var(--accent);

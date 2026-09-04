@@ -31,7 +31,7 @@ _HEADER = re.compile(r"^\s*<!--(\{.*?\})-->", re.S)
 _STYLE = re.compile(r"<style>(.*?)</style>", re.S)
 _SCRIPT = re.compile(r"<script>(.*?)</script>", re.S)
 _LOOP = re.compile(r"\{\{#([\w.]+)\}\}(.*?)\{\{/\1\}\}", re.S)
-_FIELD = re.compile(r"\{\{(\.|[\w.]+)\}\}")
+_FIELD = re.compile(r"\{\{(\.|[\w.]+)(\|len)?\}\}")
 
 
 def load():
@@ -104,6 +104,20 @@ def _lookup(data, path):
     return "" if cur is None else cur
 
 
+def _resolve(raw, filt):
+    """A field value, optionally reduced by a filter.
+
+    One filter, |len, and it exists for a real reason: a block that sets type
+    at poster scale has to know how many characters it is setting, or a long
+    word runs off the screen and a short one is lost in the middle of it. CSS
+    cannot count glyphs, so the count is passed in as a custom property and the
+    block sizes itself from it.
+    """
+    if filt == "|len":
+        return str(len(str(raw)))
+    return str(raw)
+
+
 def _fill(template, data):
     """Loops first, then scalars.
 
@@ -121,14 +135,15 @@ def _fill(template, data):
         for item in items:
             if isinstance(item, dict):
                 parts.append(_FIELD.sub(
-                    lambda f: str(item.get(f.group(1), "")), inner))
+                    lambda f: _resolve(item.get(f.group(1), ""), f.group(2)), inner))
             else:
                 parts.append(_FIELD.sub(
-                    lambda f: str(item) if f.group(1) == "." else "", inner))
+                    lambda f: _resolve(item, f.group(2)) if f.group(1) == "." else "",
+                    inner))
         return "".join(parts)
 
     out = _LOOP.sub(loop, template)
-    return _FIELD.sub(lambda m: str(_lookup(data, m.group(1))), out)
+    return _FIELD.sub(lambda m: _resolve(_lookup(data, m.group(1)), m.group(2)), out)
 
 
 def validate(plan, blocks=None):

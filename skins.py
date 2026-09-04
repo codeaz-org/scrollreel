@@ -17,6 +17,15 @@ builds on several axes, not just in its accent colour.
 """
 import random
 
+# --display-adv is the MEASURED uppercase advance of each skin's display face,
+# in em per character, taken with scripts that render the face and read the
+# box back. It is a token because a block setting type at poster scale has to
+# size itself from how wide the face actually sets, and no constant can stand
+# in for it: the faces in use here run from 0.34 em per character (Bebas
+# Condensed, in kiosk) to 1.09 (Syne, in vitrine), a spread of more than three
+# to one. A single divisor either runs the wide faces off the screen or wastes
+# half of it on the narrow ones. Re-measure if a skin's display face changes.
+
 # Google fonts only: the recorder loads from file:// and anything else has to
 # be inlined. Each pairing is a display face and a text face that were not
 # designed to be interchangeable.
@@ -35,6 +44,7 @@ SKINS = {
             "--measure": "1100px", "--pad": "34px 36px",
             "--h1": "clamp(52px,7vw,86px)", "--h2": "clamp(34px,4.4vw,54px)",
             "--body-size": "20px", "--track": "-.02em", "--case": "none",
+            "--display-adv": "0.632",
         },
         "extra": ".panel{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}",
     },
@@ -54,6 +64,7 @@ SKINS = {
             "--h1": "clamp(50px,6.4vw,78px)", "--h2": "clamp(32px,4vw,48px)",
             "--body-size": "20px", "--track": "-.01em", "--case": "none",
             "--ink-bleed": "#f4f1ec", "--muted-bleed": "#cfc7bb",
+            "--display-adv": "0.607",
         },
         # Light panels need their own accent and a rule under each heading.
         # A paper skin sets --ink dark for the panels, and the bleed blocks
@@ -81,6 +92,7 @@ SKINS = {
             "--measure": "1040px", "--pad": "30px 32px",
             "--h1": "clamp(46px,6vw,74px)", "--h2": "clamp(30px,3.8vw,46px)",
             "--body-size": "18px", "--track": "-.01em", "--case": "uppercase",
+            "--display-adv": "0.561",
         },
         "extra": (".panel{border-width:var(--border)}"
                   "h2,h3{text-transform:uppercase;letter-spacing:.02em}"
@@ -101,6 +113,7 @@ SKINS = {
             "--measure": "960px", "--pad": "40px 42px",
             "--h1": "clamp(58px,8vw,96px)", "--h2": "clamp(38px,5vw,60px)",
             "--body-size": "19px", "--track": "-.005em", "--case": "none",
+            "--display-adv": "0.597",
         },
         "extra": (".panel{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}"
                   "h1,h2{font-weight:400}"
@@ -122,6 +135,7 @@ SKINS = {
             "--h1": "clamp(46px,5.8vw,72px)", "--h2": "clamp(30px,3.6vw,44px)",
             "--body-size": "19px", "--track": "0em", "--case": "none",
             "--ink-bleed": "#f3efe6", "--muted-bleed": "#c9c0ae",
+            "--display-adv": "0.757",
         },
         "extra": (".panel{box-shadow:0 1px 0 rgba(27,26,23,.25)}"
                   ".panel h2{border-bottom:2px solid var(--ink);padding-bottom:10px}"
@@ -143,6 +157,7 @@ SKINS = {
             "--measure": "1080px", "--pad": "30px 34px",
             "--h1": "clamp(48px,6.2vw,78px)", "--h2": "clamp(30px,3.8vw,46px)",
             "--body-size": "17px", "--track": "0em", "--case": "uppercase",
+            "--display-adv": "0.576",
         },
         "extra": (".panel{border-style:dashed}"
                   "h2,h3{text-transform:uppercase;letter-spacing:.06em}"
@@ -164,6 +179,7 @@ SKINS = {
             "--measure": "1000px", "--pad": "38px 40px",
             "--h1": "clamp(64px,9vw,116px)", "--h2": "clamp(42px,5.6vw,68px)",
             "--body-size": "19px", "--track": "-.02em", "--case": "uppercase",
+            "--display-adv": "0.413",
         },
         "extra": ("h1,h2{text-transform:uppercase;line-height:.94}"
                   ".panel{border-top:2px solid var(--accent)}"
@@ -185,6 +201,7 @@ SKINS = {
             "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
             "--body-size": "20px", "--track": "-.02em", "--case": "none",
             "--ink-bleed": "#f6eee6", "--muted-bleed": "#cdbfb2",
+            "--display-adv": "0.629",
         },
         "extra": (".panel{box-shadow:0 20px 50px rgba(0,0,0,.35)}"
                   "h1,h2{font-weight:900}"),
@@ -206,6 +223,7 @@ SKINS = {
             "--h1": "clamp(54px,7vw,88px)", "--h2": "clamp(34px,4.4vw,54px)",
             "--body-size": "19px", "--track": "-.01em", "--case": "none",
             "--ink-bleed": "#faf7f0", "--muted-bleed": "#c8c2b6",
+            "--display-adv": "0.628",
         },
         "extra": (".panel h2{font-weight:900}"
                   ".panel .grid{column-gap:34px;border-top:2px solid var(--ink);padding-top:18px}"),
@@ -226,6 +244,7 @@ SKINS = {
             "--measure": "1000px", "--pad": "28px 30px",
             "--h1": "clamp(42px,5.4vw,68px)", "--h2": "clamp(28px,3.4vw,42px)",
             "--body-size": "17px", "--track": "0em", "--case": "none",
+            "--display-adv": "0.57",
         },
         "extra": ("h2::before{content:'> ';color:var(--accent)}"
                   ".fine{letter-spacing:.12em}"
@@ -246,6 +265,7 @@ SKINS = {
             "--measure": "1120px", "--pad": "32px 0px",
             "--h1": "clamp(52px,7vw,88px)", "--h2": "clamp(32px,4.2vw,52px)",
             "--body-size": "19px", "--track": "-.03em", "--case": "none",
+            "--display-adv": "0.652",
         },
         "extra": (".panel{border-top:3px solid var(--accent);background:transparent !important;"
                   "backdrop-filter:none}"
@@ -267,6 +287,7 @@ SKINS = {
             "--measure": "940px", "--pad": "40px 44px",
             "--h1": "clamp(50px,6.8vw,84px)", "--h2": "clamp(32px,4.2vw,50px)",
             "--body-size": "20px", "--track": "-.01em", "--case": "none",
+            "--display-adv": "0.627",
         },
         "extra": ("h1,h2{font-style:italic;font-weight:400}"
                   ".panel{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}"
@@ -287,6 +308,7 @@ SKINS = {
             "--measure": "1080px", "--pad": "30px 34px",
             "--h1": "clamp(52px,7.4vw,92px)", "--h2": "clamp(34px,4.6vw,56px)",
             "--body-size": "18px", "--track": "0em", "--case": "uppercase",
+            "--display-adv": "0.484",
         },
         "extra": ("h1,h2,h3{text-transform:uppercase;letter-spacing:.02em}"
                   ".panel{border-top:6px solid var(--accent)}"
@@ -307,6 +329,7 @@ SKINS = {
             "--measure": "980px", "--pad": "48px 52px",
             "--h1": "clamp(52px,7vw,88px)", "--h2": "clamp(34px,4.4vw,54px)",
             "--body-size": "18px", "--track": ".01em", "--case": "none",
+            "--display-adv": "0.581",
         },
         "extra": (".fine{letter-spacing:.32em;text-transform:uppercase;font-weight:300}"
                   "h1,h2{font-weight:400;letter-spacing:.02em}"
@@ -327,6 +350,7 @@ SKINS = {
             "--measure": "1060px", "--pad": "30px 34px",
             "--h1": "clamp(50px,6.8vw,86px)", "--h2": "clamp(32px,4.2vw,52px)",
             "--body-size": "19px", "--track": "-.01em", "--case": "uppercase",
+            "--display-adv": "0.422",
         },
         "extra": ("h2,h3{text-transform:uppercase;letter-spacing:.04em}"
                   ".fine{letter-spacing:.18em;text-transform:uppercase}"
@@ -347,6 +371,7 @@ SKINS = {
             "--measure": "1020px", "--pad": "30px 32px",
             "--h1": "clamp(52px,7.2vw,90px)", "--h2": "clamp(34px,4.6vw,56px)",
             "--body-size": "18px", "--track": "-.03em", "--case": "uppercase",
+            "--display-adv": "0.704",
         },
         "extra": (".panel{box-shadow:10px 10px 0 var(--accent)}"
                   "#content>section:nth-child(odd) .panel{transform:rotate(-.5deg)}"
@@ -369,6 +394,7 @@ SKINS = {
             "--h1": "clamp(48px,6.4vw,78px)", "--h2": "clamp(31px,3.9vw,48px)",
             "--body-size": "19px", "--track": "-.02em", "--case": "none",
             "--ink-bleed": "#f2f6fa", "--muted-bleed": "#c4ccd4",
+            "--display-adv": "0.593",
         },
         "extra": (".panel{box-shadow:0 18px 44px rgba(0,0,0,.30)}"
                   "h1,h2{font-weight:700}"),
@@ -389,6 +415,7 @@ SKINS = {
             "--measure": "1060px", "--pad": "34px 36px",
             "--h1": "clamp(72px,10vw,128px)", "--h2": "clamp(46px,6vw,74px)",
             "--body-size": "19px", "--track": ".01em", "--case": "uppercase",
+            "--display-adv": "0.339",
         },
         "extra": ("h1,h2{letter-spacing:.02em;line-height:.92}"
                   ".panel{border-bottom:8px solid var(--accent)}"
@@ -409,6 +436,7 @@ SKINS = {
             "--measure": "1020px", "--pad": "36px 38px",
             "--h1": "clamp(50px,6.8vw,84px)", "--h2": "clamp(33px,4.2vw,52px)",
             "--body-size": "19px", "--track": "-.03em", "--case": "none",
+            "--display-adv": "1.094",
         },
         "extra": ("h1,h2{font-weight:800}"
                   ".panel{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}"
@@ -429,6 +457,7 @@ SKINS = {
             "--measure": "1000px", "--pad": "32px 34px",
             "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
             "--body-size": "19px", "--track": "-.02em", "--case": "none",
+            "--display-adv": "0.604",
         },
         "extra": (".panel{box-shadow:inset 0 1px 0 rgba(255,255,255,.10),"
                   "inset 0 -1px 0 rgba(0,0,0,.5),0 18px 40px rgba(0,0,0,.45)}"
@@ -450,6 +479,7 @@ SKINS = {
             "--measure": "1040px", "--pad": "32px 34px",
             "--h1": "clamp(54px,7.2vw,90px)", "--h2": "clamp(34px,4.4vw,54px)",
             "--body-size": "18px", "--track": "-.02em", "--case": "uppercase",
+            "--display-adv": "0.555",
         },
         "extra": (".panel{background-image:radial-gradient("
                   "color-mix(in oklab,var(--accent) 26%,transparent) 1px,transparent 1px);"
@@ -471,6 +501,7 @@ SKINS = {
             "--measure": "1000px", "--pad": "28px 30px",
             "--h1": "clamp(58px,7.6vw,96px)", "--h2": "clamp(38px,4.8vw,58px)",
             "--body-size": "17px", "--track": "0em", "--case": "uppercase",
+            "--display-adv": "0.37",
         },
         "extra": (".panel{background-image:repeating-linear-gradient(0deg,"
                   "rgba(0,0,0,.28) 0 1px,transparent 1px 3px)}"
@@ -491,6 +522,7 @@ SKINS = {
             "--measure": "1060px", "--pad": "30px 32px",
             "--h1": "clamp(44px,5.8vw,72px)", "--h2": "clamp(28px,3.6vw,44px)",
             "--body-size": "16px", "--track": "0em", "--case": "uppercase",
+            "--display-adv": "0.582",
         },
         "extra": (".panel{position:relative}"
                   ".panel::before,.panel::after{content:'';position:absolute;width:12px;height:12px;"
@@ -514,6 +546,7 @@ SKINS = {
             "--measure": "960px", "--pad": "36px 40px",
             "--h1": "clamp(64px,8.4vw,104px)", "--h2": "clamp(42px,5.4vw,66px)",
             "--body-size": "19px", "--track": "0em", "--case": "none",
+            "--display-adv": "0.488",
         },
         "extra": ("h1,h2{font-weight:700;text-shadow:0 1px 0 rgba(255,255,255,.18)}"
                   ".panel{background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);"
@@ -535,6 +568,7 @@ SKINS = {
             "--measure": "980px", "--pad": "34px 38px",
             "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
             "--body-size": "19px", "--track": "-.01em", "--case": "uppercase",
+            "--display-adv": "0.708",
         },
         "extra": (".panel{box-shadow:0 0 0 3px rgba(10,42,54,.92),0 22px 50px rgba(0,0,0,.45)}"
                   "h1,h2{text-transform:uppercase;letter-spacing:.01em}"),
@@ -555,6 +589,7 @@ SKINS = {
             "--h1": "clamp(48px,6.2vw,76px)", "--h2": "clamp(31px,3.9vw,48px)",
             "--body-size": "20px", "--track": "0em", "--case": "none",
             "--ink-bleed": "#f3ece0", "--muted-bleed": "#c6bcaa",
+            "--display-adv": "0.67",
         },
         "extra": (".panel h2{text-shadow:0 1px 0 rgba(255,255,255,.6)}"
                   ".panel h2::after{content:'';display:block;height:3px;margin-top:14px;"
@@ -579,6 +614,7 @@ SKINS = {
             "--h1": "clamp(42px,5.4vw,66px)", "--h2": "clamp(28px,3.4vw,42px)",
             "--body-size": "17px", "--track": "0em", "--case": "uppercase",
             "--ink-bleed": "#eaf0e2", "--muted-bleed": "#b9c3b0",
+            "--display-adv": "0.57",
         },
         "extra": (".panel{background-image:repeating-linear-gradient(180deg,"
                   "transparent 0 34px,rgba(120,160,110,.20) 34px 68px)}"
@@ -601,6 +637,7 @@ SKINS = {
             "--measure": "1000px", "--pad": "36px 38px",
             "--h1": "clamp(50px,6.6vw,82px)", "--h2": "clamp(32px,4.2vw,52px)",
             "--body-size": "19px", "--track": "-.01em", "--case": "none",
+            "--display-adv": "0.607",
         },
         "extra": (".panel{background-image:radial-gradient(120% 80% at 20% 0%,"
                   "rgba(126,196,164,.10),transparent 60%)}"
@@ -621,6 +658,7 @@ SKINS = {
             "--measure": "1020px", "--pad": "26px 30px",
             "--h1": "clamp(50px,6.8vw,84px)", "--h2": "clamp(32px,4.2vw,50px)",
             "--body-size": "17px", "--track": ".01em", "--case": "uppercase",
+            "--display-adv": "0.484",
         },
         "extra": ("h1,h2{text-transform:uppercase;letter-spacing:.04em}"
                   ".panel > * + *{border-top:1px solid var(--line)}"
@@ -643,6 +681,7 @@ SKINS = {
             "--h1": "clamp(52px,6.8vw,84px)", "--h2": "clamp(33px,4.2vw,52px)",
             "--body-size": "20px", "--track": "-.03em", "--case": "none",
             "--ink-bleed": "#ffffff", "--muted-bleed": "#d6dade",
+            "--display-adv": "0.626",
         },
         "extra": (".panel{box-shadow:0 24px 60px rgba(0,0,0,.35)}"),
         "accent_on_panel": "#0b57d0",
@@ -664,6 +703,7 @@ SKINS = {
             "--h1": "clamp(50px,6.6vw,80px)", "--h2": "clamp(32px,4vw,50px)",
             "--body-size": "19px", "--track": "-.02em", "--case": "none",
             "--ink-bleed": "#f7f6f3", "--muted-bleed": "#c9cbcd",
+            "--display-adv": "0.635",
         },
         "extra": (".panel{overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.34)}"
                   ".panel > *{padding-inline:38px}"
@@ -689,6 +729,7 @@ SKINS = {
             "--measure": "1120px", "--pad": "28px 32px",
             "--h1": "clamp(56px,7.6vw,92px)", "--h2": "clamp(36px,4.6vw,56px)",
             "--body-size": "19px", "--track": "-.015em", "--case": "uppercase",
+            "--display-adv": "0.408",
         },
         "extra": ("h1,h2{text-transform:uppercase;letter-spacing:.01em}"
                   ".panel{border-left:3px solid var(--accent)}"
@@ -711,6 +752,7 @@ SKINS = {
             "--h1": "clamp(50px,6.6vw,82px)", "--h2": "clamp(34px,4.4vw,52px)",
             "--body-size": "19px", "--track": "-.02em", "--case": "none",
             "--ink-bleed": "#f6f2ea", "--muted-bleed": "#cdc6bb",
+            "--display-adv": "0.592",
         },
         # The misregistration is a text-shadow in the second ink, not a filter:
         # it has to sit BEHIND the letterform and stay crisp, and a blur reads
@@ -737,6 +779,7 @@ SKINS = {
             "--measure": "1060px", "--pad": "34px 36px",
             "--h1": "clamp(40px,5.2vw,68px)", "--h2": "clamp(28px,3.4vw,44px)",
             "--body-size": "18px", "--track": "-.03em", "--case": "none",
+            "--display-adv": "0.821",
         },
         "extra": ("h1,h2{text-shadow:0 0 18px rgba(120,200,255,.55),"
                   "0 0 44px rgba(120,200,255,.28)}"
@@ -760,6 +803,7 @@ SKINS = {
             "--h1": "clamp(52px,7vw,88px)", "--h2": "clamp(36px,4.6vw,56px)",
             "--body-size": "19px", "--track": ".01em", "--case": "uppercase",
             "--ink-bleed": "#f3e9d8", "--muted-bleed": "#c9b79c",
+            "--display-adv": "0.382",
         },
         # The tape is a pseudo-element on the panel rather than a background
         # image, so it holds its angle at any panel height and costs no request.
@@ -788,6 +832,7 @@ SKINS = {
             "--h1": "clamp(62px,8.6vw,116px)", "--h2": "clamp(42px,5.6vw,72px)",
             "--body-size": "17px", "--track": "-.03em", "--case": "none",
             "--ink-bleed": "#faf8f5", "--muted-bleed": "#c6c1ba",
+            "--display-adv": "0.607",
         },
         # Every heading is annotated with its own point size, the way a specimen
         # sheet labels its showings. Set in the margin, in the text face, so the
@@ -815,6 +860,7 @@ SKINS = {
             "--measure": "1020px", "--pad": "34px 38px",
             "--h1": "clamp(46px,6vw,76px)", "--h2": "clamp(30px,3.8vw,48px)",
             "--body-size": "19px", "--track": "-.015em", "--case": "none",
+            "--display-adv": "0.598",
         },
         # One family throughout is the point, not a shortcut: signage systems buy
         # their consistency by changing weight and size, never the face.
@@ -841,6 +887,7 @@ SKINS = {
             "--measure": "1000px", "--pad": "26px 28px",
             "--h1": "clamp(48px,6.4vw,80px)", "--h2": "clamp(32px,4vw,50px)",
             "--body-size": "18px", "--track": "-.01em", "--case": "none",
+            "--display-adv": "0.669",
         },
         # A contact sheet is keyline and number. The panel gets both: a white
         # frame line offset inside its own edge, and a frame number in the
@@ -867,6 +914,7 @@ SKINS = {
             "--h1": "clamp(46px,6vw,76px)", "--h2": "clamp(32px,4vw,48px)",
             "--body-size": "19px", "--track": "-.01em", "--case": "none",
             "--ink-bleed": "#eaf4f1", "--muted-bleed": "#a9c4bf",
+            "--display-adv": "0.594",
         },
         "extra": (".panel{box-shadow:0 1px 0 rgba(255,255,255,.85) inset,"
                   "0 -2px 0 rgba(15,42,46,.10) inset,"
@@ -890,6 +938,7 @@ SKINS = {
             "--h1": "clamp(46px,6vw,74px)", "--h2": "clamp(32px,4vw,48px)",
             "--body-size": "21px", "--track": "0em", "--case": "none",
             "--ink-bleed": "#f5efe2", "--muted-bleed": "#cbbfa8",
+            "--display-adv": "0.618",
         },
         # Centred on purpose, and the only skin that is: scroll-craft bans
         # centred copy in EVERY act, not centred as a page grammar, and an
