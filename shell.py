@@ -83,6 +83,25 @@ html, body { margin: 0; background: transparent !important; color: var(--ink);
 .sr-hold__intro { position: relative; z-index: 1; margin-top: -100vh; }
 .sr-hold__over { position: relative; z-index: 1; }
 
+/* A bracket is a pair of bookends with other sections between them. The two
+   ends carry a shared accent edge and the sections between them are inset, so
+   the middle reads as inside something.
+
+   The first version drew a rule down the left of the wrapper. It could not
+   work: a wrapper rule is positioned against the viewport, and there are seven
+   layouts putting the content in seven different places, so the rule landed in
+   the margin under some of them and through the type under others. An inset on
+   the enclosed sections is stated relative to whatever the layout already did,
+   which is why it holds everywhere. */
+.sr-bracket { position: relative; }
+.sr-bracket__inner > section { position: relative; }
+.sr-bracket__inner > section > .panel,
+.sr-bracket__inner > section > .bleed { margin-left: 3%; margin-right: 1%; }
+@media (max-width: 760px) {
+  .sr-bracket__inner > section > .panel,
+  .sr-bracket__inner > section > .bleed { margin-inline: 0; }
+}
+
 /* An overlapping section climbs over the one before it. Negative margin rather
    than a transform, so the page height shrinks with it and the scroll does not
    gain a dead stretch at the bottom. */

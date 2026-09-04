@@ -71,6 +71,9 @@ def catalogue(blocks=None):
             tags.insert(0, b["role"])
         if b.get("holds"):
             tags.append(f"HOLDS the next {b['holds']} blocks behind it")
+        if b.get("brackets"):
+            tags.append(f"BRACKETS the next {b['brackets']} blocks, opening "
+                        f"before them and closing after them")
         if b.get("overlap"):
             tags.append("OVERLAPS the block above it")
         lines.append(f"  {b['name']}  [{', '.join(tags)}]\n"
@@ -162,6 +165,21 @@ def validate(plan, blocks=None):
     # A holder needs something to hold. It also cannot be the last thing on the
     # page, and two of them cannot overlap, because the second would stick
     # inside the first one's overlay and neither would behave.
+    brackets = [n for n in names if int((blocks.get(n) or {}).get("brackets") or 0)]
+    if len(brackets) > 1:
+        problems.append(f"{len(brackets)} brackets ({', '.join(brackets)}); one "
+                        f"pair of bookends is a structure, two is a mess")
+    for n in brackets:
+        i = names.index(n)
+        need = int(blocks[n]["brackets"])
+        if i + need >= len(names):
+            problems.append(f"{n} brackets {need} block(s) but only "
+                            f"{len(names) - i - 1} follow it")
+        inside = names[i + 1:i + 1 + need]
+        if any(blocks.get(m, {}).get("role") == "closer" for m in inside):
+            problems.append(f"{n} brackets the closing block; the close of the "
+                            f"page cannot be inside something else")
+
     holders = [n for n in names if int((blocks.get(n) or {}).get("holds") or 0)]
     if len(holders) > 1:
         problems.append(f"{len(holders)} holds ({', '.join(holders)}); a page has "
@@ -262,6 +280,21 @@ def render(plan, blocks=None):
         if not b:
             i += 1
             continue
+        brackets = int(b.get("brackets") or 0)
+        if brackets > 0 and i + brackets < len(plan):
+            emit_assets(item["block"], b)
+            filled = _fill(b["markup"], item.get("data") or {})
+            rest, close = take_part(filled, "data-bracket-close")
+            inner = [one(p) for p in plan[i + 1:i + 1 + brackets]]
+            inner = [x for x in inner if x]
+            sections.append(
+                '<div class="sr-bracket">\n'
+                f"{rest}\n"
+                f'  <div class="sr-bracket__inner">\n{chr(10).join(inner)}\n  </div>\n'
+                f"{close}\n"
+                "</div>")
+            i += 1 + len(inner)
+            continue
         holds = int(b.get("holds") or 0)
         if holds > 0 and i + holds < len(plan) + 0:
             over = [one(p) for p in plan[i + 1:i + 1 + holds]]
@@ -297,10 +330,11 @@ _OPEN_SECTION = re.compile(r"<section\b([^>]*)>")
 
 
 class _Splitter(HTMLParser):
-    """Find the top-level element carrying data-hold-intro and its extent."""
+    """Find the top-level element carrying `attr` and its extent."""
 
-    def __init__(self):
+    def __init__(self, attr="data-hold-intro"):
         super().__init__()
+        self.attr = attr
         self.depth = 0
         self.start = None
         self.end = None
@@ -309,7 +343,7 @@ class _Splitter(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag in _VOID:
             return
-        if self.start is None and "data-hold-intro" in dict(attrs):
+        if self.start is None and self.attr in dict(attrs):
             self.start = self.getpos()
             self._want = self.depth
         self.depth += 1
@@ -327,6 +361,22 @@ def _offset(html, pos):
     return sum(len(l) + 1 for l in html.split("\n")[:line - 1]) + col
 
 
+def take_part(markup, attr):
+    """Cut the top-level element carrying `attr` out of the markup.
+
+    Returns (rest, part). A structural block is more than one piece of markup
+    that has to be placed in different parts of the page, and this is how a
+    block hands those pieces over without the composer knowing what they mean.
+    """
+    p = _Splitter(attr)
+    p.feed(markup)
+    if p.start is None or p.end is None:
+        return markup, ""
+    a = _offset(markup, p.start)
+    b = markup.index(">", _offset(markup, p.end)) + 1
+    return (markup[:a] + markup[b:]).strip(), markup[a:b].strip()
+
+
 def split_hold(markup):
     """A held block is two parts, and it has to be, because they behave
     differently: the bed sticks and is crossed by everything that follows, while
@@ -336,13 +386,7 @@ def split_hold(markup):
 
     The block marks its own copy with data-hold-intro. Everything else is bed.
     """
-    p = _Splitter()
-    p.feed(markup)
-    if p.start is None or p.end is None:
-        return markup, ""
-    a = _offset(markup, p.start)
-    b = markup.index(">", _offset(markup, p.end)) + 1
-    return (markup[:a] + markup[b:]).strip(), markup[a:b].strip()
+    return take_part(markup, "data-hold-intro")
 
 
 def _add_class(html, cls):

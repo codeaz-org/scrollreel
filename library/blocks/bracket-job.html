@@ -1,0 +1,27 @@
+<!--{"kind": "panel", "device": "draw", "brackets": 2, "what": "One job opened and closed around the sections between it: what was found on day one, then what was left behind at the end, with everything in between read as happening inside that job. A case study that is a frame rather than a section, which is the only way a page can say 'this all happened on one house'.", "slots": {"open_day": "str, e.g. 'Day one'", "open_head": "str, 3-6 words, what was found", "open_body": "str, one or two sentences, the state it was in", "close_day": "str, e.g. 'Day four'", "close_head": "str, 3-6 words, what was left", "close_body": "str, one or two sentences, checkable", "figure": "str, the headline number for the job, e.g. '4 days' or 'GBP 2,140'"}}-->
+<section class="b-brk b-brk-open">
+  <div class="panel stack" data-sc-in>
+    <div class="b-brk-day fine">{{open_day}}</div>
+    <h2>{{open_head}}</h2>
+    <p>{{open_body}}</p>
+  </div>
+</section>
+<section data-bracket-close class="b-brk b-brk-close">
+  <div class="panel stack" data-sc-in data-sc-stagger="90">
+    <div class="b-brk-day fine">{{close_day}}</div>
+    <h2>{{close_head}}</h2>
+    <p>{{close_body}}</p>
+    <div class="b-brk-fig">{{figure}}</div>
+  </div>
+</section>
+<style>
+/* Two top-level sections, and the second is marked data-bracket-close so the
+   composer can put the other blocks between them. Everything in between is
+   then read as happening inside this job, which no amount of copy could say. */
+.b-brk-day{letter-spacing:.22em;text-transform:uppercase;color:var(--accent-panel)}
+.b-brk-open .panel{border-left:3px solid var(--accent)}
+.b-brk-close .panel{border-left:3px solid var(--accent)}
+.b-brk-fig{font-family:var(--font-display);font-size:clamp(30px,4vw,52px);
+  line-height:1;color:var(--accent-panel);font-variant-numeric:tabular-nums;
+  padding-top:14px;border-top:1px solid var(--line)}
+</style>
