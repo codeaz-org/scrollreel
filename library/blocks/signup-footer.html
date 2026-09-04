@@ -1,7 +1,7 @@
 <!--{"kind": "panel", "device": "kinetic", "what": "Closing block for a business whose next step is a message rather than a visit: one big line, one field, the phone number underneath for people who would rather ring. Use instead of contact-hours when there is no counter to walk into.", "slots": {"headline": "str, 5-9 words, addressed to the reader", "field_label": "str, 2-4 words, what goes in the box", "cta": "str, 2-3 words on the button", "phone": "str, plausible local format", "reply_note": "str, one line on when they will hear back", "area": "str, one line on where they cover"}, "role": "closer"}-->
 <section data-sc-act="pin" data-sc-span="1.25">
   <div data-sc-stage class="panel b-sign">
-    <h2 class="b-sign-h" data-sc-cue="0.02 1 0.22 0" data-sc-kinetic="words">{{headline}}</h2>
+    <h2 class="b-sign-h" data-sc-cue="0 1 0 0" data-sc-kinetic="words">{{headline}}</h2>
     <div class="b-sign-form" data-sc-cue="0.18 1 0.3 0">
       <label class="b-sign-field">
         <span class="fine">{{field_label}}</span>
@@ -17,6 +17,12 @@
   </div>
 </section>
 <style>
+/* The FIRST thing in a pinned act uses the greet form (rampIn 0, from 0).
+   A pinned stage is on screen for a whole viewport before its pin begins, and
+   p is clamped to 0 for all of it: a first cue at 0.06 means the reader watches
+   an empty card slide up. That was a hole in the middle of a finished video,
+   and it is the same rule as the hero's, which only ever got applied to heroes.
+
 /* Timed tight and pinned short, because this is the LAST act on the page and
    whatever scroll it does not use is dead video at the exact moment the
    viewer is deciding whether to watch the outro. A 1.6 span with the copy

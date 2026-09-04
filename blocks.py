@@ -23,6 +23,7 @@ import json
 import os
 import re
 import sys
+from html.parser import HTMLParser
 
 DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "library", "blocks")
 
@@ -209,7 +210,100 @@ def render(plan, blocks=None):
     return out
 
 
+_ACT = re.compile(r'data-sc-act="(scrub|pin|pan)"')
+_CUE_V = re.compile(r'data-sc-cue="([^"]*)"')
+_REV_V = re.compile(r'data-sc-reveal-at="([^"]*)"')
+_VOID = {"img", "br", "hr", "input", "source", "meta", "link"}
+
+
+class _Greeter(HTMLParser):
+    """Is anything in this markup on screen before the first cue fires?
+
+    Walks the tree and ignores every subtree under an element carrying
+    data-sc-cue or data-sc-reveal, because those are hidden at p=0. What is
+    left is what greets the reader. An image counts: cutaway opens on a
+    photograph and only the drawing over it is revealed, which is correct and
+    should not be reported.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.depth = 0          # how deep inside a hidden subtree we are
+        self.stack = []
+        self.greets = False
+
+    def handle_starttag(self, tag, attrs):
+        d = dict(attrs)
+        hidden = "data-sc-cue" in d or "data-sc-reveal" in d
+        if tag not in _VOID:
+            self.stack.append(hidden)
+        if hidden:
+            self.depth += 1
+        elif self.depth == 0 and tag == "img":
+            self.greets = True
+
+    def handle_endtag(self, tag):
+        if tag in _VOID or not self.stack:
+            return
+        if self.stack.pop():
+            self.depth -= 1
+
+    def handle_data(self, text):
+        # A slot placeholder is real content: it is filled before it renders.
+        if self.depth == 0 and text.strip():
+            self.greets = True
+
+
+def _greets_on_entry(markup):
+    p = _Greeter()
+    p.feed(markup)
+    return p.greets
+
+
+def lint(blocks=None):
+    """Faults a rendered page cannot show but a scroll can. One rule so far.
+
+    A PINNED act is on screen for a whole viewport before its pin begins, and
+    the engine clamps p to 0 for all of it. So the first thing in the act has to
+    use the greet form -- from 0, with rampIn 0 -- or the reader watches an
+    empty card slide up while the page moves. That is a hole in the finished
+    video, and it will not appear in any screenshot taken with the act pinned.
+
+    The rule was known for heroes and only ever applied to heroes. It cost a
+    dead second at the closer of two separate builds before it was written down.
+    """
+    blocks = blocks or load()
+    problems = []
+    for name, b in sorted(blocks.items()):
+        if not _ACT.search(b["markup"]):
+            continue
+        starts = []
+        for raw in _CUE_V.findall(b["markup"]):
+            nums = raw.split()
+            frm = float(nums[0]) if nums else 0.0
+            ramp = float(nums[2]) if len(nums) > 2 else 0.3
+            starts.append((frm, ramp, "cue " + raw))
+        for raw in _REV_V.findall(b["markup"]):
+            nums = raw.split()
+            starts.append((float(nums[0]) if nums else 0.0, 0.0, "reveal " + raw))
+        if not starts:
+            continue                     # the act is driven from CSS, not cues
+        if _greets_on_entry(b["markup"]):
+            continue                     # something is already on screen at p=0
+        frm, ramp, which = min(starts)
+        if frm > 0.001 or ramp > 0.001:
+            problems.append(f"{name}: pinned act greets at {which!r}; the first "
+                            f"thing in a pinned act must start at 0 with rampIn 0")
+    return problems
+
+
 if __name__ == "__main__":
     bs = load()
+    faults = lint(bs)
     print(f"{len(bs)} blocks: {', '.join(bs)}\n")
+    if faults:
+        print("LINT:")
+        for f in faults:
+            print("  " + f)
+        print()
     print(catalogue(bs))

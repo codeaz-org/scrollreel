@@ -180,13 +180,20 @@ def _strip_fences(text):
     return text.strip()
 
 
-def build(business, component, photos, scene=None, api_key=None, models=None):
+def build(business, component, photos, scene=None, api_key=None, models=None,
+          attempts=1):
     """A validated block plan, plus which model produced it.
 
     Returns {"plan": [...], "model": str, "problems": [...]}. The plan is data,
     not markup: blocks.render() turns it into sections. That is the whole point
     of the change -- the animation is code we wrote, and a weak generation
     costs us copy rather than a broken page.
+
+    `attempts` re-sends the SAME prompt to the SAME model that many times and
+    keeps the last valid plan. Temperature is 1.0, so identical input does not
+    give identical output: this is a reroll, not a retry. Pass models=[m] with
+    it to pin the model, which is what main.py --again does when you did not
+    like a build and want another take on the same brief.
     """
     import blocks as blocks_mod
 
@@ -233,7 +240,26 @@ def build(business, component, photos, scene=None, api_key=None, models=None):
             continue
         names = [b["block"] for b in plan]
         print(f"[build] {model} planned {len(plan)} blocks: {', '.join(names)}")
-        return {"plan": plan, "model": model, "problems": []}
+        good = {"plan": plan, "model": model, "problems": []}
+        for extra in range(attempts - 1):
+            print(f"[build] reroll {extra + 2}/{attempts} on {model}, same prompt")
+            try:
+                again = json.loads(_strip_fences(
+                    _post(model, system, user, api_key, max_tokens=12000, json_out=True)))
+            except Exception as e:  # noqa: BLE001
+                print(f"[build] reroll failed, keeping the last good plan: "
+                      f"{str(e)[:120]}", file=sys.stderr)
+                continue
+            if isinstance(again, dict):
+                again = again.get("plan") or again.get("blocks") or []
+            trouble = blocks_mod.validate(again, catalogue)
+            if trouble:
+                print(f"[build] reroll invalid, keeping the last good plan: "
+                      f"{trouble[:3]}", file=sys.stderr)
+                continue
+            print(f"[build] reroll planned: {', '.join(b['block'] for b in again)}")
+            good = {"plan": again, "model": model, "problems": []}
+        return good
     raise RuntimeError(f"no model produced a valid plan; last error: {last}")
 
 

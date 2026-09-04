@@ -4,7 +4,7 @@
     <div class="panel stack b-call">
       <h2>{{title}}</h2>
       <div class="b-call-thread">
-        <p class="b-call-line b-call-{{lines.0.who}}" data-sc-cue="0.04 1 0.4 0">{{lines.0.said}}</p>
+        <p class="b-call-line b-call-{{lines.0.who}}" data-sc-cue="0 1 0 0">{{lines.0.said}}</p>
         <p class="b-call-line b-call-{{lines.1.who}}" data-sc-cue="0.18 1 0.4 0">{{lines.1.said}}</p>
         <p class="b-call-line b-call-{{lines.2.who}}" data-sc-cue="0.32 1 0.4 0">{{lines.2.said}}</p>
         <p class="b-call-line b-call-{{lines.3.who}}" data-sc-cue="0.46 1 0.4 0">{{lines.3.said}}</p>
@@ -15,6 +15,12 @@
   </div>
 </section>
 <style>
+/* The FIRST thing in a pinned act uses the greet form (rampIn 0, from 0).
+   A pinned stage is on screen for a whole viewport before its pin begins, and
+   p is clamped to 0 for all of it: a first cue at 0.06 means the reader watches
+   an empty card slide up. That was a hole in the middle of a finished video,
+   and it is the same rule as the hero's, which only ever got applied to heroes.
+
 /* Lines are addressed by index rather than looped because each carries its own
    cue, and they all hold to the end: a conversation that erases itself as it
    goes is not a conversation. */

@@ -105,14 +105,20 @@ def render(name, palette=None):
                 .replace("__BG__", bg))
 
 
-def pick(trade, used=(), seed=None):
+def pick(trade, used=(), seed=None, want=None):
     """A backdrop for this trade, tinted for it, as a scene dict shaped like
-    the one scenes.py returned so main.py does not care which is in use."""
+    the one scenes.py returned so main.py does not care which is in use.
+
+    `want` names one and skips the choosing, which is what a redo needs: the
+    two videos are only comparable if the thing behind them is the same."""
     rng = random.Random(seed)
     have = available()
-    wanted = [n for n in FITS.get(trade, have) if n in have] or have
-    fresh = [n for n in wanted if n not in used] or wanted
-    name = rng.choice(fresh)
+    if want and want in have:
+        name = want
+    else:
+        wanted = [n for n in FITS.get(trade, have) if n in have] or have
+        fresh = [n for n in wanted if n not in used] or wanted
+        name = rng.choice(fresh)
     return {
         "name": name,
         "html": render(name, PALETTES.get(trade, DEFAULT_PALETTE)),

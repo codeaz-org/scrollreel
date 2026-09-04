@@ -31,6 +31,15 @@ on:
         type: boolean
         required: false
         default: true
+      again:
+        description: "Redo the last build: same brief, same model, fresh generation"
+        type: boolean
+        required: false
+        default: false
+      rerolls:
+        description: "Ask the model this many times and keep the last valid plan"
+        required: false
+        default: "1"
 
 jobs:
   build:
@@ -110,8 +119,17 @@ jobs:
           if [ "${{ github.event.inputs.refine }}" = "false" ]; then
             ARGS="$ARGS --no-refine"
           fi
+          # --again reuses the previous build's brief exactly, so the only
+          # thing that changes is the generation. On a runner that means the
+          # last build has to still be in out/, which is true only when this
+          # job produced it: a fresh checkout has no out/. Left available for
+          # the manual case, where you re-run against a downloaded artifact.
+          if [ "${{ github.event.inputs.again }}" = "true" ]; then
+            ARGS="$ARGS --again"
+          fi
+          ROLLS="${{ github.event.inputs.rerolls }}"
           SECS="${{ github.event.inputs.seconds }}"
-          eval python -u main.py $ARGS --seconds "${SECS:-12}"
+          eval python -u main.py $ARGS --seconds "${SECS:-12}" --rerolls "${ROLLS:-1}"
 
       - name: Upload the video and the site
         if: always()

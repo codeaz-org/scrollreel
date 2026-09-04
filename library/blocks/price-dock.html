@@ -12,7 +12,7 @@
           <p class="fine">{{foot}}</p>
         </div>
         <ol class="b-dock-list">
-          <li data-sc-cue="0.06 1 0.5 0"><b>{{items.0.head}}</b><span>{{items.0.note}}</span><i>{{items.0.cost}}</i></li>
+          <li data-sc-cue="0 1 0 0"><b>{{items.0.head}}</b><span>{{items.0.note}}</span><i>{{items.0.cost}}</i></li>
           <li data-sc-cue="0.24 1 0.5 0"><b>{{items.1.head}}</b><span>{{items.1.note}}</span><i>{{items.1.cost}}</i></li>
           <li data-sc-cue="0.42 1 0.5 0"><b>{{items.2.head}}</b><span>{{items.2.note}}</span><i>{{items.2.cost}}</i></li>
           <li data-sc-cue="0.60 1 0.5 0"><b>{{items.3.head}}</b><span>{{items.3.note}}</span><i>{{items.3.cost}}</i></li>
@@ -27,6 +27,12 @@
 /* The panel sits INSIDE the stage rather than being it: the engine gives a
    stage exactly 100vh, so a card that is the stage is a viewport-tall card
    with its bottom half empty. */
+/* The FIRST thing in a pinned act uses the greet form (rampIn 0, from 0).
+   A pinned stage is on screen for a whole viewport before its pin begins, and
+   p is clamped to 0 for all of it: a first cue at 0.06 means the reader watches
+   an empty card slide up. That was a hole in the middle of a finished video,
+   and it is the same rule as the hero's, which only ever got applied to heroes.
+
 /* Cues are written out per item rather than looped: each one starts later than
    the last and they all hold to the end, which a repeat cannot express. The
    fourth value is a rampOut of 0, because the engine defaults it to 0.3 and a

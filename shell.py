@@ -38,10 +38,12 @@ html, body { margin: 0; background: transparent !important; color: var(--ink);
   height: 100vh !important; border: 0 !important; z-index: 0 !important;
   pointer-events: none !important; }
 #content { position: relative; z-index: 1; background: transparent !important; }
-#content > section { background: transparent !important; padding: 7vh 5vw;
-  max-width: var(--measure); margin: 0 auto; }
-#content > section.hero { min-height: 92vh; display: flex; align-items: flex-end;
-  padding-bottom: 10vh; }
+#content > section { background: transparent !important; }
+/* Section geometry is NOT here any more. It was, and that was the reason forty
+   skins rendered one page: whatever the type and the colour did, every build
+   was a centred column of cards 7vh apart, capped at the measure. The skin now
+   names a layout and layouts.py supplies the rules, which is why two skins can
+   put the same block in genuinely different places. */
 /* A bleed sits on the live backdrop, not on a panel, so it needs the skin's
    OTHER ink. This is done by re-declaring the tokens on the subtree rather than
    by recolouring elements, because specificity could not win the argument: a
@@ -170,7 +172,7 @@ def translucify(text, alpha=SCRIM_ALPHA, skin=None):
 
 
 def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
-         accent="#ff6a2b", engine_dir="engine"):
+         accent="#ff6a2b", engine_dir="engine", layout=None):
     """Assemble the finished document: engine, skin tokens, then structure.
 
     The engine is scroll-craft's, vendored and unmodified. Blocks declare what
@@ -178,10 +180,16 @@ def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
     one rAF loop -- instead of a dozen blocks each running their own listener
     with its own slightly different easing.
     """
+    import layouts as layouts_mod
     import skins as skins_mod
 
     body = translucify(sections_html, skin=skin)
     skin_css = skins_mod.css(skin, accent)
+    layout = layout or skins_mod.SKINS.get(skin, {}).get("layout", layouts_mod.DEFAULT)
+    layout_css = layouts_mod.css(layout)
+    # Chrome is markup no block knows about: a spine, a running caption, a
+    # progress rail. It goes in with the content so it inherits the tokens.
+    layout_chrome = layouts_mod.chrome(layout, title=title)
     # The engine themes off --sc-* tokens; map ours onto them so a skin drives
     # the engine's own surfaces too rather than fighting them.
     bridge = """
@@ -206,12 +214,14 @@ html,body,.sc-page{background:transparent !important}
 <style id="scrollreel-skin">{skin_css}</style>
 <style id="scrollreel-engine-bridge">{bridge}</style>
 <style id="scrollreel-shell">{SHELL_CSS}</style>
+<style id="scrollreel-layout">{layout_css}</style>
 </head>
 <body>
 <iframe src="{scene_file}" id="scene" title="" tabindex="-1" scrolling="no"></iframe>
 <main id="content">
 {body}
 </main>
+{layout_chrome}
 <script src="{engine_dir}/scrollcraft.js"></script>
 {MOUNT_JS}
 </body>

@@ -22,6 +22,7 @@ import random
 # designed to be interchangeable.
 SKINS = {
     "glass": {
+        "layout": "column",
         "grammar": "live surface",
         "what": "Dark, translucent, blurred. The backdrop reads through everything.",
         "fonts": ["Inter:wght@400;600;800"],
@@ -38,6 +39,7 @@ SKINS = {
         "extra": ".panel{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}",
     },
     "press": {
+        "layout": "margin",
         "grammar": "chaptered editorial",
         "what": "Paper panels on a dark ground. Serif headlines, narrow measure, "
                 "generous leading. Reads like a printed brochure laid over the scene.",
@@ -65,6 +67,7 @@ SKINS = {
         "accent_on_panel": "#8a3b12",
     },
     "brutal": {
+        "layout": "ranged",
         "grammar": "typographic poster",
         "what": "Mono type, zero radius, hard rules, no blur. Everything squared "
                 "off and stated. Suits trades that sell precision.",
@@ -84,6 +87,7 @@ SKINS = {
                   "#content>section{border-bottom:1px solid var(--line)}"),
     },
     "atelier": {
+        "layout": "margin",
         "grammar": "gallery",
         "what": "Almost no panel: outline only, wide margins, small caps labels. "
                 "The photographs and the backdrop carry it.",
@@ -103,6 +107,7 @@ SKINS = {
                   ".fine{letter-spacing:.22em;text-transform:uppercase}"),
     },
     "ledger": {
+        "layout": "margin",
         "grammar": "tabular record",
         "what": "Ruled like an account book. Everything aligns to a baseline "
                 "grid, numbers are tabular, rules are hairlines. Trust through order.",
@@ -124,6 +129,7 @@ SKINS = {
         "accent_on_panel": "#7a2e12",
     },
     "blueprint": {
+        "layout": "gutter",
         "grammar": "technical drawing",
         "what": "Cyan on deep navy, dashed rules, everything labelled and "
                 "dimensioned. Reads as a drawing rather than a page.",
@@ -144,6 +150,7 @@ SKINS = {
                   ".panel::before{content:'';position:absolute}"),
     },
     "noir": {
+        "layout": "broad",
         "grammar": "filmic one-shot",
         "what": "Near-black, one hard light, enormous type and almost no colour. "
                 "Fewer words, larger. Contrast does the work.",
@@ -163,6 +170,7 @@ SKINS = {
                   ".lede{font-weight:500}"),
     },
     "clay": {
+        "layout": "column",
         "grammar": "soft stage",
         "what": "Rounded, warm and low-contrast. Big radii, soft shadows, "
                 "nothing sharp. For trades that sell comfort rather than precision.",
@@ -183,6 +191,7 @@ SKINS = {
         "accent_on_panel": "#b1481f",
     },
     "broadsheet": {
+        "layout": "gutter",
         "grammar": "chaptered editorial",
         "what": "Newspaper: dense condensed headlines, hairline column rules, "
                 "off-white stock. More words than any other skin, set smaller.",
@@ -203,6 +212,7 @@ SKINS = {
         "accent_on_panel": "#8c2f16",
     },
     "terminal": {
+        "layout": "rail",
         "grammar": "live product surface",
         "what": "Console: monospace throughout, amber or green on black, "
                 "everything prefixed and aligned like output.",
@@ -222,6 +232,7 @@ SKINS = {
                   ".panel{box-shadow:inset 0 0 40px rgba(120,255,140,.05)}"),
     },
     "swiss": {
+        "layout": "gutter",
         "grammar": "split stage",
         "what": "Strict grid, one accent, flush-left everything, generous "
                 "negative space. Nothing decorative survives.",
@@ -242,6 +253,7 @@ SKINS = {
                   "h1,h2{font-weight:700}"),
     },
     "botanic": {
+        "layout": "broad",
         "grammar": "continuous world",
         "what": "Organic and unhurried: humanist serif, deep green ground, "
                 "leading wide enough to breathe. Curved rules, no hard corners.",
@@ -261,6 +273,7 @@ SKINS = {
                   "p,li{line-height:1.72}"),
     },
     "industrial": {
+        "layout": "ranged",
         "grammar": "rhythmic cutlist",
         "what": "Concrete and steel: stencil-weight display, heavy top rules, "
                 "hazard-tape accent, everything stamped rather than styled.",
@@ -280,6 +293,7 @@ SKINS = {
                   ".fine{letter-spacing:.2em;text-transform:uppercase}"),
     },
     "luxe": {
+        "layout": "broad",
         "grammar": "gallery",
         "what": "Black and metal: hairline serif at large size, very wide "
                 "letterspacing on labels, almost no fill. Restraint as the message.",
@@ -299,6 +313,7 @@ SKINS = {
                   ".panel{border-color:rgba(214,193,150,.34)}"),
     },
     "field": {
+        "layout": "ranged",
         "grammar": "continuous world",
         "what": "Outdoors and surveyed: condensed labels, khaki and rust, "
                 "contour-line rules, coordinates and distances everywhere.",
@@ -318,6 +333,7 @@ SKINS = {
                   ".panel{border-left:2px solid var(--accent)}"),
     },
     "zine": {
+        "layout": "offset",
         "grammar": "rhythmic cutlist",
         "what": "Photocopied and pasted: heavy grotesque, panels sitting at a "
                 "slight angle, thick offset borders. Loud on purpose.",
@@ -338,6 +354,7 @@ SKINS = {
                   "h1,h2{text-transform:uppercase;line-height:.98}"),
     },
     "pastel": {
+        "layout": "broad",
         "grammar": "soft stage",
         "what": "Light, airy and quiet: pale panels, low contrast, rounded, "
                 "small accents. The opposite of shouting.",
@@ -358,6 +375,7 @@ SKINS = {
         "accent_on_panel": "#2b6cb0",
     },
     "kiosk": {
+        "layout": "broad",
         "grammar": "split stage",
         "what": "Signage: very large condensed type, flat blocks of accent, "
                 "short lines. Reads from across a room.",
@@ -377,6 +395,7 @@ SKINS = {
                   ".b-hero-cta,.b-contact-cta{border-radius:0}"),
     },
     "vitrine": {
+        "layout": "broad",
         "grammar": "live surface",
         "what": "Shopfront glass at night: very dark, a single bright accent, "
                 "thin borders and a lot of empty. Product-forward.",
@@ -396,6 +415,7 @@ SKINS = {
                   ".b-hero-cta{box-shadow:0 0 40px var(--accent)}"),
     },
     "skeuo": {
+        "layout": "column",
         "grammar": "live product surface",
         "what": "Physical controls: inset panels, real bevels, a soft top light. "
                 "Borrowed from ThreeUI's skeuomorphic set. Things look pressable.",
@@ -416,6 +436,7 @@ SKINS = {
                   "0 6px 0 rgba(0,0,0,.35)}"),
     },
     "halftone": {
+        "layout": "offset",
         "grammar": "typographic poster",
         "what": "Print reproduction: a dot screen behind everything, heavy ink, "
                 "two colours only. From ThreeUI's halftone work.",
@@ -436,6 +457,7 @@ SKINS = {
                   "h1,h2{text-transform:uppercase}"),
     },
     "crt": {
+        "layout": "column",
         "grammar": "live product surface",
         "what": "Cathode tube: scanlines, phosphor glow, slight bloom on the "
                 "accent. From ThreeUI's CRT background. Suits diagnostics.",
@@ -455,6 +477,7 @@ SKINS = {
                   "h1,h2{text-shadow:0 0 18px color-mix(in oklab,var(--accent) 55%,transparent)}"),
     },
     "wireframe": {
+        "layout": "rail",
         "grammar": "technical drawing",
         "what": "Nothing filled: outlines, corner ticks and measurements only. "
                 "From ThreeUI's wireframe forms. Everything looks measured.",
@@ -477,6 +500,7 @@ SKINS = {
                   "h2{letter-spacing:.06em}"),
     },
     "chalkboard": {
+        "layout": "column",
         "grammar": "gallery",
         "what": "Hand-lettered on slate: chalky type, soft dusty edges, a wiped "
                 "board behind it. Everything looks written this morning.",
@@ -497,6 +521,7 @@ SKINS = {
                   ".fine{font-family:var(--font-body);letter-spacing:.16em;text-transform:uppercase}"),
     },
     "enamel": {
+        "layout": "broad",
         "grammar": "typographic poster",
         "what": "Vitreous enamel signage: one deep saturated ground, a thick "
                 "white keyline around everything, rounded plate corners.",
@@ -515,6 +540,7 @@ SKINS = {
                   "h1,h2{text-transform:uppercase;letter-spacing:.01em}"),
     },
     "letterpress": {
+        "layout": "margin",
         "grammar": "chaptered editorial",
         "what": "Printed by impression: cream stock, ink that sits IN the paper, "
                 "ornament rules between sections, small caps labels.",
@@ -538,6 +564,7 @@ SKINS = {
         "accent_on_panel": "#8a2d17",
     },
     "manifest": {
+        "layout": "gutter",
         "grammar": "tabular record",
         "what": "Dot-matrix printout: green-bar alternating rows, perforated "
                 "edges, everything monospaced and aligned to a column.",
@@ -560,6 +587,7 @@ SKINS = {
         "accent_on_panel": "#1f5f2f",
     },
     "patina": {
+        "layout": "column",
         "grammar": "continuous world",
         "what": "Oxidised copper: verdigris greens over warm metal, edges that "
                 "look weathered rather than drawn. Built for roofs and metalwork.",
@@ -579,6 +607,7 @@ SKINS = {
                   "h1,h2{font-weight:500}"),
     },
     "timetable": {
+        "layout": "gutter",
         "grammar": "rhythmic cutlist",
         "what": "Split-flap departure board: rows of monospaced entries on a "
                 "dark board, one bright column. For anything with a schedule.",
@@ -598,6 +627,7 @@ SKINS = {
                   ".b-price-v,.b-spec-row dd,.b-feed-when{color:var(--accent)}"),
     },
     "daylight": {
+        "layout": "broad",
         "grammar": "gallery",
         "what": "Actually light: white ground, near-black type, photographs "
                 "given the room. The only skin where the backdrop reads as sky "
@@ -618,6 +648,7 @@ SKINS = {
         "accent_on_panel": "#0b57d0",
     },
     "swatch": {
+        "layout": "offset",
         "grammar": "gallery",
         "what": "Material samples: each section is a chip with its reference "
                 "printed on it, laid on a neutral board. For trades that choose "
@@ -644,6 +675,7 @@ SKINS = {
         "accent_on_panel": "#1a1c1e",
     },
     "signal": {
+        "layout": "gutter",
         "grammar": "live product surface",
         "what": "Tight technical grid, thin rules, numbers everywhere, accent "
                 "underlines. Reads like an instrument panel.",
@@ -663,6 +695,7 @@ SKINS = {
                   ".fine{letter-spacing:.18em;text-transform:uppercase}"),
     },
     "riso": {
+        "layout": "offset",
         "grammar": "typographic poster",
         "what": "Risograph: two spot inks on off-white stock, printed one pass "
                 "each and never quite in register. Headings carry the second ink "
@@ -690,6 +723,7 @@ SKINS = {
         "accent_on_panel": "#d81f6a",
     },
     "neon": {
+        "layout": "ranged",
         "grammar": "live surface",
         "what": "Wet street at night: near-black, every rule and heading carrying "
                 "a glow, and nothing filled in. The light is the only material.",
@@ -711,6 +745,7 @@ SKINS = {
                   "hr,.panel h2{border-color:rgba(120,200,255,.4)}"),
     },
     "tape": {
+        "layout": "offset",
         "grammar": "rhythmic cutlist",
         "what": "Kraft board and packing tape: brown stock, stencil display, and "
                 "a strip of tape holding each section down at an angle.",
@@ -738,6 +773,7 @@ SKINS = {
         "accent_on_panel": "#9a3f10",
     },
     "specimen": {
+        "layout": "margin",
         "grammar": "gallery",
         "what": "A type specimen sheet: the letterforms are the furniture, sizes "
                 "printed in the margin, everything else deliberately plain.",
@@ -765,6 +801,7 @@ SKINS = {
         "accent_on_panel": "#8c1d2f",
     },
     "transit": {
+        "layout": "rail",
         "grammar": "split stage",
         "what": "Wayfinding: one family at every size, thick coloured route rules "
                 "with round caps, and interchange dots where sections meet.",
@@ -789,6 +826,7 @@ SKINS = {
                   ".panel{box-shadow:inset 0 0 0 2px rgba(255,255,255,.06)}"),
     },
     "darkroom": {
+        "layout": "rail",
         "grammar": "filmic one-shot",
         "what": "A contact sheet under a safelight: frames keylined in white, "
                 "everything numbered, and red the only colour in the room.",
@@ -814,6 +852,7 @@ SKINS = {
                   ".fine{letter-spacing:.16em;text-transform:uppercase}"),
     },
     "ceramic": {
+        "layout": "offset",
         "grammar": "soft stage",
         "what": "Glazed tile: every panel is a slab with grout around it and a "
                 "wet highlight along its top edge. Nothing is flat.",
@@ -836,6 +875,7 @@ SKINS = {
         "accent_on_panel": "#0d6f6a",
     },
     "almanac": {
+        "layout": "column",
         "grammar": "chaptered editorial",
         "what": "A folk almanac: cream stock, everything centred and symmetrical, "
                 "ornamental rules between sections and small caps throughout.",
@@ -883,13 +923,14 @@ FITS = {
 
 # The axes a build is fingerprinted on. Two builds sharing a skin share all of
 # them, which is the point: a repeat is visible, not subtle.
-AXES = ("grammar", "display", "radius", "case", "panel")
+AXES = ("layout", "grammar", "display", "radius", "case", "panel")
 
 
 def fingerprint(skin_name):
     s = SKINS[skin_name]
     t = s["tokens"]
     return {
+        "layout": s.get("layout", "column"),
         "grammar": s["grammar"],
         "display": s["display"],
         "radius": t["--radius"],

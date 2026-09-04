@@ -88,6 +88,16 @@ def least_recently_used(options, used):
     return max(sorted(options), key=age)
 
 
+def _latest_slug():
+    """The most recently finished build, by its meta.json timestamp."""
+    if not os.path.isdir(OUT):
+        return None
+    done = [(os.path.getmtime(os.path.join(OUT, d, "meta.json")), d)
+            for d in os.listdir(OUT)
+            if os.path.exists(os.path.join(OUT, d, "meta.json"))]
+    return max(done)[1] if done else None
+
+
 def slugify(text):
     return re.sub(r"[^a-z0-9]+", "-", (text or "").lower()).strip("-")[:60] or "site"
 
@@ -100,14 +110,45 @@ def main():
     ap.add_argument("--keep-frames", action="store_true")
     ap.add_argument("--no-refine", action="store_true",
                     help="skip the look-at-your-own-scroll review pass")
+    ap.add_argument("--again", nargs="?", const="", metavar="SLUG",
+                    help="rebuild a site you did not like: same business, same "
+                         "skin, same backdrop, same photos, same model, and the "
+                         "identical prompt sent again. Defaults to the most "
+                         "recent build. The old video is kept beside the new "
+                         "one so you can compare them.")
+    ap.add_argument("--rerolls", type=int, default=1, metavar="N",
+                    help="ask the model N times with the same prompt and keep "
+                         "the last valid plan. Temperature is 1.0, so this is a "
+                         "different take rather than a retry.")
     args = ap.parse_args()
+
+    # --again reuses a finished build's brief exactly, so the only thing that
+    # changes between the two videos is the generation. That is the whole
+    # point: if a build came out flat you want another take on the same brief,
+    # not a different business with a different skin that cannot be compared.
+    redo = None
+    if args.again is not None:
+        slug = args.again or _latest_slug()
+        if not slug:
+            sys.exit("nothing to redo: out/ has no finished build")
+        meta_path = os.path.join(OUT, slug, "meta.json")
+        if not os.path.exists(meta_path):
+            sys.exit(f"no meta.json in {os.path.join(OUT, slug)}")
+        with open(meta_path) as f:
+            redo = json.load(f)
+        redo["slug"] = slug
+        print(f"[main] redo: {redo['business']} ({redo['trade']}), skin "
+              f"{redo['skin']}, backdrop {redo.get('scene')}, model {redo['model']}")
 
     state = load_state()
     history = all_built()
     used_trades = {b.get("trade") for b in history}
     used_components = {b.get("component_id") for b in history}
 
-    if args.trade:
+    if redo:
+        niche = next(n for n in businesses.NICHES if n["trade"] == redo["trade"])
+        business = {**niche, "name": redo["business"], "city": redo["city"]}
+    elif args.trade:
         niche = next((n for n in businesses.NICHES if n["trade"] == args.trade), None)
         if not niche:
             sys.exit(f"unknown trade {args.trade!r}; have: "
@@ -127,7 +168,21 @@ def main():
             print(f"[main] {source['name']} unavailable: {e}", file=sys.stderr)
     if not pool:
         sys.exit("no unused components available")
-    chosen = businesses.choose_component(business, pool)
+    if redo:
+        # The redo's own component is in used_components, so it was filtered out
+        # of the pool above. Fetch it back by id rather than letting the reroll
+        # silently change one of the inputs it is supposed to hold fixed.
+        pool = []
+        for source in components.REPOS:
+            try:
+                pool += [{**c, "source": source} for c in components.list_components(source)]
+            except Exception:  # noqa: BLE001
+                pass
+        chosen = next((c for c in pool
+                       if f"{c['source']['repo']}:{c['name']}" == redo["component_id"]),
+                      None) or businesses.choose_component(business, pool)
+    else:
+        chosen = businesses.choose_component(business, pool)
     source = chosen["source"]
     component = {
         "id": f"{source['repo']}:{chosen['name']}",
@@ -146,7 +201,16 @@ def main():
     shutil.rmtree(engine_dst, ignore_errors=True)
     shutil.copytree(os.path.join("library", "engine"), engine_dst)
 
-    photos = images.fetch(business["photo_query"], work)
+    if redo and redo.get("photos") is not None and os.path.isdir(os.path.join(work, "img")):
+        # Same pictures, or the two videos are not comparable. The names are
+        # fixed by images.fetch, so the files on disk are the record.
+        photos = [{"file": f"img/{f}", "alt": business["photo_query"],
+                   "credit": c}
+                  for f, c in zip(sorted(os.listdir(os.path.join(work, "img"))),
+                                  redo["photos"])]
+        print(f"[main] reusing {len(photos)} photos already in {work}/img")
+    else:
+        photos = images.fetch(business["photo_query"], work)
 
     # The scene is copied in, never generated. It is a finished WebGL file and
     # the reason anyone stops scrolling; a model asked to "rebuild the idea in
@@ -154,7 +218,8 @@ def main():
     used_scenes = {b.get("scene") for b in history}
     # Ours, not ThreeUI's. Their files are finished demo pages and only five of
     # seventy worked as a backdrop; these are shaders we own, tinted per trade.
-    scene = backdrops.pick(business["trade"], used=used_scenes)
+    scene = (backdrops.pick(business["trade"], want=redo.get("scene")) if redo
+             else backdrops.pick(business["trade"], used=used_scenes))
     if scene:
         with open(os.path.join(work, "scene.html"), "w") as f:
             f.write(scene["html"])
@@ -167,13 +232,15 @@ def main():
     # treatment, radius, measure, whether headings shout. Fingerprinted against
     # the last few builds so two consecutive sites cannot converge.
     recent_skins = [b.get("skin") for b in history if b.get("skin")]
-    skin = skins.pick(business["trade"], recent=recent_skins)
+    skin = redo["skin"] if redo else skins.pick(business["trade"], recent=recent_skins)
     accent = "#%02x%02x%02x" % tuple(
         int(max(0.0, min(1.0, v)) * 255) for v in
         backdrops.PALETTES.get(business["trade"], backdrops.DEFAULT_PALETTE)[2])
     print(f"[main] skin: {skin} ({skins.SKINS[skin]['grammar']}), accent {accent}")
 
-    built = page_builder.build(business, component, photos, scene=scene)
+    built = page_builder.build(business, component, photos, scene=scene,
+                               models=[redo["model"]] if redo else None,
+                               attempts=max(1, args.rerolls))
     sections_html = blocks.render(built["plan"])
 
     # Injected rather than requested: the model does not have to remember to
@@ -235,7 +302,8 @@ def main():
     # Rotate the presentation too, so a week of builds is not one video made
     # seven times. Least-recently-used rather than random: random repeats.
     used_templates = [b.get("template") for b in history if b.get("template")]
-    template = least_recently_used(compose.TEMPLATES, used_templates)
+    template = (redo.get("template") if redo
+                else least_recently_used(compose.TEMPLATES, used_templates))
     print(f"[main] template: {template}")
 
     pills = "".join(f'<div class="pill">{s}</div>' for s in business["services"][:4])
@@ -251,7 +319,16 @@ def main():
         outro_line="This site was built by CodeAZ",
         template=template,
     )
-    video = compose.compose(frames_dir, os.path.join(work, "video.mp4"), assets, fps=args.fps)
+    # A redo keeps the take it is replacing. Comparing two videos is the only
+    # way to tell whether the second generation is actually better, and the one
+    # you overwrote is exactly the one you wanted to compare against.
+    out_video = os.path.join(work, "video.mp4")
+    if redo and os.path.exists(out_video):
+        keep = next(os.path.join(work, f"video-take{n}.mp4") for n in range(1, 99)
+                    if not os.path.exists(os.path.join(work, f"video-take{n}.mp4")))
+        shutil.move(out_video, keep)
+        print(f"[main] previous take kept at {keep}")
+    video = compose.compose(frames_dir, out_video, assets, fps=args.fps)
     print(f"[main] video: {video}")
 
     meta = {
@@ -278,8 +355,14 @@ def main():
     if not args.keep_frames:
         shutil.rmtree(frames_dir, ignore_errors=True)   # ~2MB each at 2x
 
-    state["built"].append(meta)
-    save_state(state)
+    # A redo is the same site again, not a new one: appending it would push a
+    # trade, a skin and a backdrop out of the rotation window for a build that
+    # never happened.
+    if redo:
+        print("[main] redo: state left alone")
+    else:
+        state["built"].append(meta)
+        save_state(state)
     print(f"[main] done -> {work}/")
 
 
