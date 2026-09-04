@@ -174,7 +174,6 @@ jobs:
           if-no-files-found: warn
 
       - name: Upload to TikTok drafts
-        if: steps.guard.outputs.run == 'yes'
         # Default true, and on a schedule inputs are empty -- so a cron run
         # posts. It lands in the TikTok app's drafts, never public: post.py has
         # no publish path at all, so the worst case is a draft nobody wants.
