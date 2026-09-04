@@ -1,0 +1,25 @@
+<!--{"kind": "panel", "device": "count", "holds": 2, "what": "One number at the scale of the whole screen, held there while the two sections that justify it pass over the top of it. The number does not scroll away before the reader has been given a reason to believe it, which is the usual failure of a statistic on a website.", "slots": {"value": "whole number, the figure alone, no units", "unit": "str, 1-3 words, what it counts", "since": "str, one short line saying over what period or since when"}}-->
+<div class="b-hfig">
+  <div class="b-hfig-num" data-sc-count="0 {{value}}" data-sc-count-ms="2200">0</div>
+</div>
+<div data-hold-intro class="b-hfig-intro">
+  <div class="b-hfig-unit">{{unit}}</div>
+  <div class="b-hfig-since fine">{{since}}</div>
+</div>
+<style>
+/* The figure is the bed and stays for the whole passage; the words naming it
+   belong to the first screen and scroll off with it. Set low-contrast on
+   purpose: it is furniture for the passage, not a card competing with the copy
+   crossing it. */
+.b-hfig{position:relative;width:100%;height:100%;display:flex;
+  align-items:center;justify-content:center}
+.b-hfig-num{font-family:var(--font-display);font-size:min(42vw,44vh);line-height:.82;
+  font-variant-numeric:tabular-nums;letter-spacing:-.04em;
+  color:color-mix(in oklab, var(--accent) 40%, transparent)}
+.b-hfig-intro{position:relative;height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-end;gap:8px;padding-bottom:13vh;
+  text-align:center;pointer-events:none}
+.b-hfig-unit{font-family:var(--font-display);font-size:clamp(22px,3vw,40px);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.b-hfig-since{color:var(--muted)}
+</style>

@@ -1,0 +1,23 @@
+<!--{"kind": "panel", "device": "stagger", "overlap": true, "what": "A short card that climbs over the bottom of whatever is above it, so the two read as one composition instead of two bands. Use it for the aside that qualifies the section before it: the overlap is the argument, because it makes the note physically attached to the thing it is qualifying.", "slots": {"head": "str, 2-5 words", "body": "str, one or two sentences that QUALIFY the section above, not a new subject", "points": "list of exactly 2 short lines"}}-->
+<section>
+  <div class="panel b-onote" data-sc-in data-sc-stagger="90">
+    <h3 class="b-onote-h">{{head}}</h3>
+    <p>{{body}}</p>
+    <ul class="b-onote-list">
+      {{#points}}<li>{{.}}</li>{{/points}}
+    </ul>
+  </div>
+</section>
+<style>
+/* The section is narrowed and pushed off centre so the edge of the block
+   beneath it stays visible. An overlapping card that lines up exactly with what
+   it covers just looks like a section with a shadow. */
+.b-onote{max-width:min(600px, 78%);margin-left:auto;margin-right:6%}
+.b-onote-h{font-size:24px}
+.b-onote-list{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.b-onote-list li{padding-left:20px;position:relative;font-size:calc(var(--body-size) * .92);
+  color:var(--muted)}
+.b-onote-list li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;
+  background:var(--accent-panel)}
+@media(max-width:760px){.b-onote{max-width:none;margin-inline:0}}
+</style>

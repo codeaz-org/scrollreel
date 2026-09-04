@@ -66,8 +66,14 @@ def catalogue(blocks=None):
     lines = []
     for b in blocks.values():
         slots = "\n".join(f"      {k}: {v}" for k, v in (b.get("slots") or {}).items())
-        lines.append(f"  {b['name']}  [{b.get('kind', 'panel')}, "
-                     f"device: {b.get('device', 'flow')}]\n"
+        tags = [b.get("kind", "panel"), f"device: {b.get('device', 'flow')}"]
+        if b.get("role"):
+            tags.insert(0, b["role"])
+        if b.get("holds"):
+            tags.append(f"HOLDS the next {b['holds']} blocks behind it")
+        if b.get("overlap"):
+            tags.append("OVERLAPS the block above it")
+        lines.append(f"  {b['name']}  [{', '.join(tags)}]\n"
                      f"    {b.get('what', '').strip()}\n"
                      f"    slots:\n{slots}")
     return "\n\n".join(lines)
@@ -153,6 +159,28 @@ def validate(plan, blocks=None):
         for slot in (blocks[name].get("slots") or {}):
             if slot not in data or data[slot] in ("", None, []):
                 problems.append(f"item {i} ({name}): missing slot {slot!r}")
+    # A holder needs something to hold. It also cannot be the last thing on the
+    # page, and two of them cannot overlap, because the second would stick
+    # inside the first one's overlay and neither would behave.
+    holders = [n for n in names if int((blocks.get(n) or {}).get("holds") or 0)]
+    if len(holders) > 1:
+        problems.append(f"{len(holders)} holds ({', '.join(holders)}); a page has "
+                        f"one, or neither reads as deliberate")
+    held_until = -1
+    for i, name in enumerate(names):
+        n = int((blocks.get(name) or {}).get("holds") or 0)
+        if not n:
+            continue
+        if i <= held_until:
+            problems.append(f"{name} at {i} is inside another hold; holds cannot nest")
+        if i + n >= len(names):
+            problems.append(f"{name} holds {n} block(s) but only "
+                            f"{len(names) - i - 1} follow it; a holder cannot be last")
+        held_until = i + n
+        for over in names[i + 1:i + 1 + n]:
+            if int((blocks.get(over) or {}).get("holds") or 0):
+                problems.append(f"{over} is held by {name} and holds in turn")
+
     # The engine tracks ONE background wash at a time: with two drift acts on a
     # page the second overwrites the first mid-scroll and both look broken.
     drifting = [n for n in names if n in blocks and blocks[n].get("device") == "drift"]
@@ -187,21 +215,72 @@ def validate(plan, blocks=None):
 
 def render(plan, blocks=None):
     """The sections HTML for a plan. CSS and JS are emitted once per block
-    kind, however many times the block is used."""
+    kind, however many times the block is used.
+
+    Two blocks can also stand in a RELATIONSHIP to each other, which is the
+    thing a flat list of sections could not express:
+
+      holds: N   this block is a stage that stays put while the next N blocks
+                 scroll over it. The page stops being a stack and becomes two
+                 layers, and the held visual is on screen for a third of the
+                 video instead of four seconds.
+
+      overlap    this block pulls up over the one before it, so the two
+                 interleave instead of sitting in separate bands. Cheap, and it
+                 is most of the difference between a page that looks composed
+                 and a page that looks stacked.
+
+    Both are declared in the block's own header, so a block knows how it wants
+    to sit and the model only has to choose it.
+    """
     blocks = blocks or load()
     sections, css, js, seen = [], [], [], set()
-    for item in plan:
-        name = item.get("block")
-        b = blocks.get(name)
+
+    def emit_assets(name, b):
+        if name in seen:
+            return
+        seen.add(name)
+        if b["css"]:
+            css.append(f"/* {name} */\n{b['css'].strip()}")
+        if b["js"]:
+            js.append(f"/* {name} */\n{b['js'].strip()}")
+
+    def one(item):
+        b = blocks.get(item.get("block"))
         if not b:
+            return None
+        emit_assets(item["block"], b)
+        html = _fill(b["markup"], item.get("data") or {})
+        if b.get("overlap"):
+            html = _add_class(html, "sr-overlap")
+        return html
+
+    i = 0
+    while i < len(plan):
+        item = plan[i]
+        b = blocks.get(item.get("block"))
+        if not b:
+            i += 1
             continue
-        sections.append(_fill(b["markup"], item.get("data") or {}))
-        if name not in seen:
-            seen.add(name)
-            if b["css"]:
-                css.append(f"/* {name} */\n{b['css'].strip()}")
-            if b["js"]:
-                js.append(f"/* {name} */\n{b['js'].strip()}")
+        holds = int(b.get("holds") or 0)
+        if holds > 0 and i + holds < len(plan) + 0:
+            over = [one(p) for p in plan[i + 1:i + 1 + holds]]
+            over = [o for o in over if o]
+            emit_assets(item["block"], b)
+            bed, intro = split_hold(_fill(b["markup"], item.get("data") or {}))
+            sections.append(
+                '<div class="sr-hold">\n'
+                f'  <div class="sr-hold__bed">{bed}</div>\n'
+                + (f'  <div class="sr-hold__intro">{intro}</div>\n' if intro else "")
+                + f'  <div class="sr-hold__over">\n{chr(10).join(over)}\n  </div>\n'
+                "</div>")
+            i += 1 + len(over)
+            continue
+        html = one(item)
+        if html:
+            sections.append(html)
+        i += 1
+
     out = "\n".join(sections)
     if css:
         out += "\n<style>\n" + "\n".join(css) + "\n</style>"
@@ -214,6 +293,68 @@ _ACT = re.compile(r'data-sc-act="(scrub|pin|pan)"')
 _CUE_V = re.compile(r'data-sc-cue="([^"]*)"')
 _REV_V = re.compile(r'data-sc-reveal-at="([^"]*)"')
 _VOID = {"img", "br", "hr", "input", "source", "meta", "link"}
+_OPEN_SECTION = re.compile(r"<section\b([^>]*)>")
+
+
+class _Splitter(HTMLParser):
+    """Find the top-level element carrying data-hold-intro and its extent."""
+
+    def __init__(self):
+        super().__init__()
+        self.depth = 0
+        self.start = None
+        self.end = None
+        self._want = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in _VOID:
+            return
+        if self.start is None and "data-hold-intro" in dict(attrs):
+            self.start = self.getpos()
+            self._want = self.depth
+        self.depth += 1
+
+    def handle_endtag(self, tag):
+        if tag in _VOID:
+            return
+        self.depth -= 1
+        if self.start is not None and self.end is None and self.depth == self._want:
+            self.end = self.getpos()
+
+
+def _offset(html, pos):
+    line, col = pos
+    return sum(len(l) + 1 for l in html.split("\n")[:line - 1]) + col
+
+
+def split_hold(markup):
+    """A held block is two parts, and it has to be, because they behave
+    differently: the bed sticks and is crossed by everything that follows, while
+    the block's own words belong to the first screen and must scroll away with
+    it. Left in the sticky layer they sit under the incoming panel for the whole
+    hold, and two pieces of copy occupy the same pixels.
+
+    The block marks its own copy with data-hold-intro. Everything else is bed.
+    """
+    p = _Splitter()
+    p.feed(markup)
+    if p.start is None or p.end is None:
+        return markup, ""
+    a = _offset(markup, p.start)
+    b = markup.index(">", _offset(markup, p.end)) + 1
+    return (markup[:a] + markup[b:]).strip(), markup[a:b].strip()
+
+
+def _add_class(html, cls):
+    """Add a class to the block's outermost <section>, whether or not it has
+    one already. Done here rather than in the block so the same markup can be
+    laid out differently without being rewritten."""
+    def sub(m):
+        attrs = m.group(1)
+        if 'class="' in attrs:
+            return "<section" + attrs.replace('class="', f'class="{cls} ', 1) + ">"
+        return f'<section class="{cls}"' + attrs + ">"
+    return _OPEN_SECTION.sub(sub, html, count=1)
 
 
 class _Greeter(HTMLParser):

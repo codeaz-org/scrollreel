@@ -73,8 +73,17 @@ A JSON array and nothing else. No markdown fences, no commentary.
 Each element: {"block": "<block name>", "data": { ...that block's slots... }}
 
 RULES
-- First element is always hero-statement. Last is always contact-hours.
-- 6 to 8 blocks. Fewer is a thin page; more and the video outruns its length.
+- Open with a block marked [opener] and close with one marked [closer]. There
+  is more than one of each; pick the one that suits this business. A garage
+  people walk into wants contact-hours. A trade that quotes by email wants
+  signup-footer.
+- 6 to 9 blocks. Fewer is a thin page; more and the video outruns its length.
+- At most ONE block that HOLDS, and it must have the stated number of blocks
+  after it. A hold puts its visual behind the next sections instead of above
+  them, so the page is layered rather than stacked -- but two holds in a page
+  cancel each other out and neither reads as deliberate.
+- A block that OVERLAPS must follow the section it is commenting on, because
+  the overlap is what attaches it to that section. Never open with one.
 - Alternate: a panel of substance, then a bleed over the open backdrop. Never
   two bleeds in a row -- that is a screen of type floating on nothing.
 - Never the same DEVICE twice in a row, and use at least four device families

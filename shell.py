@@ -59,6 +59,36 @@ html, body { margin: 0; background: transparent !important; color: var(--ink);
 .panel { background: var(--panel) !important; border: var(--border) solid var(--line);
   border-radius: var(--radius); padding: var(--pad); }
 .stack > * + * { margin-top: 18px; }
+
+/* ---- how blocks sit relative to each other -----------------------------
+   Everything above styles one block. These two style the RELATIONSHIP between
+   blocks, which is the thing a flat list of sections could not say.
+
+   A hold is two layers: a stage that sticks for the height of what follows,
+   and the following sections pulled back up over it. The held visual is then
+   on screen for a third of the video rather than four seconds, and the page
+   reads as layered instead of stacked.
+
+   The stage is 100vh and the overlay is pulled up by exactly that, so the
+   arithmetic does not depend on how many sections are held or how tall they
+   are. Held sections keep their own backgrounds: a panel over a held
+   photograph is the effect, not a mistake. */
+.sr-hold { position: relative; }
+.sr-hold__bed { position: sticky; top: 0; height: 100vh; z-index: 0;
+  overflow: clip; }
+/* The held block's own words are NOT in the sticky layer. They are one screen
+   tall, pulled back over the bed, and they scroll away like anything else --
+   which is the only place they make sense, since the bed is crossed by every
+   section that follows. */
+.sr-hold__intro { position: relative; z-index: 1; margin-top: -100vh; }
+.sr-hold__over { position: relative; z-index: 1; }
+
+/* An overlapping section climbs over the one before it. Negative margin rather
+   than a transform, so the page height shrinks with it and the scroll does not
+   gain a dead stretch at the bottom. */
+.sr-overlap { margin-top: -7vh; position: relative; z-index: 1; }
+.sr-overlap > .panel { box-shadow: 0 -18px 50px rgba(0,0,0,.30); }
+@media (max-width: 760px) { .sr-overlap { margin-top: 0; } }
 h1, h2, h3 { font-family: var(--font-display); margin: 0; }
 h1 { font-size: var(--h1); line-height: 1.02; letter-spacing: var(--track);
   text-shadow: 0 2px 40px rgba(0,0,0,.45); }
