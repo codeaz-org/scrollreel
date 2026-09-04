@@ -89,6 +89,55 @@
       "video": "out/marlow-smile-studio/video.mp4",
       "frames": 375,
       "ts": "2026-09-03T16:56:03"
+    },
+    {
+      "business": "Ashgrove Power",
+      "trade": "electrical contractor",
+      "city": "Leeds",
+      "component_id": "magicuidesign/magicui:scroll-progress",
+      "component": "scroll-progress",
+      "scene": "gridfall",
+      "template": "editorial",
+      "skin": "industrial",
+      "grammar": "rhythmic cutlist",
+      "scene_source": "library/backdrops/gridfall.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/scroll-progress.tsx",
+      "photos": [
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by Elvan  Lam on Pexels",
+        "Photo by Thampapon Otavorn on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-3.7-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "job-tree",
+        "capacity-arc",
+        "split-stage",
+        "drift-band",
+        "spec-table",
+        "quote-bleed",
+        "contact-hours"
+      ],
+      "refined": false,
+      "dead_scroll": [
+        {
+          "y": 5988,
+          "ink": 0
+        },
+        {
+          "y": 6127,
+          "ink": 0
+        }
+      ],
+      "page": "out/ashgrove-power/page.html",
+      "video": "out/ashgrove-power/video.mp4",
+      "frames": 315,
+      "ts": "2026-09-04T12:37:53"
     }
   ]
 }
