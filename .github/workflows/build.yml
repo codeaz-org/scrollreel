@@ -5,12 +5,17 @@ on:
     # One a day. Eight trades and five backdrops: more often than this and the
     # rotation repeats itself faster than anyone forgets the last one.
     #
-    # 08:23, not 09:00. GitHub's scheduler queues every repo asking for the top
-    # of the hour and drops or delays what it cannot fit: the sibling clipping
-    # repo asks for 14:00 and has been starting at 17:30. An odd minute off the
-    # hour is the standard mitigation. Expect drift regardless; this is a daily
-    # build, not a cron job anyone is waiting on.
+    # TWO slots, and a guard below that makes the second one a no-op if the
+    # first already built today.
+    #
+    # GitHub's scheduler is best-effort and drops runs it cannot fit. Off the
+    # top of the hour helps and is not enough: this repo asked for 09:00 and
+    # then 08:23 and neither fired, while the sibling clipping repo's 14:00
+    # does fire, three and a half hours late. So one slot is not a daily build,
+    # it is a daily lottery ticket. Two widely separated slots plus "skip if
+    # today is already done" gives a second chance without a second video.
     - cron: "23 8 * * *"
+    - cron: "47 15 * * *"
   workflow_dispatch:
     inputs:
       trade:
@@ -50,20 +55,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Has today already been built?
+        id: guard
+        run: |
+          # Only guards the SCHEDULE. A person pressing Run workflow means it.
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "run=yes" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          # python3, not python: this step runs before setup-python and the bare
+          # name is not on the runner until that step has run.
+          LAST=$(python3 -c "import json;print(json.load(open('state.json'))['built'][-1]['ts'][:10])" 2>/dev/null || echo none)
+          TODAY=$(date -u +%F)
+          echo "last build $LAST, today $TODAY"
+          if [ "$LAST" = "$TODAY" ]; then
+            echo "run=no" >> "$GITHUB_OUTPUT"
+            echo "::notice::already built today; this is the backup slot doing nothing"
+          else
+            echo "run=yes" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-python@v5
+        if: steps.guard.outputs.run == 'yes'
         with:
           python-version: "3.11"
 
       - name: Install deps
+        if: steps.guard.outputs.run == 'yes'
         run: pip install playwright requests
 
       - name: Install ffmpeg
+        if: steps.guard.outputs.run == 'yes'
         # Not on the ubuntu-24.04 runner image. compose.py shells out to it and
         # the first CI run died on FileNotFoundError 36 minutes in, after the
         # whole page had been built and recorded twice.
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
 
       - name: Check what the runner actually has
+        if: steps.guard.outputs.run == 'yes'
         run: |
           # command -v, not `tool --version | head -1`: in a pipeline the exit
           # status is the LAST command's, so `ffmpeg -version | head -1 || exit 1`
@@ -75,6 +103,7 @@ jobs:
           ffmpeg -version 2>&1 | head -1
 
       - name: Prove WebGL works headless
+        if: steps.guard.outputs.run == 'yes'
         run: |
           # No GPU here, so the backdrops rely on SwiftShader. If this prints
           # anything other than a real renderer, every video is a black frame
@@ -100,6 +129,7 @@ jobs:
           PY
 
       - name: Build
+        if: steps.guard.outputs.run == 'yes'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -132,7 +162,7 @@ jobs:
           eval python -u main.py $ARGS --seconds "${SECS:-12}" --rerolls "${ROLLS:-1}"
 
       - name: Upload the video and the site
-        if: always()
+        if: ${{ steps.guard.outputs.run == 'yes' && (always()) }}
         uses: actions/upload-artifact@v4
         with:
           name: site-build
@@ -144,10 +174,11 @@ jobs:
           if-no-files-found: warn
 
       - name: Upload to TikTok drafts
+        if: steps.guard.outputs.run == 'yes'
         # Default true, and on a schedule inputs are empty -- so a cron run
         # posts. It lands in the TikTok app's drafts, never public: post.py has
         # no publish path at all, so the worst case is a draft nobody wants.
-        if: ${{ github.event.inputs.post != 'false' }}
+        if: ${{ steps.guard.outputs.run == 'yes' && github.event.inputs.post != 'false' }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
@@ -159,7 +190,7 @@ jobs:
           python post.py "$DIR" --yes
 
       - name: Persist state
-        if: success()
+        if: ${{ steps.guard.outputs.run == 'yes' && (success()) }}
         run: |
           # state.json is what stops the next run repeating a trade, a
           # component or a backdrop.
