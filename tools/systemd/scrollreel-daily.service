@@ -1,0 +1,14 @@
+[Unit]
+Description=Trigger the scrollreel daily build on GitHub
+Documentation=https://github.com/codeaz-org/scrollreel
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/Downloads/codeaz-scrollreel/tools/daily-trigger.sh
+# %h/.local/bin is where gh actually lives on this machine, and a systemd unit
+# gets none of the login shell's PATH. The first version omitted it and the
+# service failed with "gh not on PATH" -- which the script reports rather than
+# dying silently, because a trigger that quietly stops triggering is worse than
+# one that never worked.
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
