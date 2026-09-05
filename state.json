@@ -138,6 +138,46 @@
       "video": "out/ashgrove-power/video.mp4",
       "frames": 315,
       "ts": "2026-09-04T12:37:53"
+    },
+    {
+      "business": "Larkspur Green",
+      "trade": "garden design studio",
+      "city": "Porto",
+      "component_id": "magicuidesign/magicui:marquee",
+      "component": "marquee",
+      "scene": "motes",
+      "template": "flush",
+      "skin": "field",
+      "grammar": "continuous world",
+      "scene_source": "library/backdrops/motes.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/marquee.tsx",
+      "photos": [
+        "Photo by Jauhar Musthofal Qulub on Pexels",
+        "Photo by Egor Komarov on Pexels",
+        "Photo by Samer Daboul on Pexels",
+        "Photo by VictoriaMyColours on Pexels",
+        "Photo by Tonmoy Bhakta on Pexels"
+      ],
+      "model": "gemini-3.7-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "bento-grid",
+        "before-after",
+        "owner-note",
+        "season-band",
+        "layer-build",
+        "capacity-arc",
+        "contact-hours"
+      ],
+      "refined": true,
+      "dead_scroll": [],
+      "page": "out/larkspur-green/page.html",
+      "video": "out/larkspur-green/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-05T12:14:00"
     }
   ]
 }
