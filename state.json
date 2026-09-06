@@ -178,6 +178,46 @@
       "video": "out/larkspur-green/video.mp4",
       "frames": 375,
       "ts": "2026-09-05T12:14:00"
+    },
+    {
+      "business": "Ashgrove Contracts",
+      "trade": "roofing contractor",
+      "city": "Cork",
+      "component_id": "shadcn-ui/ui:scroll-area",
+      "component": "scroll-area",
+      "scene": "gridfall",
+      "template": "window",
+      "skin": "brutal",
+      "grammar": "typographic poster",
+      "scene_source": "library/backdrops/gridfall.frag (CodeAZ)",
+      "library": "shadcn/ui",
+      "license": "MIT",
+      "source_url": "https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/new-york-v4/ui/scroll-area.tsx",
+      "photos": [
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Gundula Vogel on Pexels",
+        "Photo by Rajesh S  Balouria on Pexels",
+        "Photo by Cl\u00e9ment Proust on Pexels",
+        "Photo by Ryan  Stephens on Pexels"
+      ],
+      "model": "gemini-3.7-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "cutaway",
+        "owner-note",
+        "steps-timeline",
+        "guarantee-mark",
+        "bento-grid",
+        "ledger-strip",
+        "signup-footer"
+      ],
+      "refined": true,
+      "dead_scroll": [],
+      "page": "out/ashgrove-contracts/page.html",
+      "video": "out/ashgrove-contracts/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-06T09:47:18"
     }
   ]
 }
