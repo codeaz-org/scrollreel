@@ -104,7 +104,8 @@ def _post_multimodal(model, system, text, image_parts, api_key, max_tokens=40000
     return text_out
 
 
-def refine(plan, frames_dir, business, api_key=None, scrollcraft_dir="scrollcraft"):
+def refine(plan, frames_dir, business, api_key=None, scrollcraft_dir="scrollcraft",
+           constraints=None):
     """One review pass over a block plan.
 
     Returns (plan, changed). A failed or invalid critique returns the original
@@ -146,7 +147,9 @@ def refine(plan, frames_dir, business, api_key=None, scrollcraft_dir="scrollcraf
             continue
         if isinstance(revised, dict):
             revised = revised.get("plan") or revised.get("blocks") or []
-        problems = blocks_mod.validate(revised, catalogue)
+        # Same constraints as the first pass. A critique that is allowed to
+        # swap in a banned block quietly undoes the whole direction.
+        problems = blocks_mod.validate(revised, catalogue, constraints)
         if problems:
             print(f"[refine] {model}'s plan is invalid {problems[:3]}; keeping the original",
                   file=sys.stderr)

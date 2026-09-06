@@ -26,6 +26,7 @@ import time
 
 import businesses
 import components
+import direction
 import compose
 import images
 import page_builder
@@ -155,7 +156,13 @@ def main():
                      + ", ".join(n["trade"] for n in businesses.NICHES))
         business = businesses.dress(niche)
     else:
-        business = businesses.pick(used_trades=used_trades)
+        # Least recently used, not random-from-unused. The set-based version
+        # fell back to picking at random the moment every trade had been seen
+        # once, and produced the same trade on two consecutive CI runs.
+        trades = [n["trade"] for n in businesses.NICHES]
+        want = least_recently_used(trades, [b.get("trade") for b in history])
+        business = businesses.dress(
+            next(n for n in businesses.NICHES if n["trade"] == want))
     print(f"[main] business: {business['name']} -- {business['trade']} in {business['city']}")
 
     # Components are filtered by fit, so pick a pool then choose within it.
@@ -218,8 +225,13 @@ def main():
     used_scenes = {b.get("scene") for b in history}
     # Ours, not ThreeUI's. Their files are finished demo pages and only five of
     # seventy worked as a backdrop; these are shaders we own, tinted per trade.
-    scene = (backdrops.pick(business["trade"], want=redo.get("scene")) if redo
-             else backdrops.pick(business["trade"], used=used_scenes))
+    if redo:
+        scene = backdrops.pick(business["trade"], want=redo.get("scene"))
+    else:
+        # Same fix as the trade: five backdrops and a set-based "unused" filter
+        # gave gridfall four builds out of nine.
+        scene = backdrops.pick(business["trade"], want=least_recently_used(
+            backdrops.available(), [b.get("scene") for b in history]))
     if scene:
         with open(os.path.join(work, "scene.html"), "w") as f:
             f.write(scene["html"])
@@ -238,9 +250,25 @@ def main():
         backdrops.PALETTES.get(business["trade"], backdrops.DEFAULT_PALETTE)[2])
     print(f"[main] skin: {skin} ({skins.SKINS[skin]['grammar']}), accent {accent}")
 
+    # Two steps before the plan, and they exist because nine builds of asking
+    # nicely produced 42 blocks that were never chosen once and two consecutive
+    # pages sharing 60% of their sections. See direction.py.
+    limits = direction.constraints(history, blocks.load())
+    print(f"[main] direction: open {limits['opener']}, close {limits['closer']}, "
+          f"{limits['target_sections']} sections, structure {limits['relationship']}, "
+          f"{len(limits['banned'])} blocks banned as too recent")
+    recent_angles = [b.get("angle", {}).get("obsession") for b in history[-4:]]
+    try:
+        angle = direction.angle(business, recent_angles)
+    except Exception as e:  # noqa: BLE001 -- an angle is an improvement, not a dependency
+        print(f"[main] no angle ({e}); planning without one", file=sys.stderr)
+        angle = {}
+
     built = page_builder.build(business, component, photos, scene=scene,
                                models=[redo["model"]] if redo else None,
-                               attempts=max(1, args.rerolls))
+                               attempts=max(1, args.rerolls),
+                               direction_brief=direction.brief(limits, angle),
+                               constraints=limits)
     sections_html = blocks.render(built["plan"])
 
     # Injected rather than requested: the model does not have to remember to
@@ -271,7 +299,8 @@ def main():
     refined = False
     plan = built["plan"]
     if not args.no_refine:
-        plan, refined = refine.refine(plan, frames_dir, business)
+        plan, refined = refine.refine(plan, frames_dir, business,
+                                      constraints=limits)
         if refined:
             sections = blocks.render(plan)
             html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}",
@@ -345,6 +374,9 @@ def main():
         "model": built["model"], "verify_problems": built["problems"],
         "blocks": [b["block"] for b in plan],
         "refined": refined,
+        # Stored so the NEXT build can be told what this one already said.
+        "angle": angle,
+        "direction": {k: v for k, v in limits.items() if k != "banned"},
         "dead_scroll": [{"y": y, "ink": ink} for y, ink in holes],
         "page": page_path, "video": video, "frames": n,
         "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),

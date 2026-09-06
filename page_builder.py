@@ -190,7 +190,7 @@ def _strip_fences(text):
 
 
 def build(business, component, photos, scene=None, api_key=None, models=None,
-          attempts=1):
+          attempts=1, direction_brief="", constraints=None):
     """A validated block plan, plus which model produced it.
 
     Returns {"plan": [...], "model": str, "problems": [...]}. The plan is data,
@@ -217,6 +217,12 @@ def build(business, component, photos, scene=None, api_key=None, models=None,
         photo_lines = "(none -- do not use any block with a photo slot)"
 
     system = SYSTEM.replace("{catalogue}", blocks_mod.catalogue(catalogue))
+    # The direction goes at the END of the system prompt, after the catalogue
+    # and after the general rules, because it overrides both. A constraint
+    # buried above a hundred lines of block descriptions is a constraint the
+    # model reads first and forgets last.
+    if direction_brief:
+        system += "\n\n" + direction_brief
     user = USER.format(
         name=business["name"], an=("an" if business["trade"][:1].lower() in "aeiou" else "a"),
         trade=business["trade"], city=business["city"],
@@ -241,12 +247,39 @@ def build(business, component, photos, scene=None, api_key=None, models=None,
             continue
         if isinstance(plan, dict):          # some models wrap it in {"plan": [...]}
             plan = plan.get("plan") or plan.get("blocks") or []
-        problems = blocks_mod.validate(plan, catalogue)
+        problems = blocks_mod.validate(plan, catalogue, constraints)
         if problems:
             # A plan that fails validation cannot be assembled, so unlike the
-            # old freeform mode there is no "ship it with issues" path.
+            # old freeform mode there is no "ship it with issues" path. But
+            # moving straight to the next model wastes the good half of the
+            # answer: hand the reasons back to the SAME model first, which is
+            # what a person reviewing it would do.
             print(f"[build] {model}'s plan is invalid: {problems[:4]}", file=sys.stderr)
-            continue
+            fixed = None
+            for retry in range(2):
+                note = ("Your plan was rejected. Fix exactly these and return the "
+                        "whole plan again, same JSON shape:\n"
+                        + "\n".join(f"- {p}" for p in problems[:8]))
+                try:
+                    again_raw = _post(model, system, user + "\n\n" + note, api_key,
+                                      max_tokens=12000, json_out=True)
+                    cand = json.loads(_strip_fences(again_raw))
+                except Exception as e:  # noqa: BLE001
+                    print(f"[build] retry {retry + 1} failed: {str(e)[:120]}",
+                          file=sys.stderr)
+                    break
+                if isinstance(cand, dict):
+                    cand = cand.get("plan") or cand.get("blocks") or []
+                problems = blocks_mod.validate(cand, catalogue, constraints)
+                if not problems:
+                    print(f"[build] {model} fixed it on retry {retry + 1}")
+                    fixed = cand
+                    break
+                print(f"[build] retry {retry + 1} still invalid: {problems[:3]}",
+                      file=sys.stderr)
+            if fixed is None:
+                continue
+            plan = fixed
         names = [b["block"] for b in plan]
         print(f"[build] {model} planned {len(plan)} blocks: {', '.join(names)}")
         good = {"plan": plan, "model": model, "problems": []}
@@ -261,7 +294,7 @@ def build(business, component, photos, scene=None, api_key=None, models=None,
                 continue
             if isinstance(again, dict):
                 again = again.get("plan") or again.get("blocks") or []
-            trouble = blocks_mod.validate(again, catalogue)
+            trouble = blocks_mod.validate(again, catalogue, constraints)
             if trouble:
                 print(f"[build] reroll invalid, keeping the last good plan: "
                       f"{trouble[:3]}", file=sys.stderr)

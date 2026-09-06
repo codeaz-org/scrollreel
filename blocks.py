@@ -146,8 +146,14 @@ def _fill(template, data):
     return _FIELD.sub(lambda m: _resolve(_lookup(data, m.group(1)), m.group(2)), out)
 
 
-def validate(plan, blocks=None):
-    """Problems with a plan, as a list. Empty means it can be assembled."""
+def validate(plan, blocks=None, constraints=None):
+    """Problems with a plan, as a list. Empty means it can be assembled.
+
+    `constraints` is this build's direction (see direction.py). Enforced HERE
+    rather than only in the prompt, because a constraint that lives in the
+    prompt is a suggestion: nine builds of "vary the device, use at least four
+    families" produced forty-two blocks that were never chosen once.
+    """
     blocks = blocks or load()
     problems = []
     if not isinstance(plan, list) or not plan:
@@ -174,9 +180,18 @@ def validate(plan, blocks=None):
             problems.append(f"item {i}: unknown block {name!r}")
             continue
         data = item.get("data") or {}
-        for slot in (blocks[name].get("slots") or {}):
-            if slot not in data or data[slot] in ("", None, []):
+        for slot, described in (blocks[name].get("slots") or {}).items():
+            # A slot whose own description offers '' as a valid value is
+            # OPTIONAL, and rejecting it as missing is the validator arguing
+            # with the block. figure-count.prefix says "'' or a currency
+            # symbol"; the model sent '' for a business that does not quote in
+            # money, was told the slot was missing, and burned two retries and
+            # a whole model being right.
+            optional = "''" in described or '""' in described
+            if slot not in data:
                 problems.append(f"item {i} ({name}): missing slot {slot!r}")
+            elif data[slot] in (None, []) or (data[slot] == "" and not optional):
+                problems.append(f"item {i} ({name}): empty slot {slot!r}")
     # A holder needs something to hold. It also cannot be the last thing on the
     # page, and two of them cannot overlap, because the second would stick
     # inside the first one's overlay and neither would behave.
@@ -243,6 +258,28 @@ def validate(plan, blocks=None):
     if len(set(fams)) < 4:
         problems.append(f"only {len(set(fams))} device families "
                         f"({', '.join(sorted(set(fams)))}); use at least four")
+
+    if constraints:
+        c, ns = constraints, set(names)
+        banned = ns & set(c.get("banned") or ())
+        if banned:
+            problems.append(f"uses blocks banned for this build: "
+                            f"{', '.join(sorted(banned))}")
+        if c.get("opener") and names and names[0] != c["opener"]:
+            problems.append(f"must open with {c['opener']}, not {names[0]}")
+        if c.get("closer") and names and names[-1] != c["closer"]:
+            problems.append(f"must close with {c['closer']}, not {names[-1]}")
+        want = c.get("target_sections")
+        if want and len(names) != want:
+            problems.append(f"{len(names)} blocks; this build must have exactly {want}")
+        need = set(c.get("structural_blocks") or ())
+        if need and not (ns & need):
+            problems.append(f"must include one of {', '.join(sorted(need))}: this "
+                            f"build's structure is a {c.get('relationship')}")
+        cold = set(c.get("cold_devices") or ())
+        if cold and len(cold & set(fams)) < 3:
+            problems.append(f"only {len(cold & set(fams))} of the required device "
+                            f"families ({', '.join(sorted(cold))}) appear; need three")
     return problems
 
 
