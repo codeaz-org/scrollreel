@@ -323,6 +323,12 @@ def main():
     # second of empty card in the video, because the last pinned act owned 1360px
     # of scroll and did not start its copy until 36% of the way through. Nobody
     # reviews 675 frames, so this walks the page instead.
+    # Before the holes, the commonest CAUSE of one: a stage a skin un-stuck.
+    unstuck = shell.unstuck_stages(page_path)
+    if unstuck:
+        print("[main] STAGE NOT STICKY (the act will scroll away and leave a hole): "
+              + "; ".join(f"{c} is {p}" for c, p in unstuck), file=sys.stderr)
+
     holes = shell.dead_scroll(page_path)
     if holes:
         print(f"[main] dead scroll at {len(holes)} position(s): "

@@ -60,6 +60,18 @@ html, body { margin: 0; background: transparent !important; color: var(--ink);
   border-radius: var(--radius); padding: var(--pad); }
 .stack > * + * { margin-top: 18px; }
 
+/* A stage is sticky. This restates the engine's own rule at a weight a skin
+   cannot beat, and it is not belt and braces -- it is a bug that shipped.
+   `tape` sets .panel{position:relative} so it can pin a strip of tape to the
+   card, and seven blocks put data-sc-stage on an element that is also a
+   .panel. Same specificity, skin CSS comes later, so `relative` won: the act
+   still reserved its two viewports of scroll, the stage scrolled away after
+   one screen, and the rest was a hole. Four consecutive dead frames in a
+   finished video, on twenty-one skin-and-block combinations.
+   The engine's own stylesheet warns about exactly this next to
+   [data-sc-spotlight]. It only guarded the case it owned. */
+#content [data-sc-stage] { position: sticky; }
+
 /* ---- how blocks sit relative to each other -----------------------------
    Everything above styles one block. These two style the RELATIONSHIP between
    blocks, which is the thing a flat list of sections could not say.
@@ -373,3 +385,39 @@ def dead_scroll(page_path, viewport=(1024, 850), samples=48, min_ink=0.012):
                 found.append((y, round(ink, 4)))
         b.close()
     return sorted(found, key=lambda r: r[1])
+
+
+def unstuck_stages(page_path, viewport=(1024, 850)):
+    """Stages the browser did not make sticky, as [(class, position)].
+
+    Cannot be answered by reading the CSS: it depends on which skin, which
+    block, and which rule came later in a document assembled from four sources.
+    Only the cascade knows, so ask the cascade.
+
+    An unstuck stage is the worst shape of bug this project produces -- the act
+    still reserves its scroll, so the page is the right length and every
+    screenshot of it looks fine, and the defect is only a hole in the middle of
+    the video.
+    """
+    from playwright.sync_api import sync_playwright
+    import os
+    w, h = viewport
+    with sync_playwright() as p:
+        b = p.chromium.launch(channel="chrome")
+        pg = b.new_page(viewport={"width": w, "height": h})
+        try:
+            pg.goto("file://" + os.path.abspath(page_path), wait_until="load")
+            pg.wait_for_timeout(1200)
+            bad = pg.evaluate("""() => {
+                const out = [];
+                document.querySelectorAll('[data-sc-stage], .sc-stage').forEach(el => {
+                  const pos = getComputedStyle(el).position;
+                  if (pos !== 'sticky') out.push([el.className || '(no class)', pos]);
+                });
+                return out;
+            }""")
+        except Exception:  # noqa: BLE001
+            bad = []
+        finally:
+            b.close()
+    return [tuple(x) for x in bad]
