@@ -233,19 +233,36 @@ def translucify(text, alpha=SCRIM_ALPHA, skin=None):
 
 
 def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
-         accent="#ff6a2b", engine_dir="engine", layout=None):
+         accent="#ff6a2b", engine_dir="engine", layout=None,
+         ground="scene", ground_photo=None):
     """Assemble the finished document: engine, skin tokens, then structure.
 
     The engine is scroll-craft's, vendored and unmodified. Blocks declare what
     they want with data-sc-* and it drives all of them from one scroll value on
     one rAF loop -- instead of a dozen blocks each running their own listener
     with its own slightly different easing.
+
+    `ground` is what the page sits on -- see grounds.py. It exists because
+    every build before it sat on a WebGL scene with translucent cards over it,
+    which is one template with the hue changed: a viewer who saw two builds in
+    a week could not tell they came from different generators. "scene" is the
+    old behaviour and stays available; the other three are ordinary opaque
+    pages, which none of the first eleven builds ever were.
     """
+    import grounds as grounds_mod
     import layouts as layouts_mod
     import skins as skins_mod
 
-    body = translucify(sections_html, skin=skin)
+    skin_tokens = skins_mod.SKINS[skin]["tokens"]
+    # translucify only makes sense when something behind the page needs to
+    # show through it. On every other ground the panels are opaque by design
+    # -- grounds.css() sets --panel-solid for exactly that -- and running it
+    # anyway would fade block-authored colours (a held photo's own scrim, a
+    # drift band's wash) that were never meant to be see-through.
+    body = translucify(sections_html, skin=skin) if ground == "scene" else sections_html
     skin_css = skins_mod.css(skin, accent)
+    ground_css = grounds_mod.css(ground, skin_tokens, photo_url=ground_photo)
+    ground_chrome = grounds_mod.chrome(ground, photo=ground_photo)
     layout = layout or skins_mod.SKINS.get(skin, {}).get("layout", layouts_mod.DEFAULT)
     layout_css = layouts_mod.css(layout)
     # Chrome is markup no block knows about: a spine, a running caption, a
@@ -263,8 +280,14 @@ def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
 /* The engine paints a ground; ours is the live backdrop behind it. */
 html,body,.sc-page{background:transparent !important}
 """
+    # The scene iframe is omitted, not hidden, on any ground that is not
+    # "scene": main.py never writes scene.html for those builds, and an
+    # <iframe> pointed at a file that does not exist is still a request, a
+    # console error, and a blank rectangle sitting under everything.
+    scene_tag = (f'<iframe src="{scene_file}" id="scene" title="" tabindex="-1" '
+                f'scrolling="no"></iframe>') if ground == "scene" else ""
     return f"""<!DOCTYPE html>
-<html lang="en" data-skin="{skin}">
+<html lang="en" data-skin="{skin}" data-ground="{ground}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -276,9 +299,11 @@ html,body,.sc-page{background:transparent !important}
 <style id="scrollreel-engine-bridge">{bridge}</style>
 <style id="scrollreel-shell">{SHELL_CSS}</style>
 <style id="scrollreel-layout">{layout_css}</style>
+<style id="scrollreel-ground">{ground_css}</style>
 </head>
 <body>
-<iframe src="{scene_file}" id="scene" title="" tabindex="-1" scrolling="no"></iframe>
+{scene_tag}
+{ground_chrome}
 <main id="content">
 {body}
 </main>

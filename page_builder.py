@@ -124,9 +124,7 @@ Visual tone: {tone}
 Photos on disk (use these paths exactly; do not invent others):
 {photos}
 
-Behind every section is a live 3D backdrop ({scene_name}) that reacts to
-scroll. Panels are translucent so it shows through -- lean on that, and let the
-bleed blocks give it room.
+{ground_note}
 
 Return the JSON plan for {name}'s website."""
 
@@ -176,8 +174,21 @@ def _post_once(model, system, user, api_key, max_tokens=32000, json_out=False):
         raise RuntimeError(f"no candidates: {json.dumps(data)[:300]}")
     parts = (cands[0].get("content") or {}).get("parts") or []
     text = "".join(p.get("text", "") for p in parts).strip()
+    finish = cands[0].get("finishReason")
     if not text:
-        raise RuntimeError(f"empty text, finishReason={cands[0].get('finishReason')}")
+        raise RuntimeError(f"empty text, finishReason={finish}")
+    if finish == "MAX_TOKENS":
+        # The response was cut mid-generation and json.loads on it fails with
+        # something like "Unterminated string starting at: line 2 column 16" --
+        # true, but it hides the actual cause. It happened on a call budgeted
+        # at 800 tokens for a JSON object that is at most a paragraph: the
+        # model spent most of the budget on hidden reasoning before writing any
+        # visible output, so raising it here rather than at the parse site is
+        # what makes "this model needs more headroom" legible instead of
+        # looking like malformed JSON three models in a row.
+        raise RuntimeError(
+            f"truncated at MAX_TOKENS ({max_tokens}) with only {len(text)} chars "
+            f"written; raise max_tokens for this call")
     return text
 
 
@@ -189,8 +200,24 @@ def _strip_fences(text):
     return text.strip()
 
 
+GROUND_NOTES = {
+    "scene": ("Behind every section is a live 3D backdrop ({scene_name}) that "
+              "reacts to scroll. Panels are translucent so it shows through -- "
+              "lean on that, and let the bleed blocks give it room."),
+    "flat": ("There is no backdrop. This is an ordinary opaque website: panels "
+             "are solid, bleed blocks sit on a plain ground. Do not write copy "
+             "that assumes something is moving behind the page."),
+    "paper": ("The page reads as print: a light, opaque page with no backdrop "
+              "and no cards -- panels are plain rules and whitespace, not "
+              "boxes. Favour a quieter, more editorial register."),
+    "photo": ("One fixed photograph sits behind the whole page, dimmed by a "
+              "scrim; panels are solid over it, not translucent. Do not "
+              "describe it as moving or reacting -- it is a still."),
+}
+
+
 def build(business, component, photos, scene=None, api_key=None, models=None,
-          attempts=1, direction_brief="", constraints=None):
+          attempts=1, direction_brief="", constraints=None, ground="scene"):
     """A validated block plan, plus which model produced it.
 
     Returns {"plan": [...], "model": str, "problems": [...]}. The plan is data,
@@ -223,12 +250,14 @@ def build(business, component, photos, scene=None, api_key=None, models=None,
     # model reads first and forgets last.
     if direction_brief:
         system += "\n\n" + direction_brief
+    ground_note = GROUND_NOTES.get(ground, GROUND_NOTES["scene"]).format(
+        scene_name=(scene or {}).get("name", "none"))
     user = USER.format(
         name=business["name"], an=("an" if business["trade"][:1].lower() in "aeiou" else "a"),
         trade=business["trade"], city=business["city"],
         services=", ".join(business["services"]), moment=business["moment"],
         tone=business["tone"], photos=photo_lines,
-        scene_name=(scene or {}).get("name", "none"),
+        ground_note=ground_note,
     )
 
     last = None

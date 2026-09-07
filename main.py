@@ -34,6 +34,7 @@ import record
 import refine
 import backdrops
 import blocks
+import grounds
 import shell
 import skins
 
@@ -219,26 +220,46 @@ def main():
     else:
         photos = images.fetch(business["photo_query"], work)
 
-    # The scene is copied in, never generated. It is a finished WebGL file and
-    # the reason anyone stops scrolling; a model asked to "rebuild the idea in
-    # CSS" returns a fade-in, which is what the first dozen builds were.
-    used_scenes = {b.get("scene") for b in history}
-    # Ours, not ThreeUI's. Their files are finished demo pages and only five of
-    # seventy worked as a backdrop; these are shaders we own, tinted per trade.
-    if redo:
-        scene = backdrops.pick(business["trade"], want=redo.get("scene"))
-    else:
-        # Same fix as the trade: five backdrops and a set-based "unused" filter
-        # gave gridfall four builds out of nine.
-        scene = backdrops.pick(business["trade"], want=least_recently_used(
-            backdrops.available(), [b.get("scene") for b in history]))
-    if scene:
+    # What the page SITS ON. Chosen before the scene, because it decides
+    # whether there is one: every build before this had a WebGL backdrop with
+    # translucent cards over it, which was one template with the hue changed --
+    # a viewer who saw two builds in a week could not tell they came from
+    # different generators. See grounds.py.
+    ground = (redo["ground"] if redo and redo.get("ground") else
+              least_recently_used(list(grounds.GROUNDS),
+                                  [b.get("ground") for b in history]))
+    print(f"[main] ground: {ground} ({grounds.GROUNDS[ground]['what']})")
+
+    scene = None
+    if ground == "scene":
+        # The scene is copied in, never generated. It is a finished WebGL file
+        # and the reason anyone stops scrolling; a model asked to "rebuild the
+        # idea in CSS" returns a fade-in, which is what the first dozen builds
+        # were.
+        # Ours, not ThreeUI's. Their files are finished demo pages and only
+        # five of seventy worked as a backdrop; these are shaders we own,
+        # tinted per trade.
+        if redo:
+            scene = backdrops.pick(business["trade"], want=redo.get("scene"))
+        else:
+            # Same fix as the trade: five backdrops and a set-based "unused"
+            # filter gave gridfall four builds out of nine.
+            scene = backdrops.pick(business["trade"], want=least_recently_used(
+                backdrops.available(), [b.get("scene") for b in history]))
         with open(os.path.join(work, "scene.html"), "w") as f:
             f.write(scene["html"])
         print(f"[main] backdrop: {scene['name']} "
               f"({'fitted' if scene['fitted'] else 'any'}, {len(scene['html']) // 1000}KB)")
-    else:
-        print("[main] no 3D scene available; the page will be flat", file=sys.stderr)
+
+    # The photo ground needs one picture fixed behind the whole page. First of
+    # the fetched set: it is not shown inside a block too, since blocks pick
+    # their own images independently and a repeated photo would be the one
+    # thing on the page that visibly did not vary.
+    ground_photo = photos[0]["file"] if ground == "photo" and photos else None
+    if ground == "photo" and not ground_photo:
+        print("[main] photo ground wanted but no photos fetched; falling back to flat",
+              file=sys.stderr)
+        ground = "flat"
 
     # A skin is a whole design system, not a palette: type pairing, panel
     # treatment, radius, measure, whether headings shout. Fingerprinted against
@@ -268,7 +289,7 @@ def main():
                                models=[redo["model"]] if redo else None,
                                attempts=max(1, args.rerolls),
                                direction_brief=direction.brief(limits, angle),
-                               constraints=limits)
+                               constraints=limits, ground=ground)
     sections_html = blocks.render(built["plan"])
 
     # Injected rather than requested: the model does not have to remember to
@@ -277,7 +298,8 @@ def main():
     # what stops a build burying the scene under opaque cards.
     sections = sections_html
     html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}",
-                      skin=skin, accent=accent)
+                      skin=skin, accent=accent, ground=ground,
+                      ground_photo=ground_photo)
     if scene:
         html = re.sub(r"</body>", backdrops.PARENT_BRIDGE + "</body>", html,
                       count=1, flags=re.I)
@@ -300,11 +322,12 @@ def main():
     plan = built["plan"]
     if not args.no_refine:
         plan, refined = refine.refine(plan, frames_dir, business,
-                                      constraints=limits)
+                                      constraints=limits, ground=ground)
         if refined:
             sections = blocks.render(plan)
             html = shell.wrap(sections, title=f"{business['name']} — {business['trade']}",
-                              skin=skin, accent=accent)
+                              skin=skin, accent=accent, ground=ground,
+                              ground_photo=ground_photo)
             if scene:
                 html = re.sub(r"</body>", backdrops.PARENT_BRIDGE + "</body>", html,
                               count=1, flags=re.I)
@@ -369,6 +392,7 @@ def main():
     meta = {
         "business": business["name"], "trade": business["trade"], "city": business["city"],
         "component_id": component["id"], "component": component["name"],
+        "ground": ground,
         "scene": (scene or {}).get("name"),
         "template": template,
         "skin": skin,

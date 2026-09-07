@@ -170,8 +170,14 @@ def angle(business, recent_angles, api_key=None, models=None):
 
     for model in (models or page_builder.MODELS):
         try:
+            # 800 was not enough headroom: gemini-3.5-flash returned a
+            # response truncated at MAX_TOKENS after only 80 characters of a
+            # four-field JSON object, almost certainly hidden reasoning tokens
+            # eating the budget before any visible output. The object itself
+            # is at most a paragraph; 2500 leaves real room for that overhead
+            # and still costs nothing to speak of.
             raw = page_builder._post(model, ANGLE_SYSTEM, user, api_key,
-                                     max_tokens=800, json_out=True)
+                                     max_tokens=2500, json_out=True)
             data = json.loads(page_builder._strip_fences(raw))
         except Exception as e:  # noqa: BLE001
             print(f"[direction] {model} failed: {str(e)[:120]}", file=sys.stderr)

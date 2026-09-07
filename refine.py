@@ -51,11 +51,21 @@ Priorities, in this order:
    different block, not with more words.
 3. Copy that could be on any business's site. Replace it with something only
    this business could say -- a price, a tolerance, a street, a material.
-4. The backdrop never being visible: if every frame is wall-to-wall panel, put
-   a bleed block between them.
+{backdrop_rule}
 5. A block that earns nothing where it sits.
 
 Keep everything that works. A plan that is fine comes back unchanged."""
+
+# Rule 4 above only makes sense when there is a live backdrop to reveal. On the
+# other three grounds (see grounds.py) "wall-to-wall panel" is not a defect --
+# there is nothing behind the page to show through, and telling the model to
+# fix it produced a critique that swapped in a bleed block for no reason on a
+# page that never had a scene.
+BACKDROP_RULE = {
+    "scene": ("4. The backdrop never being visible: if every frame is "
+              "wall-to-wall panel, put a bleed block between them."),
+    "flat": "", "paper": "", "photo": "",
+}
 
 
 def _frames_as_parts(frames_dir, count=8):
@@ -105,7 +115,7 @@ def _post_multimodal(model, system, text, image_parts, api_key, max_tokens=40000
 
 
 def refine(plan, frames_dir, business, api_key=None, scrollcraft_dir="scrollcraft",
-           constraints=None):
+           constraints=None, ground="scene"):
     """One review pass over a block plan.
 
     Returns (plan, changed). A failed or invalid critique returns the original
@@ -126,7 +136,8 @@ def refine(plan, frames_dir, business, api_key=None, scrollcraft_dir="scrollcraf
             verify = f.read()[:18000]
 
     system = (SYSTEM.replace("{verify}", verify)
-                    .replace("{catalogue}", blocks_mod.catalogue(catalogue)))
+                    .replace("{catalogue}", blocks_mod.catalogue(catalogue))
+                    .replace("{backdrop_rule}", BACKDROP_RULE.get(ground, BACKDROP_RULE["scene"])))
     text = (f"This is the site for {business['name']}, {business['trade']} in "
             f"{business['city']}.\n\nCurrent plan:\n\n"
             f"{json.dumps(plan, indent=2)}\n\n"
