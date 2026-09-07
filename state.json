@@ -218,6 +218,67 @@
       "video": "out/ashgrove-contracts/video.mp4",
       "frames": 375,
       "ts": "2026-09-06T09:47:18"
+    },
+    {
+      "business": "Halden Motor Works",
+      "trade": "auto repair shop",
+      "city": "Leeds",
+      "component_id": "magicuidesign/magicui:border-beam",
+      "component": "border-beam",
+      "ground": "flat",
+      "scene": null,
+      "template": "editorial",
+      "skin": "skeuo",
+      "grammar": "live product surface",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/border-beam.tsx",
+      "photos": [
+        "Photo by Gratisography on Pexels",
+        "Photo by Renee Razumov on Pexels",
+        "Photo by Jose Ricardo Barraza Morachis on Pexels",
+        "Photo by Sergey  Meshkov on Pexels",
+        "Photo by Artem Podrez on Pexels"
+      ],
+      "model": "gemini-2.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "bracket-job",
+        "gauge-row",
+        "layered-scene",
+        "spec-compare",
+        "filmstrip",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "Refusing to bolt on a replacement part until the specific condition that destroyed the original is identified and corrected.",
+        "register": "blunt",
+        "spine": "the failure, the cause, the fix",
+        "avoid": "Promising to treat the customer's car like their own"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "bracket",
+        "structural_blocks": [
+          "bracket-job"
+        ],
+        "cold_devices": [
+          "pan",
+          "parallax",
+          "drift",
+          "count"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/halden-motor-works/page.html",
+      "video": "out/halden-motor-works/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-07T14:37:37"
     }
   ]
 }
