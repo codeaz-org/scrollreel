@@ -271,6 +271,20 @@ def main():
         backdrops.PALETTES.get(business["trade"], backdrops.DEFAULT_PALETTE)[2])
     print(f"[main] skin: {skin} ({skins.SKINS[skin]['grammar']}), accent {accent}")
 
+    # grounds.css() is meant to be self-correcting: it computes and forces
+    # legible panel/bleed colours for whatever skin, ground and accent it is
+    # given. This is the runtime check on that claim for the ONE combination
+    # this build actually uses -- cheap, no browser -- because "the logic
+    # guarantees it" is exactly the kind of claim that turned out to be wrong
+    # twice in one afternoon (a --panel text override that silently never
+    # fired, and one that fired everywhere for the wrong reason) before it was
+    # actually right. See contrast.py for the exhaustive version across the
+    # whole skin x ground matrix.
+    contrast_problems = grounds.verify(skin, ground, accent)
+    if contrast_problems:
+        print(f"[main] CONTRAST: {skin}/{ground}/{accent} -- "
+              + "; ".join(contrast_problems), file=sys.stderr)
+
     # Two steps before the plan, and they exist because nine builds of asking
     # nicely produced 42 blocks that were never chosen once and two consecutive
     # pages sharing 60% of their sections. See direction.py.
@@ -393,6 +407,7 @@ def main():
         "business": business["name"], "trade": business["trade"], "city": business["city"],
         "component_id": component["id"], "component": component["name"],
         "ground": ground,
+        "contrast_problems": contrast_problems,
         "scene": (scene or {}).get("name"),
         "template": template,
         "skin": skin,

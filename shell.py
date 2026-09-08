@@ -261,7 +261,14 @@ def wrap(sections_html, scene_file="scene.html", title="", skin="glass",
     # drift band's wash) that were never meant to be see-through.
     body = translucify(sections_html, skin=skin) if ground == "scene" else sections_html
     skin_css = skins_mod.css(skin, accent)
-    ground_css = grounds_mod.css(ground, skin_tokens, photo_url=ground_photo)
+    # The same fallback skins.css() itself uses: a skin that has already
+    # chosen its own accent-on-panel colour (press picks #8a3b12 because it
+    # knows its own panel) is trusted over the raw per-build accent, which
+    # grounds.css() would otherwise contrast-correct FROM -- correcting the
+    # generic accent instead of the skin's considered one.
+    accent_on_panel = skins_mod.SKINS[skin].get("accent_on_panel", accent)
+    ground_css = grounds_mod.css(ground, skin_tokens, accent_on_panel,
+                                 photo_url=ground_photo)
     ground_chrome = grounds_mod.chrome(ground, photo=ground_photo)
     layout = layout or skins_mod.SKINS.get(skin, {}).get("layout", layouts_mod.DEFAULT)
     layout_css = layouts_mod.css(layout)
