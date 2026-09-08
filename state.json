@@ -279,6 +279,75 @@
       "video": "out/halden-motor-works/video.mp4",
       "frames": 375,
       "ts": "2026-09-07T14:37:37"
+    },
+    {
+      "business": "Thistle Movement",
+      "trade": "yoga studio",
+      "city": "Cork",
+      "component_id": "magicuidesign/magicui:text-3d-flip",
+      "component": "text-3d-flip",
+      "ground": "paper",
+      "scene": null,
+      "template": "flush",
+      "skin": "atelier",
+      "grammar": "gallery",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/text-3d-flip.tsx",
+      "photos": [
+        "Photo by eran design on Pexels",
+        "Photo by Yan Krukau on Pexels",
+        "Photo by Thirdman on Pexels",
+        "Photo by Thirdman on Pexels",
+        "Photo by Paulina Vargas on Pexels"
+      ],
+      "model": "gemini-3.7-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "before-after",
+        "marquee-strip",
+        "held-scene",
+        "drift-band",
+        "split-stage",
+        "quote-bleed",
+        "price-list",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We are obsessed with individual skeletal biomechanics, refusing to ever force a student's unique bone structure into a standardized, 'picture-perfect' pose.",
+        "register": "blunt",
+        "spine": "your anatomy, then our adaptation",
+        "avoid": "images of hyper-flexible beach sunsets and vague promises of spiritual alignment"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "hold",
+        "structural_blocks": [
+          "held-figure",
+          "held-scene"
+        ],
+        "cold_devices": [
+          "drift",
+          "scrub",
+          "marquee",
+          "pin"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [
+        {
+          "y": 6928,
+          "ink": 0
+        }
+      ],
+      "page": "out/thistle-movement/page.html",
+      "video": "out/thistle-movement/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-08T13:02:46"
     }
   ]
 }
