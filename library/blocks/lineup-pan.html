@@ -14,10 +14,21 @@
   </div>
 </section>
 <style>
-.b-lineup{overflow:hidden}
+/* Same root cause as gallery-rail: data-sc-stage on this element forces it to
+   height:100vh. A photo can be blown up to fill that; text cannot, and
+   stretching the CARD instead just moved the emptiness into an awkward gap
+   between the note and the price, with a visible border drawing a box around
+   the empty part. The fix here is to give the number itself the weight,
+   the way stat-row and price-dock do: the price is the largest thing on the
+   card, not a line pinned to the bottom of one. */
+.b-lineup{overflow:hidden;display:flex;flex-direction:column;justify-content:center}
 .b-lineup-rail{display:flex;gap:18px;width:max-content;margin-top:18px;will-change:transform}
-.b-lineup-card{flex:0 0 300px;border:1px solid var(--line);border-radius:calc(var(--radius) * .7);
-  padding:24px 26px;display:flex;flex-direction:column;gap:8px}
-.b-lineup-meta{margin-top:auto;padding-top:14px;font-weight:700;font-size:22px;
+.b-lineup-card{flex:0 0 280px;border:1px solid var(--line);
+  border-radius:calc(var(--radius) * .8);padding:30px 26px;
+  display:flex;flex-direction:column;gap:14px}
+.b-lineup-card h3{font-size:23px}
+.b-lineup-meta{margin-top:auto;padding-top:22px;border-top:1px solid var(--line);
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(34px,4vw,52px);line-height:1;
   color:var(--accent-panel);font-variant-numeric:tabular-nums}
 </style>

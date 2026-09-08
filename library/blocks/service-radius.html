@@ -25,15 +25,22 @@
    the block no longer carries an observer of its own. */
 .b-radius-wrap{display:grid;grid-template-columns:280px 1fr;gap:30px;align-items:center;margin-top:6px}
 .b-radius-rings{position:relative;height:260px;display:grid;place-items:center}
-.b-ring{position:absolute;border:1px solid var(--line);border-radius:50%;
-  transform:scale(.25);opacity:0;
+/* Stroked in the accent, not --line. A 1px hairline in the border colour is
+   the block's whole visual point and is invisible on any skin whose --line
+   sits close to the panel colour -- which most of the light and paper-ish
+   skins do, since --line there is a faint tint for hairlines between text,
+   not a decorative stroke. This graphic IS the block; it cannot depend on a
+   token tuned for something else. */
+.b-ring{position:absolute;border:1.5px solid color-mix(in oklab, var(--accent-panel) 55%, transparent);
+  border-radius:50%;transform:scale(.25);opacity:0;
   transition:transform 1s var(--sc-ease-out,cubic-bezier(.16,.84,.44,1)),opacity .8s ease}
 .b-ring-1{width:110px;height:110px}.b-ring-2{width:190px;height:190px}.b-ring-3{width:260px;height:260px}
 .sc-in .b-ring,.b-radius.sc-in .b-ring{transform:scale(1);opacity:1}
 .sc-in .b-ring-2{transition-delay:.12s}
-.sc-in .b-ring-3{transition-delay:.24s;border-style:dashed}
+.sc-in .b-ring-3{transition-delay:.24s;border-style:dashed;
+  border-color:color-mix(in oklab, var(--accent-panel) 30%, transparent)}
 .b-radius-dot{width:13px;height:13px;border-radius:50%;background:var(--accent);
-  box-shadow:0 0 0 6px rgba(255,255,255,.05)}
+  box-shadow:0 0 0 6px color-mix(in oklab, var(--accent) 14%, transparent)}
 .b-radius-centre{position:absolute;top:calc(50% + 18px);letter-spacing:.14em;text-transform:uppercase}
 .b-radius-num{font-family:var(--font-display);font-size:clamp(44px,5vw,64px);font-weight:800;
   color:var(--accent-panel);letter-spacing:-.03em}

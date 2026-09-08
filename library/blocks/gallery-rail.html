@@ -17,13 +17,30 @@
 <style>
 /* The pan is the engine's: it owns the act's progress and the travel maths,
    which the hand-rolled version approximated with a bounding-rect guess. */
+/* This block's own class also carries data-sc-stage, which the engine
+   forces to height:100vh (a stage is sticky-pinned for the act's whole
+   span, and 100vh is the only height that makes the maths work regardless
+   of how tall the content is). Without a rule to center it, one row of
+   220px cards sat at the top of a box stretched to the full viewport and
+   the rest was just panel background -- a huge dead void, on every build
+   that used this block. before-after and steps-timeline already do this;
+   this family of pan/rail blocks did not. */
+/* Centering alone does not fix this family: a 220px image row inside an
+   850px forced stage just splits the emptiness between top and bottom
+   instead of dumping it all at the bottom, and a PANEL -- a bordered card
+   with a visible edge -- reads as broken when most of its own box is
+   empty. A bleed can carry that much surrounding space as breathing room;
+   a card cannot. The real fix is to make the photography big enough to
+   actually own the space it is given. */
+.b-rail{display:flex;flex-direction:column;justify-content:center}
 .b-rail-vp{overflow:hidden;margin-top:6px;
   mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .b-rail-track{display:flex;gap:18px;width:max-content}
-.b-rail-card{margin:0;width:330px;flex:0 0 auto;position:relative;
+.b-rail-card{margin:0;width:min(64vw,520px);flex:0 0 auto;position:relative;
   border-radius:calc(var(--radius) * .7);overflow:hidden}
-.b-rail-card img{width:100%;height:220px;object-fit:cover;border-radius:0}
+.b-rail-card img{width:100%;height:clamp(320px,52vh,560px);object-fit:cover;
+  border-radius:0}
 .b-rail-card figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px;
   display:flex;flex-direction:column;gap:2px;background:linear-gradient(transparent,rgba(0,0,0,.8))}
 .b-rail-l{font-weight:700;font-size:20px}
