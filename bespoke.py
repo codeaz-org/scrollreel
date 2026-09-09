@@ -49,6 +49,7 @@ import page_builder
 
 GRAMMARS = {
     "filmic-one-shot": {
+        "intensity": "loud",
         "fits": "a single linear argument with one emotional arc",
         "forbids": "visible sequence (chapter numbers, an index); hard cuts "
                    "between grounds; more than one entry point",
@@ -60,6 +61,7 @@ GRAMMARS = {
         "note": "the default drift. Earn it -- say why the other six did not fit.",
     },
     "chaptered-editorial": {
+        "intensity": "calm",
         "fits": "long-form substance: a method, a manifesto, a founder story",
         "forbids": "drift as a continuous gradient; full-bleed scrub hero; "
                    "pinned crossfade type acts; a magnetic CTA; centred hero copy",
@@ -72,6 +74,7 @@ GRAMMARS = {
         "bans": "scrub beyond one chapter, spotlight, magnet",
     },
     "live-surface": {
+        "intensity": "calm",
         "fits": "software, tools, dashboards -- anything where the demo IS the argument",
         "forbids": "marketing chrome of any kind: no wordmark+CTA bar, no "
                    "scrims, no full-bleed photography, no kinetic headline "
@@ -90,6 +93,7 @@ GRAMMARS = {
                 "this grammar is unavailable, pick another.",
     },
     "typographic-poster": {
+        "intensity": "loud",
         "fits": "a brand whose asset is a sentence; also right when there are "
                 "no good photos and generating them would be forgettable",
         "forbids": "photographic ground, scrub, scrims, cards of any kind, "
@@ -105,6 +109,7 @@ GRAMMARS = {
         "bans": "scrub, pan rails of cards, tilt, parallax on text",
     },
     "gallery-catalog": {
+        "intensity": "calm",
         "fits": "a range: product variants, a portfolio, a menu, case studies",
         "forbids": "the argument-shaped pinned type act; a single hero claim; "
                    "scrim copy over media; persuasion in labels -- a label reads "
@@ -118,6 +123,7 @@ GRAMMARS = {
         "bans": "kinetic headlines, spotlight, magnet, more than one scrub",
     },
     "split-stage": {
+        "intensity": "loud",
         "fits": "any two-sided argument: before/after, cost/saving, manual/automated",
         "forbids": "full-bleed anything before the resolve; centred copy; "
                    "corner-anchored hero; a symmetric close",
@@ -132,6 +138,7 @@ GRAMMARS = {
         "bans": "pan, spotlight, magnet, more than one scrub, drift",
     },
     "rhythmic-cutlist": {
+        "intensity": "loud",
         "fits": "energy brands: streetwear, sport, events, music, drinks",
         "forbids": "any act over ~1.4 viewport-heights; dwell above 0.1; pin "
                    "entirely; overlapping cue windows; slow easing",
@@ -239,17 +246,36 @@ Do not use this trade's usual cliche: {avoid}
 Build the page."""
 
 
-def pick_grammar(history):
+def pick_grammar(history, pool=None):
     """Least-recently-used, same rotation as trade/skin/backdrop elsewhere in
     this project. `history` is meta.json entries; grammar is read from each
-    one's own "fingerprint" dict once builds start recording one."""
+    one's own "fingerprint" dict once builds start recording one.
+
+    Rotates within `pool` (default: only intensity=="loud"), not the full
+    seven. The first bespoke build landed on chaptered-editorial by
+    unweighted LRU and it read as "a junior dev's first HTML page" -- which
+    is not a bug in that build, it is what chaptered-editorial IS: the
+    grammar's own rules BAN scrub, pinned crossfade type, full-bleed hero and
+    kinetic headline stacks. Restrained is the point of it. But the product
+    here is a software house's own capability reel, not a client brief that
+    asked for restraint, and an unweighted rotation had no way to know that
+    "editorial calm" was the wrong answer regardless of how well it was
+    executed. live-surface and gallery-catalog are excluded for the same
+    reason -- both ban kinetic type and spotlight outright.
+
+    To bring the calm three back into rotation later (they are still
+    correctly-built grammars for a brief that actually wants restraint):
+    pass pool=list(GRAMMARS) for the full seven, or pool=[name, ...] for any
+    subset.
+    """
+    pool = pool or [n for n, g in GRAMMARS.items() if g.get("intensity") == "loud"]
     used = [b.get("fingerprint", {}).get("grammar") for b in history]
     recent = list(used)[::-1]
 
     def age(g):
         return recent.index(g) if g in recent else len(recent) + 1
 
-    return max(sorted(GRAMMARS), key=age)
+    return max(sorted(pool), key=age)
 
 
 def _fingerprint_table(history, limit=6):
