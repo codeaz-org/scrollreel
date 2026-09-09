@@ -453,3 +453,133 @@ def unstuck_stages(page_path, viewport=(1024, 850)):
         finally:
             b.close()
     return [tuple(x) for x in bad]
+
+
+def wrap_bespoke(body_html, title="", scene_file=None):
+    """The minimal document for a fully bespoke page: the engine, mounted,
+    and nothing else imposed. No skin tokens, no ground CSS, no translucify
+    -- the model wrote its own six-role palette (taste.md: canvas, surface,
+    ink, ink-soft, accent, accent-ink) and its own section backgrounds, and
+    forcing any of that through the block-library's cascade would just be
+    fighting a page that was never built to expect it.
+
+    scene_file is optional and only wired in when the grammar asked for one
+    (filmic-one-shot); most bespoke pages have no live backdrop at all.
+    """
+    scene_tag = (f'<iframe src="{scene_file}" id="scene" title="" tabindex="-1" '
+                f'scrolling="no" style="position:fixed;inset:0;width:100vw;'
+                f'height:100vh;border:0;z-index:0;pointer-events:none"></iframe>'
+                ) if scene_file else ""
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="engine/scrollcraft.css">
+<style>*,*::before,*::after{{box-sizing:border-box}} body{{margin:0}}</style>
+</head>
+<body>
+{scene_tag}
+<main id="content">
+{body_html}
+</main>
+<script src="engine/scrollcraft.js"></script>
+{MOUNT_JS}
+</body>
+</html>
+"""
+# #content is not the engine's convention -- grep confirms scrollcraft.js/css
+# never reference it -- it is dead_scroll()'s. Without this wrapper the first
+# real bespoke build reported "dead scroll" at all 48 sampled positions,
+# including y=0 where the hero plainly was not blank: the checker was
+# querying `#content *` against a document that had no #content element at
+# all, so it always found nothing and always reported 0% ink, regardless of
+# what was actually on screen. Keeping the id, rather than rewriting the
+# checker to scope to <body>, is what lets dead_scroll() and the rest of the
+# block-library pipeline's checks stay exactly as tested.
+
+
+def live_contrast(page_path, viewport=(1024, 850), min_body=4.5, min_large=3.0):
+    """Real WCAG contrast, read off the ACTUAL rendered page -- not a token
+    table, because a bespoke page has no fixed token table to check. Walks
+    every leaf text node, reads its computed colour and the first ancestor
+    with an opaque-enough background, and grades the pair.
+
+    This is the bespoke-pipeline equivalent of contrast.py, and it has to
+    work differently: contrast.py can compute colours from CSS text because
+    the whole skin x ground matrix is closed and finite. A model can write
+    ANY CSS, including gradients, color-mix(), currentColor tricks and
+    inherited alpha -- the only colour that is ever actually correct is the
+    one the browser resolved, so this asks the browser instead of a parser.
+    """
+    from playwright.sync_api import sync_playwright
+    import os
+    w, h = viewport
+    problems = []
+    with sync_playwright() as p:
+        b = p.chromium.launch(channel="chrome")
+        pg = b.new_page(viewport={"width": w, "height": h})
+        try:
+            pg.goto("file://" + os.path.abspath(page_path), wait_until="load", timeout=30000)
+            pg.wait_for_timeout(1500)
+            total = pg.evaluate("document.body.scrollHeight - innerHeight")
+            positions = [round(total * f) for f in (0, .15, .3, .45, .6, .75, .9, 1)] if total > 0 else [0]
+            seen = set()
+            for y in positions:
+                pg.evaluate(f"scrollTo(0, {max(y, 0)})")
+                pg.wait_for_timeout(400)
+                found = pg.evaluate(r"""() => {
+                    function relLum(r,g,b){
+                      const f = c => { c/=255; return c<=0.04045? c/12.92 : Math.pow((c+0.055)/1.055,2.4); };
+                      return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b);
+                    }
+                    function parseRGBA(s){
+                      const m = s.match(/rgba?\(([^)]+)\)/); if(!m) return null;
+                      const p = m[1].split(',').map(x=>parseFloat(x));
+                      return {r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1};
+                    }
+                    function bgBehind(el){
+                      let node = el, stack = [];
+                      while (node && node !== document.documentElement) {
+                        const bg = parseRGBA(getComputedStyle(node).backgroundColor);
+                        if (bg && bg.a > 0.5) return bg;
+                        node = node.parentElement;
+                      }
+                      return {r:255,g:255,b:255,a:1};
+                    }
+                    const out = [];
+                    document.querySelectorAll('body *').forEach(el => {
+                      if (el.children.length) return;
+                      const t = el.textContent.trim();
+                      if (!t || t.length < 2) return;
+                      const r = el.getBoundingClientRect();
+                      if (r.bottom < 0 || r.top > innerHeight || r.width < 1) return;
+                      const cs = getComputedStyle(el);
+                      if (parseFloat(cs.opacity) < 0.4) return;
+                      const fg = parseRGBA(cs.color);
+                      if (!fg) return;
+                      const bg = bgBehind(el);
+                      const lf = relLum(fg.r, fg.g, fg.b), lb = relLum(bg.r, bg.g, bg.b);
+                      const ratio = (Math.max(lf,lb)+0.05) / (Math.min(lf,lb)+0.05);
+                      const big = parseFloat(cs.fontSize) >= 24 ||
+                                  (parseFloat(cs.fontSize) >= 19 && parseInt(cs.fontWeight) >= 700);
+                      out.push({text: t.slice(0,40), ratio: Math.round(ratio*100)/100, big});
+                    });
+                    return out;
+                }""")
+                for item in found:
+                    key = item["text"]
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    need = min_large if item["big"] else min_body
+                    if item["ratio"] < need:
+                        problems.append(f"\"{item['text']}\" at {item['ratio']}:1, needs {need}:1")
+        except Exception as e:  # noqa: BLE001
+            problems.append(f"could not check ({e})")
+        finally:
+            b.close()
+    return problems

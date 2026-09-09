@@ -5,4 +5,4 @@ __pycache__/
 .env
 lab/
 out/
-state.local.json
+state*.local.json
