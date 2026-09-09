@@ -348,6 +348,67 @@
       "video": "out/thistle-movement/video.mp4",
       "frames": 375,
       "ts": "2026-09-08T13:02:46"
+    },
+    {
+      "business": "Larkspur Roastery",
+      "trade": "coffee roastery",
+      "city": "Cork",
+      "component_id": "magicuidesign/magicui:line-shadow-text",
+      "component": "line-shadow-text",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "letterpress",
+      "grammar": "chaptered editorial",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/line-shadow-text.tsx",
+      "photos": [
+        "Photo by Hebert  Santos on Pexels",
+        "Photo by FOX ^.\u11bd.^= \u222b on Pexels",
+        "Photo by Sevde Alt\u0131nta\u015f on Pexels",
+        "Photo by M\u00e9lodie Lochon on Pexels",
+        "Photo by Tony  Wu on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "objection-flip",
+        "held-figure",
+        "layer-build",
+        "warranty-line",
+        "photo-reveal",
+        "orbit-services",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to dispatch or sell any coffee until it has degassed in our climate-controlled cellar for the exact number of days required for that specific origin to reach its absolute flavor peak.",
+        "register": "technical",
+        "spine": "the freshness lie, the chemistry, the proof",
+        "avoid": "The 'roasted yesterday, on your doorstep today' speed promise."
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "reveal",
+          "count",
+          "draw",
+          "flow"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [],
+      "page": "out/larkspur-roastery/page.html",
+      "video": "out/larkspur-roastery/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-09T13:22:03"
     }
   ]
 }
