@@ -409,6 +409,71 @@
       "video": "out/larkspur-roastery/video.mp4",
       "frames": 375,
       "ts": "2026-09-09T13:22:03"
+    },
+    {
+      "business": "Rowan Bakery",
+      "trade": "artisan bakery",
+      "city": "Aarhus",
+      "component_id": "magicuidesign/magicui:spinning-text",
+      "component": "spinning-text",
+      "ground": "scene",
+      "contrast_problems": [],
+      "scene": "aurora",
+      "template": "editorial",
+      "skin": "clay",
+      "grammar": "soft stage",
+      "scene_source": "library/backdrops/aurora.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/spinning-text.tsx",
+      "photos": [
+        "Photo by Boys in Bristol Photography on Pexels",
+        "Photo by Yasin Onu\u015f on Pexels",
+        "Photo by ready made on Pexels",
+        "Photo by Furkan Tumer on Pexels",
+        "Photo by cottonbro studio on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "gallery-rail",
+        "dawn-wash",
+        "lens-detail",
+        "kinetic-claim",
+        "window-scene",
+        "signup-footer"
+      ],
+      "refined": true,
+      "angle": {
+        "obsession": "We refuse to use raw bench-flour during the shaping process, relying solely on high-hydration dough mastery and water-wet hands to ensure a perfectly gelatinized, custard-like crumb free from dry pockets or bitter, burnt flour.",
+        "register": "technical",
+        "spine": "the method, then the bite",
+        "avoid": "Photos of flour-dusted hands looking rustic, or copy about 'passion' and 'baking from the heart'"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pan",
+          "drift",
+          "marquee",
+          "parallax"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [
+        {
+          "y": 4790,
+          "ink": 0
+        }
+      ],
+      "page": "out/rowan-bakery/page.html",
+      "video": "out/rowan-bakery/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-10T13:49:52"
     }
   ]
 }
