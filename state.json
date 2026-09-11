@@ -474,6 +474,68 @@
       "video": "out/rowan-bakery/video.mp4",
       "frames": 375,
       "ts": "2026-09-10T13:49:52"
+    },
+    {
+      "business": "Calder Dental",
+      "trade": "dental practice",
+      "city": "Cluj",
+      "component_id": "magicuidesign/magicui:grid-pattern",
+      "component": "grid-pattern",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "flush",
+      "skin": "glass",
+      "grammar": "live surface",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/grid-pattern.tsx",
+      "photos": [
+        "Photo by cottonbro studio on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by Tima Miroshnichenko on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-3.7-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "cutaway",
+        "velocity-band",
+        "split-stage",
+        "drift-band",
+        "before-after",
+        "spec-table",
+        "typed-status",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to bond any restoration, from a simple composite filling to an implant crown, without verifying the margin under a 20x surgical microscope to guarantee there is zero micro-space for bacteria to recolonize.",
+        "register": "technical",
+        "spine": "the microscopic gap, our defense",
+        "avoid": "the 'spa-like dental oasis' cliche featuring bamboo, hot stones, and stock photos of people biting into green apples"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "marquee",
+          "pin",
+          "scrub",
+          "stagger"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [],
+      "page": "out/calder-dental/page.html",
+      "video": "out/calder-dental/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-11T13:01:04"
     }
   ]
 }
