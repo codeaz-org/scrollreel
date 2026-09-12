@@ -536,6 +536,67 @@
       "video": "out/calder-dental/video.mp4",
       "frames": 375,
       "ts": "2026-09-11T13:01:04"
+    },
+    {
+      "business": "Calder Power",
+      "trade": "electrical contractor",
+      "city": "Ghent",
+      "component_id": "magicuidesign/magicui:animated-beam",
+      "component": "animated-beam",
+      "ground": "paper",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "swiss",
+      "grammar": "split stage",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/animated-beam.tsx",
+      "photos": [
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by Elvan  Lam on Pexels",
+        "Photo by Thampapon Otavorn on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "objection-flip",
+        "terminal-readout",
+        "held-scene",
+        "spec-compare",
+        "route-line",
+        "stat-row",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to energize any circuit until every single terminal screw and lug has been tightened to the manufacturer's exact Newton-meter specification using calibrated torque drivers to eliminate the risk of micro-arcing.",
+        "register": "technical",
+        "spine": "the risk, then the precision",
+        "avoid": "stock photos of smiling men pointing at breaker panels or wearing pristine hardhats"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "count",
+          "draw",
+          "pan",
+          "parallax"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [],
+      "page": "out/calder-power/page.html",
+      "video": "out/calder-power/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-12T12:20:13"
     }
   ]
 }
