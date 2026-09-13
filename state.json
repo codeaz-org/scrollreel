@@ -597,6 +597,66 @@
       "video": "out/calder-power/video.mp4",
       "frames": 375,
       "ts": "2026-09-12T12:20:13"
+    },
+    {
+      "business": "Rowan Landscapes",
+      "trade": "garden design studio",
+      "city": "Ghent",
+      "component_id": "magicuidesign/magicui:comic-text",
+      "component": "comic-text",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "field",
+      "grammar": "continuous world",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/comic-text.tsx",
+      "photos": [
+        "Photo by Egor Komarov on Pexels",
+        "Photo by Samer Daboul on Pexels",
+        "Photo by VictoriaMyColours on Pexels",
+        "Photo by sukrit lamthong on Pexels",
+        "Photo by \uc815\uaddc\uc1a1 Nui MALAMA on Pexels"
+      ],
+      "model": "gemini-3-flash-preview",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "season-band",
+        "editorial-intro",
+        "gallery-rail",
+        "dawn-wash",
+        "first-call",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to select a single summer perennial or flowering shrub until the garden's architectural mass has been drawn and verified to look intentional in the bleakest week of January.",
+        "register": "blunt",
+        "spine": "solve January, solve the year",
+        "avoid": "promising an outdoor living room or lush summer oasis"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pan",
+          "drift",
+          "flow",
+          "marquee"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/rowan-landscapes/page.html",
+      "video": "out/rowan-landscapes/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-13T13:38:20"
     }
   ]
 }
