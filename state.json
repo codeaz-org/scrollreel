@@ -657,6 +657,68 @@
       "video": "out/rowan-landscapes/video.mp4",
       "frames": 375,
       "ts": "2026-09-13T13:38:20"
+    },
+    {
+      "business": "Thistle Contracts",
+      "trade": "roofing contractor",
+      "city": "Leeds",
+      "component_id": "magicuidesign/magicui:animated-grid-pattern",
+      "component": "animated-grid-pattern",
+      "ground": "scene",
+      "contrast_problems": [],
+      "scene": "embers",
+      "template": "flush",
+      "skin": "enamel",
+      "grammar": "typographic poster",
+      "scene_source": "library/backdrops/embers.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/animated-grid-pattern.tsx",
+      "photos": [
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Gundula Vogel on Pexels",
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Rajesh S  Balouria on Pexels",
+        "Photo by Cl\u00e9ment Proust on Pexels"
+      ],
+      "model": "gemini-2.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "cutaway",
+        "guarantee-mark",
+        "before-after",
+        "drift-band",
+        "job-tree",
+        "capacity-arc",
+        "service-radius",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to seal any roof\u2014flat, slate, or tile\u2014until we have calculated and mapped the attic's ventilation pathways, because trapped internal condensation rots structural timbers faster than Leeds rain ever could.",
+        "register": "technical",
+        "spine": "the hidden rot, then the seal",
+        "avoid": "The phrase 'no job too big or too small' accompanied by stock photos of smiling models in pristine high-vis vests pointing at a sunny sky."
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "marquee",
+          "scrub",
+          "count",
+          "draw"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [],
+      "page": "out/thistle-contracts/page.html",
+      "video": "out/thistle-contracts/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-14T15:29:45"
     }
   ]
 }
