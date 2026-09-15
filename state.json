@@ -719,6 +719,67 @@
       "video": "out/thistle-contracts/video.mp4",
       "frames": 375,
       "ts": "2026-09-14T15:29:45"
+    },
+    {
+      "business": "Calder Motor Works",
+      "trade": "auto repair shop",
+      "city": "Leeds",
+      "component_id": "magicuidesign/magicui:progressive-blur",
+      "component": "progressive-blur",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "signal",
+      "grammar": "live product surface",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/progressive-blur.tsx",
+      "photos": [
+        "Photo by Renee Razumov on Pexels",
+        "Photo by Jose Ricardo Barraza Morachis on Pexels",
+        "Photo by Artem Podrez on Pexels",
+        "Photo by Artem Podrez on Pexels",
+        "Photo by Sergey  Meshkov on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "spec-table",
+        "weigh-up",
+        "photo-reveal",
+        "terminal-readout",
+        "window-scene",
+        "ledger-strip",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to simply swap a worn component\u2014whether a brake caliper, suspension bush, or engine seal\u2014without measuring, identifying, and correcting the exact systemic imbalance, friction, or contamination that caused it to fail in the first place.",
+        "register": "technical",
+        "spine": "diagnose the wear, cure the cause",
+        "avoid": "The 'honest family garage' clich\u00e9 of promising the cheapest, fastest quick-fix in Leeds."
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "marquee",
+          "parallax",
+          "flow",
+          "pan"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [],
+      "page": "out/calder-motor-works/page.html",
+      "video": "out/calder-motor-works/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-15T13:47:50"
     }
   ]
 }
