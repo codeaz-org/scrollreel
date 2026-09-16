@@ -780,6 +780,66 @@
       "video": "out/calder-motor-works/video.mp4",
       "frames": 375,
       "ts": "2026-09-15T13:47:50"
+    },
+    {
+      "business": "Ashgrove Studio",
+      "trade": "yoga studio",
+      "city": "Bristol",
+      "component_id": "magicuidesign/magicui:animated-shiny-text",
+      "component": "animated-shiny-text",
+      "ground": "paper",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "atelier",
+      "grammar": "gallery",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/animated-shiny-text.tsx",
+      "photos": [
+        "Photo by eran design on Pexels",
+        "Photo by Yan Krukau on Pexels",
+        "Photo by Paulina Vargas on Pexels",
+        "Photo by Yan Krukau on Pexels",
+        "Photo by Thirdman on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "gallery-rail",
+        "held-scene",
+        "menu-board",
+        "dawn-wash",
+        "stat-row",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to prioritize the final, static shape of a pose, obsessing instead entirely on the kinetic control of the transitions between them, where 90% of joint strain and misalignment actually occurs.",
+        "register": "technical",
+        "spine": "the transition, then the depth",
+        "avoid": "using vague spiritual jargon like 'finding your flow' or 'opening your heart' to gloss over poor physical mechanics"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pan",
+          "count",
+          "draw",
+          "drift"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/ashgrove-studio/page.html",
+      "video": "out/ashgrove-studio/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-16T13:46:58"
     }
   ]
 }
