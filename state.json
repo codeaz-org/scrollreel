@@ -840,6 +840,68 @@
       "video": "out/ashgrove-studio/video.mp4",
       "frames": 375,
       "ts": "2026-09-16T13:46:58"
+    },
+    {
+      "business": "Petrichor Coffee Roasters",
+      "trade": "coffee roastery",
+      "city": "Porto",
+      "component_id": "magicuidesign/magicui:ripple",
+      "component": "ripple",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "flush",
+      "skin": "halftone",
+      "grammar": "typographic poster",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/ripple.tsx",
+      "photos": [
+        "Photo by Hebert  Santos on Pexels",
+        "Photo by FOX ^.\u11bd.^= \u222b on Pexels",
+        "Photo by Sevde Alt\u0131nta\u015f on Pexels",
+        "Photo by M\u00e9lodie Lochon on Pexels",
+        "Photo by Tony  Wu on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "before-after",
+        "editorial-intro",
+        "split-stage",
+        "velocity-band",
+        "layer-build",
+        "price-list",
+        "capacity-arc",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to charge a single batch of green coffee into our roaster until the beans have reached absolute moisture equilibrium within our climate-stabilized cellar, because roasting beans with volatile internal humidity profiles destroys the delicate organic acids before they can develop.",
+        "register": "technical",
+        "spine": "the variable, then the control",
+        "avoid": "vague romanticized stories about direct-trade partnerships and photos of hands holding raw green beans"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "draw",
+          "scrub",
+          "marquee",
+          "pin"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [],
+      "page": "out/petrichor-coffee-roasters/page.html",
+      "video": "out/petrichor-coffee-roasters/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-17T13:49:04"
     }
   ]
 }
