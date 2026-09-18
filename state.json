@@ -902,6 +902,67 @@
       "video": "out/petrichor-coffee-roasters/video.mp4",
       "frames": 375,
       "ts": "2026-09-17T13:49:04"
+    },
+    {
+      "business": "Ironwood Bakehouse",
+      "trade": "artisan bakery",
+      "city": "Ghent",
+      "component_id": "magicuidesign/magicui:orbiting-circles",
+      "component": "orbiting-circles",
+      "ground": "scene",
+      "contrast_problems": [],
+      "scene": "flowlines",
+      "template": "window",
+      "skin": "almanac",
+      "grammar": "chaptered editorial",
+      "scene_source": "library/backdrops/flowlines.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/orbiting-circles.tsx",
+      "photos": [
+        "Photo by Boys in Bristol Photography on Pexels",
+        "Photo by Yasin Onu\u015f on Pexels",
+        "Photo by ready made on Pexels",
+        "Photo by Furkan Tumer on Pexels",
+        "Photo by cottonbro studio on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "photo-reveal",
+        "outline-type",
+        "spec-table",
+        "drift-band",
+        "window-scene",
+        "guarantee-mark",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to slice, pack, or sell any bake while it is still warm from the oven, obsessing entirely on the quiet hours of rack-cooling where starch retrogradation actually finishes the bake and cures the crumb.",
+        "register": "technical",
+        "spine": "the myth, then the chemistry",
+        "avoid": "slow-motion videos of steaming-hot loaves being torn open"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "draw",
+          "drift",
+          "pan",
+          "parallax"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [],
+      "page": "out/ironwood-bakehouse/page.html",
+      "video": "out/ironwood-bakehouse/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-18T13:21:17"
     }
   ]
 }
