@@ -963,6 +963,66 @@
       "video": "out/ironwood-bakehouse/video.mp4",
       "frames": 375,
       "ts": "2026-09-18T13:21:17"
+    },
+    {
+      "business": "Marlow Dental Care",
+      "trade": "dental practice",
+      "city": "Porto",
+      "component_id": "magicuidesign/magicui:interactive-grid-pattern",
+      "component": "interactive-grid-pattern",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "clay",
+      "grammar": "soft stage",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/interactive-grid-pattern.tsx",
+      "photos": [
+        "Photo by cottonbro studio on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by Tima Miroshnichenko on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "objection-flip",
+        "device-mockup",
+        "ledger-strip",
+        "spec-compare",
+        "gallery-rail",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to grind down healthy tooth structure for cosmetic or restorative convenience, obsessing entirely on preserving every single micrometer of your natural enamel to ensure your teeth last a lifetime.",
+        "register": "technical",
+        "spine": "the biology, then the preservation",
+        "avoid": "stock photos of blindingly white, perfectly symmetrical model smiles"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pan",
+          "count",
+          "flow",
+          "marquee"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/marlow-dental-care/page.html",
+      "video": "out/marlow-dental-care/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-19T12:42:10"
     }
   ]
 }
