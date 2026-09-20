@@ -1023,6 +1023,73 @@
       "video": "out/marlow-dental-care/video.mp4",
       "frames": 375,
       "ts": "2026-09-19T12:42:10"
+    },
+    {
+      "business": "Rowan Power",
+      "trade": "electrical contractor",
+      "city": "Bristol",
+      "component_id": "magicuidesign/magicui:striped-pattern",
+      "component": "striped-pattern",
+      "ground": "paper",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "flush",
+      "skin": "swiss",
+      "grammar": "split stage",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/striped-pattern.tsx",
+      "photos": [
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by Thampapon Otavorn on Pexels",
+        "Photo by Elvan  Lam on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "before-after",
+        "terminal-readout",
+        "capacity-arc",
+        "first-call",
+        "lens-detail",
+        "quote-bleed",
+        "job-tree",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to sign off on any electrical termination until it has been verified under full operational load using thermal imaging, because hidden resistance heating at loose connections is the root cause of both system failures and electrical fires.",
+        "register": "technical",
+        "spine": "the hidden threat, then proof",
+        "avoid": "stock photos of glowing lightbulbs and generic slogans about 'keeping the lights on'"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "count",
+          "pin",
+          "scrub",
+          "draw"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [
+        {
+          "y": 6874,
+          "ink": 0
+        }
+      ],
+      "page": "out/rowan-power/page.html",
+      "video": "out/rowan-power/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-20T13:18:16"
     }
   ]
 }
