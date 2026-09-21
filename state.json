@@ -1090,6 +1090,67 @@
       "video": "out/rowan-power/video.mp4",
       "frames": 375,
       "ts": "2026-09-20T13:18:16"
+    },
+    {
+      "business": "Halden Green",
+      "trade": "garden design studio",
+      "city": "Leeds",
+      "component_id": "magicuidesign/magicui:blur-fade",
+      "component": "blur-fade",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "swatch",
+      "grammar": "gallery",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/blur-fade.tsx",
+      "photos": [
+        "Photo by Egor Komarov on Pexels",
+        "Photo by Samer Daboul on Pexels",
+        "Photo by VictoriaMyColours on Pexels",
+        "Photo by \uc815\uaddc\uc1a1 Nui MALAMA on Pexels",
+        "Photo by sukrit lamthong on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "season-band",
+        "layer-build",
+        "drift-band",
+        "window-scene",
+        "spec-table",
+        "service-radius",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to place a single plant in the ground until a bespoke soil amendment plan has been executed to cultivate the precise microbial ecosystem each species needs to thrive for decades, because the true health of any garden starts far beneath the surface.",
+        "register": "technical",
+        "spine": "Beneath surface, lasting garden.",
+        "avoid": "Your outdoor living space."
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "draw",
+          "drift",
+          "flow",
+          "marquee"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [],
+      "page": "out/halden-green/page.html",
+      "video": "out/halden-green/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-21T15:36:38"
     }
   ]
 }
