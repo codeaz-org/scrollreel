@@ -1151,6 +1151,66 @@
       "video": "out/halden-green/video.mp4",
       "frames": 375,
       "ts": "2026-09-21T15:36:38"
+    },
+    {
+      "business": "Marlow Roofworks",
+      "trade": "roofing contractor",
+      "city": "Cluj",
+      "component_id": "magicuidesign/magicui:globe",
+      "component": "globe",
+      "ground": "scene",
+      "contrast_problems": [],
+      "scene": "motes",
+      "template": "editorial",
+      "skin": "field",
+      "grammar": "continuous world",
+      "scene_source": "library/backdrops/motes.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/globe.tsx",
+      "photos": [
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Gundula Vogel on Pexels",
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Rajesh S  Balouria on Pexels",
+        "Photo by Cl\u00e9ment Proust on Pexels"
+      ],
+      "model": "gemini-2.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "cutaway",
+        "owner-note",
+        "split-stage",
+        "ledger-strip",
+        "stat-row",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to install any roofing material until the moisture content of the substrate has been verified below 12% with a pin-meter, because trapping residual moisture guarantees internal rot regardless of material quality.",
+        "register": "technical",
+        "spine": "the reading, then the installation",
+        "avoid": "We've got you covered"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "marquee",
+          "pan",
+          "count",
+          "pin"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/marlow-roofworks/page.html",
+      "video": "out/marlow-roofworks/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-22T19:23:59"
     }
   ]
 }
