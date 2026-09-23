@@ -1211,6 +1211,68 @@
       "video": "out/marlow-roofworks/video.mp4",
       "frames": 375,
       "ts": "2026-09-22T19:23:59"
+    },
+    {
+      "business": "Larkspur Auto",
+      "trade": "auto repair shop",
+      "city": "Porto",
+      "component_id": "magicuidesign/magicui:text-reveal",
+      "component": "text-reveal",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "flush",
+      "skin": "industrial",
+      "grammar": "rhythmic cutlist",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/text-reveal.tsx",
+      "photos": [
+        "Photo by Renee Razumov on Pexels",
+        "Photo by Jose Ricardo Barraza Morachis on Pexels",
+        "Photo by Artem Podrez on Pexels",
+        "Photo by Artem Podrez on Pexels",
+        "Photo by Sergey  Meshkov on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "first-call",
+        "before-after",
+        "dawn-wash",
+        "terminal-readout",
+        "objection-flip",
+        "guarantee-mark",
+        "gallery-rail",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to sign off on any suspension, steering, or brake work until the vehicle has been dynamically road-tested on Porto\u2019s steepest cobbled hills, because static workshop lifts cannot replicate the severe vibrational stresses of our local streets.",
+        "register": "blunt",
+        "spine": "the street, then the stress-test",
+        "avoid": "stock photos of smiling mechanics holding clipboards under spotless, perfectly glowing car undercarriages"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pan",
+          "scrub",
+          "draw",
+          "drift"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [],
+      "page": "out/larkspur-auto/page.html",
+      "video": "out/larkspur-auto/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-23T13:51:02"
     }
   ]
 }
