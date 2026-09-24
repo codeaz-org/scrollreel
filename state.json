@@ -1273,6 +1273,67 @@
       "video": "out/larkspur-auto/video.mp4",
       "frames": 375,
       "ts": "2026-09-23T13:51:02"
+    },
+    {
+      "business": "Larkspur Yoga",
+      "trade": "yoga studio",
+      "city": "Leeds",
+      "component_id": "magicuidesign/magicui:flickering-grid",
+      "component": "flickering-grid",
+      "ground": "paper",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "pastel",
+      "grammar": "soft stage",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/flickering-grid.tsx",
+      "photos": [
+        "Photo by eran design on Pexels",
+        "Photo by Yan Krukau on Pexels",
+        "Photo by Paulina Vargas on Pexels",
+        "Photo by Yan Krukau on Pexels",
+        "Photo by Thirdman on Pexels"
+      ],
+      "model": "gemini-2.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "depth-cards",
+        "marquee-strip",
+        "spec-table",
+        "drift-band",
+        "slots-left",
+        "layered-scene",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to cue any pose without first teaching the active muscle engagement required to protect the joints, because passive flexibility without strength is just a slow-motion injury.",
+        "register": "technical",
+        "spine": "the anatomy, then the movement",
+        "avoid": "generic promises of 'finding your inner peace' or 'aligning your chakras'"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "parallax",
+          "stagger",
+          "count",
+          "marquee"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [],
+      "page": "out/larkspur-yoga/page.html",
+      "video": "out/larkspur-yoga/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-24T13:53:40"
     }
   ]
 }
