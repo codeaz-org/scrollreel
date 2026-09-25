@@ -1334,6 +1334,75 @@
       "video": "out/larkspur-yoga/video.mp4",
       "frames": 375,
       "ts": "2026-09-24T13:53:40"
+    },
+    {
+      "business": "Halden Roastery",
+      "trade": "coffee roastery",
+      "city": "Bristol",
+      "component_id": "magicuidesign/magicui:morphing-text",
+      "component": "morphing-text",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "darkroom",
+      "grammar": "filmic one-shot",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/morphing-text.tsx",
+      "photos": [
+        "Photo by Hebert  Santos on Pexels",
+        "Photo by FOX ^.\u11bd.^= \u222b on Pexels",
+        "Photo by Sevde Alt\u0131nta\u015f on Pexels",
+        "Photo by M\u00e9lodie Lochon on Pexels",
+        "Photo by Tony  Wu on Pexels"
+      ],
+      "model": "gemini-2.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "cutaway",
+        "owner-note",
+        "orbit-services",
+        "kinetic-claim",
+        "filmstrip",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to finalize a roast profile until it has been cupped against the specific mineral-to-bicarbonate ratio of the local water supply, because a profile designed for pure water will always taste thin and unbalanced when brewed in a real kitchen.",
+        "register": "technical",
+        "spine": "chemistry, calibration, then clarity",
+        "avoid": "from farm to cup"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "draw",
+          "flow",
+          "pan",
+          "pin"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [
+        {
+          "y": 4620,
+          "ink": 0
+        },
+        {
+          "y": 4769,
+          "ink": 0
+        }
+      ],
+      "page": "out/halden-roastery/page.html",
+      "video": "out/halden-roastery/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-25T14:20:59"
     }
   ]
 }
