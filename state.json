@@ -1465,6 +1465,67 @@
       "video": "out/norwood-bakehouse/video.mp4",
       "frames": 375,
       "ts": "2026-09-26T13:24:11"
+    },
+    {
+      "business": "Verrick Smile Studio",
+      "trade": "dental practice",
+      "city": "Cluj",
+      "component_id": "magicuidesign/magicui:animated-circular-progress-bar",
+      "component": "animated-circular-progress-bar",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "skeuo",
+      "grammar": "live product surface",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/animated-circular-progress-bar.tsx",
+      "photos": [
+        "Photo by cottonbro studio on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by Tima Miroshnichenko on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-3-flash-preview",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "bento-grid",
+        "marquee-strip",
+        "terminal-readout",
+        "window-scene",
+        "stat-row",
+        "spec-table",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to perform any cosmetic or restorative treatment without first mapping and balancing the microscopic bite forces across your entire jaw, because a beautiful tooth is useless if it is absorbing destructive, uneven pressure every time you chew.",
+        "register": "technical",
+        "spine": "force analysis, then aesthetic design",
+        "avoid": "stock photos of models holding plastic shade guides against impossibly white teeth"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "marquee",
+          "parallax",
+          "stagger",
+          "pan"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [],
+      "page": "out/verrick-smile-studio/page.html",
+      "video": "out/verrick-smile-studio/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-27T14:14:31"
     }
   ]
 }
