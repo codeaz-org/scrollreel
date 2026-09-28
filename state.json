@@ -1526,6 +1526,66 @@
       "video": "out/verrick-smile-studio/video.mp4",
       "frames": 375,
       "ts": "2026-09-27T14:14:31"
+    },
+    {
+      "business": "Calder Electrical",
+      "trade": "electrical contractor",
+      "city": "Ghent",
+      "component_id": "magicuidesign/magicui:hexagon-pattern",
+      "component": "hexagon-pattern",
+      "ground": "paper",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "terminal",
+      "grammar": "live product surface",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/hexagon-pattern.tsx",
+      "photos": [
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by Elvan  Lam on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by Thampapon Otavorn on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-2.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "bracket-job",
+        "layered-scene",
+        "cutaway",
+        "drift-band",
+        "first-call",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to consider any electrical work truly complete until every circuit, connection, and component is meticulously labeled and documented with an accessible, up-to-date plan, because an undocumented system is a silent frustration and a future liability for anyone who needs to understand or modify it.",
+        "register": "proud",
+        "spine": "Clarity now, ease later",
+        "avoid": "Safety is our priority"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pan",
+          "draw",
+          "drift",
+          "pin"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/calder-electrical/page.html",
+      "video": "out/calder-electrical/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-28T17:01:32"
     }
   ]
 }
