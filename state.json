@@ -1586,6 +1586,73 @@
       "video": "out/calder-electrical/video.mp4",
       "frames": 375,
       "ts": "2026-09-28T17:01:32"
+    },
+    {
+      "business": "Ironwood Gardens",
+      "trade": "garden design studio",
+      "city": "Porto",
+      "component_id": "magicuidesign/magicui:retro-grid",
+      "component": "retro-grid",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "flush",
+      "skin": "pastel",
+      "grammar": "soft stage",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/retro-grid.tsx",
+      "photos": [
+        "Photo by Egor Komarov on Pexels",
+        "Photo by Samer Daboul on Pexels",
+        "Photo by VictoriaMyColours on Pexels",
+        "Photo by sukrit lamthong on Pexels",
+        "Photo by \uc815\uaddc\uc1a1 Nui MALAMA on Pexels"
+      ],
+      "model": "gemini-2.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "certificate-seal",
+        "owner-note",
+        "timeline-pan",
+        "capacity-arc",
+        "before-after",
+        "kinetic-claim",
+        "depth-cards",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to plant for day-one visual density, insisting on the strict root spacing and subsoil drainage required for plants to survive five years out rather than choke each other by season two.",
+        "register": "blunt",
+        "spine": "structural maturity over instant impact",
+        "avoid": "Promising an instant, lush outdoor oasis on the day of handover."
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pan",
+          "scrub",
+          "count",
+          "flow"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [
+        {
+          "y": 6684,
+          "ink": 0
+        }
+      ],
+      "page": "out/ironwood-gardens/page.html",
+      "video": "out/ironwood-gardens/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-29T15:25:37"
     }
   ]
 }
