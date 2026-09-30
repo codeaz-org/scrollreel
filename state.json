@@ -1653,6 +1653,67 @@
       "video": "out/ironwood-gardens/video.mp4",
       "frames": 375,
       "ts": "2026-09-29T15:25:37"
+    },
+    {
+      "business": "Verrick Roofworks",
+      "trade": "roofing contractor",
+      "city": "Cork",
+      "component_id": "magicuidesign/magicui:bento-grid",
+      "component": "bento-grid",
+      "ground": "scene",
+      "contrast_problems": [],
+      "scene": "aurora",
+      "template": "window",
+      "skin": "transit",
+      "grammar": "split stage",
+      "scene_source": "library/backdrops/aurora.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/bento-grid.tsx",
+      "photos": [
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Gundula Vogel on Pexels",
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Rajesh S  Balouria on Pexels",
+        "Photo by Cl\u00e9ment Proust on Pexels"
+      ],
+      "model": "gemini-2.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "spec-table",
+        "dawn-wash",
+        "photo-reveal",
+        "guarantee-mark",
+        "plain-answer",
+        "marquee-strip",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to lay a single slate or seal a flat membrane until we have calculated and cleared the internal attic airflow path, because trapping household moisture beneath a waterproof layer rots roof timbers faster than any external leak.",
+        "register": "technical",
+        "spine": "the physics, then the execution",
+        "avoid": "using the phrase 'we've got you covered' alongside generic drone shots of pristine tiles"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "marquee",
+          "stagger",
+          "drift",
+          "pin"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [],
+      "page": "out/verrick-roofworks/page.html",
+      "video": "out/verrick-roofworks/video.mp4",
+      "frames": 375,
+      "ts": "2026-09-30T15:41:51"
     }
   ]
 }
