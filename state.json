@@ -1714,6 +1714,66 @@
       "video": "out/verrick-roofworks/video.mp4",
       "frames": 375,
       "ts": "2026-09-30T15:41:51"
+    },
+    {
+      "business": "Norwood Motor Works",
+      "trade": "auto repair shop",
+      "city": "Ghent",
+      "component_id": "shadcn-ui/ui:message-scroller",
+      "component": "message-scroller",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "brutal",
+      "grammar": "typographic poster",
+      "scene_source": null,
+      "library": "shadcn/ui",
+      "license": "MIT",
+      "source_url": "https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/new-york-v4/ui/message-scroller.tsx",
+      "photos": [
+        "Photo by Renee Razumov on Pexels",
+        "Photo by Jose Ricardo Barraza Morachis on Pexels",
+        "Photo by Artem Podrez on Pexels",
+        "Photo by Artem Podrez on Pexels",
+        "Photo by Artem Podrez on Pexels"
+      ],
+      "model": "gemini-3-flash-preview",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "bento-grid",
+        "ledger-strip",
+        "held-scene",
+        "stat-row",
+        "steps-timeline",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to fit a replacement component until we have proven and eliminated the upstream stress, heat, or lubrication failure that killed the original part.",
+        "register": "blunt",
+        "spine": "trace the cause, fix once",
+        "avoid": "stock photos of wrench sets and generic claims of dealer quality at fair prices"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pin",
+          "count",
+          "pan",
+          "parallax"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/norwood-motor-works/page.html",
+      "video": "out/norwood-motor-works/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-01T15:50:56"
     }
   ]
 }
