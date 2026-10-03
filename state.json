@@ -1841,6 +1841,76 @@
       "video": "out/norwood-movement/video.mp4",
       "frames": 375,
       "ts": "2026-10-02T14:58:11"
+    },
+    {
+      "business": "Ironwood Coffee Roasters",
+      "trade": "coffee roastery",
+      "city": "Cork",
+      "component_id": "magicuidesign/magicui:kinetic-text",
+      "component": "kinetic-text",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "chalkboard",
+      "grammar": "gallery",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/kinetic-text.tsx",
+      "photos": [
+        "Photo by Hebert  Santos on Pexels",
+        "Photo by FOX ^.\u11bd.^= \u222b on Pexels",
+        "Photo by Sevde Alt\u0131nta\u015f on Pexels",
+        "Photo by M\u00e9lodie Lochon on Pexels",
+        "Photo by Tony  Wu on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "spec-table",
+        "figure-count",
+        "cutaway",
+        "quote-bleed",
+        "split-stage",
+        "objection-flip",
+        "contact-hours"
+      ],
+      "refined": true,
+      "angle": {
+        "obsession": "We refuse to pack or ship a single batch of coffee until we have analyzed its internal development using near-infrared light, ensuring the bean's core is roasted to the exact same depth as its outer skin.",
+        "register": "technical",
+        "spine": "the science, then the taste",
+        "avoid": "the 'roasted fresh this morning' pitch that encourages brewing unstable, carbon-heavy beans too early"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "reveal",
+          "count",
+          "flow",
+          "parallax"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [
+        {
+          "y": 4224,
+          "ink": 0
+        },
+        {
+          "y": 4416,
+          "ink": 0
+        }
+      ],
+      "page": "out/ironwood-coffee-roasters/page.html",
+      "video": "out/ironwood-coffee-roasters/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-03T14:02:30"
     }
   ]
 }
