@@ -1911,6 +1911,66 @@
       "video": "out/ironwood-coffee-roasters/video.mp4",
       "frames": 375,
       "ts": "2026-10-03T14:02:30"
+    },
+    {
+      "business": "Kestrel Bakehouse",
+      "trade": "artisan bakery",
+      "city": "Utrecht",
+      "component_id": "magicuidesign/magicui:animated-gradient-text",
+      "component": "animated-gradient-text",
+      "ground": "scene",
+      "contrast_problems": [],
+      "scene": "embers",
+      "template": "editorial",
+      "skin": "broadsheet",
+      "grammar": "chaptered editorial",
+      "scene_source": "library/backdrops/embers.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/animated-gradient-text.tsx",
+      "photos": [
+        "Photo by Boys in Bristol Photography on Pexels",
+        "Photo by Yasin Onu\u015f on Pexels",
+        "Photo by ready made on Pexels",
+        "Photo by Furkan Tumer on Pexels",
+        "Photo by cottonbro studio on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "steps-timeline",
+        "velocity-band",
+        "window-scene",
+        "guarantee-mark",
+        "spec-compare",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to follow fixed recipe hydrations, recalibrating water volume and bulk fermentation hourly against Utrecht's ambient humidity and the batch's grain moisture content to eliminate the need for dough conditioners.",
+        "register": "technical",
+        "spine": "measure the atmosphere, then mix",
+        "avoid": "romanticizing rustic flour-dusted hands and sourdough 'made with passion'"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "parallax",
+          "draw",
+          "drift",
+          "marquee"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/kestrel-bakehouse/page.html",
+      "video": "out/kestrel-bakehouse/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-04T14:24:48"
     }
   ]
 }
