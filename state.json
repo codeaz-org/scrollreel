@@ -1971,6 +1971,68 @@
       "video": "out/kestrel-bakehouse/video.mp4",
       "frames": 375,
       "ts": "2026-10-04T14:24:48"
+    },
+    {
+      "business": "Verrick Dental Care",
+      "trade": "dental practice",
+      "city": "Ghent",
+      "component_id": "magicuidesign/magicui:shine-border",
+      "component": "shine-border",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "flush",
+      "skin": "daylight",
+      "grammar": "gallery",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/shine-border.tsx",
+      "photos": [
+        "Photo by cottonbro studio on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by Tima Miroshnichenko on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-3-flash-preview",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "device-mockup",
+        "gauge-row",
+        "drift-band",
+        "bento-grid",
+        "gallery-rail",
+        "plain-answer",
+        "capacity-arc",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to treat any dental issue\u2014from a filling to an implant\u2014without first meticulously analyzing its long-term impact on the stability and balance of your entire bite and jaw structure.",
+        "register": "technical",
+        "spine": "Beyond the tooth, lifelong structure.",
+        "avoid": "Creating beautiful smiles."
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "drift",
+          "pan",
+          "scrub",
+          "count"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [],
+      "page": "out/verrick-dental-care/page.html",
+      "video": "out/verrick-dental-care/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-05T17:27:16"
     }
   ]
 }
