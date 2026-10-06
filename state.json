@@ -2033,6 +2033,72 @@
       "video": "out/verrick-dental-care/video.mp4",
       "frames": 375,
       "ts": "2026-10-05T17:27:16"
+    },
+    {
+      "business": "Norwood Electrics",
+      "trade": "electrical contractor",
+      "city": "Leeds",
+      "component_id": "magicuidesign/magicui:dot-pattern",
+      "component": "dot-pattern",
+      "ground": "paper",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "swiss",
+      "grammar": "split stage",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/dot-pattern.tsx",
+      "photos": [
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by Thampapon Otavorn on Pexels",
+        "Photo by Elvan  Lam on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels",
+        "Photo by https://kaboompics.com/ on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "depth-cards",
+        "dawn-wash",
+        "cutaway",
+        "quote-bleed",
+        "before-after",
+        "service-radius",
+        "signup-footer"
+      ],
+      "refined": true,
+      "angle": {
+        "obsession": "We refuse to install any high-draw circuit or complete a fit-out without physically stress-testing the entire supply's thermal headroom under simultaneous peak load.",
+        "register": "technical",
+        "spine": "capacity first, installation second",
+        "avoid": "promising that no job is too big or too small"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "scrub",
+          "reveal",
+          "draw",
+          "marquee"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [
+        {
+          "y": 4549,
+          "ink": 0
+        }
+      ],
+      "page": "out/norwood-electrics/page.html",
+      "video": "out/norwood-electrics/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-06T15:32:06"
     }
   ]
 }
