@@ -2099,6 +2099,66 @@
       "video": "out/norwood-electrics/video.mp4",
       "frames": 375,
       "ts": "2026-10-06T15:32:06"
+    },
+    {
+      "business": "Norwood Green",
+      "trade": "garden design studio",
+      "city": "Leeds",
+      "component_id": "magicuidesign/magicui:dia-text-reveal",
+      "component": "dia-text-reveal",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "press",
+      "grammar": "chaptered editorial",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/dia-text-reveal.tsx",
+      "photos": [
+        "Photo by Egor Komarov on Pexels",
+        "Photo by Samer Daboul on Pexels",
+        "Photo by VictoriaMyColours on Pexels",
+        "Photo by sukrit lamthong on Pexels",
+        "Photo by \uc815\uaddc\uc1a1 Nui MALAMA on Pexels"
+      ],
+      "model": "gemini-3-flash-preview",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "photo-reveal",
+        "ledger-strip",
+        "editorial-intro",
+        "steps-timeline",
+        "season-band",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to approve any hard landscaping or planting plan until we have modelled its exact hydrological impact, ensuring every drop of water is managed on-site through natural infiltration and purposeful redirection.",
+        "register": "technical",
+        "spine": "The overlooked element, then our integrated design",
+        "avoid": "Transforming your outdoor space"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "marquee",
+          "pin",
+          "count",
+          "flow"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/norwood-green/page.html",
+      "video": "out/norwood-green/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-07T15:57:50"
     }
   ]
 }
