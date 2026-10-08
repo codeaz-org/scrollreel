@@ -2159,6 +2159,68 @@
       "video": "out/norwood-green/video.mp4",
       "frames": 375,
       "ts": "2026-10-07T15:57:50"
+    },
+    {
+      "business": "Petrichor Roofing",
+      "trade": "roofing contractor",
+      "city": "Cork",
+      "component_id": "magicuidesign/magicui:scroll-based-velocity",
+      "component": "scroll-based-velocity",
+      "ground": "scene",
+      "contrast_problems": [],
+      "scene": "flowlines",
+      "template": "flush",
+      "skin": "transit",
+      "grammar": "split stage",
+      "scene_source": "library/backdrops/flowlines.frag (CodeAZ)",
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/scroll-based-velocity.tsx",
+      "photos": [
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Gundula Vogel on Pexels",
+        "Photo by Ryan  Stephens on Pexels",
+        "Photo by Rajesh S  Balouria on Pexels",
+        "Photo by Cl\u00e9ment Proust on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "stat-row",
+        "held-scene",
+        "spec-compare",
+        "terminal-readout",
+        "drift-band",
+        "weigh-up",
+        "warranty-line",
+        "signup-footer"
+      ],
+      "refined": true,
+      "angle": {
+        "obsession": "We refuse to install or repair any roof using standard galvanized nails, insisting on marine-grade stainless steel fixings calibrated specifically to withstand Cork\u2019s coastal salt-air corrosion and Atlantic wind-shear.",
+        "register": "technical",
+        "spine": "the rust, the steel, the survival",
+        "avoid": "Using the phrase 'no job too big or too small' alongside stock photos of families holding umbrellas indoors."
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "count",
+          "pan",
+          "draw",
+          "drift"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [],
+      "page": "out/petrichor-roofing/page.html",
+      "video": "out/petrichor-roofing/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-08T16:09:02"
     }
   ]
 }
