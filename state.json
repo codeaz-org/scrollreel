@@ -2221,6 +2221,76 @@
       "video": "out/petrichor-roofing/video.mp4",
       "frames": 375,
       "ts": "2026-10-08T16:09:02"
+    },
+    {
+      "business": "Kestrel Garage",
+      "trade": "auto repair shop",
+      "city": "Cluj",
+      "component_id": "magicuidesign/magicui:number-ticker",
+      "component": "number-ticker",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "window",
+      "skin": "signal",
+      "grammar": "live product surface",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/number-ticker.tsx",
+      "photos": [
+        "Photo by Renee Razumov on Pexels",
+        "Photo by Jose Ricardo Barraza Morachis on Pexels",
+        "Photo by Artem Podrez on Pexels",
+        "Photo by Artem Podrez on Pexels",
+        "Photo by Artem Podrez on Pexels"
+      ],
+      "model": "gemini-3.7-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "before-after",
+        "velocity-band",
+        "spec-table",
+        "kinetic-claim",
+        "gallery-rail",
+        "guarantee-mark",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to assemble any mechanical joint, brake rotor, or engine component without measuring mating-surface runout down to hundredths of a millimeter and recording calibrated torque-to-yield values.",
+        "register": "technical",
+        "spine": "the tolerance, the torque, the record",
+        "avoid": "assurances about being 'honest mechanics who never rip you off'"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pan",
+          "scrub",
+          "flow",
+          "marquee"
+        ],
+        "target_sections": 8
+      },
+      "dead_scroll": [
+        {
+          "y": 4138,
+          "ink": 0.0061
+        },
+        {
+          "y": 4292,
+          "ink": 0.0113
+        }
+      ],
+      "page": "out/kestrel-garage/page.html",
+      "video": "out/kestrel-garage/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-09T15:33:50"
     }
   ]
 }
