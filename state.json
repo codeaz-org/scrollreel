@@ -2291,6 +2291,66 @@
       "video": "out/kestrel-garage/video.mp4",
       "frames": 375,
       "ts": "2026-10-09T15:33:50"
+    },
+    {
+      "business": "Marlow Studio",
+      "trade": "yoga studio",
+      "city": "Porto",
+      "component_id": "magicuidesign/magicui:sparkles-text",
+      "component": "sparkles-text",
+      "ground": "paper",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "ceramic",
+      "grammar": "soft stage",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/sparkles-text.tsx",
+      "photos": [
+        "Photo by eran design on Pexels",
+        "Photo by Yan Krukau on Pexels",
+        "Photo by Paulina Vargas on Pexels",
+        "Photo by Yan Krukau on Pexels",
+        "Photo by Thirdman on Pexels"
+      ],
+      "model": "gemini-3.7-flash",
+      "verify_problems": [],
+      "blocks": [
+        "hero-statement",
+        "photo-reveal",
+        "dawn-wash",
+        "window-scene",
+        "capacity-arc",
+        "plain-answer",
+        "signup-footer"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to cue postures for visual symmetry, adapting every asana strictly around the non-negotiable bone structure and joint limits of the individual skeleton.",
+        "register": "blunt",
+        "spine": "anatomy first, the shape second",
+        "avoid": "Language about sacred sanctuaries, finding your center, or opening energetic heart spaces"
+      },
+      "direction": {
+        "opener": "hero-statement",
+        "closer": "signup-footer",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "reveal",
+          "count",
+          "drift",
+          "parallax"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/marlow-studio/page.html",
+      "video": "out/marlow-studio/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-10T14:39:01"
     }
   ]
 }
