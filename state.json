@@ -2351,6 +2351,68 @@
       "video": "out/marlow-studio/video.mp4",
       "frames": 375,
       "ts": "2026-10-10T14:39:01"
+    },
+    {
+      "business": "Norwood Coffee Roasters",
+      "trade": "coffee roastery",
+      "city": "Aarhus",
+      "component_id": "magicuidesign/magicui:noise-texture",
+      "component": "noise-texture",
+      "ground": "photo",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "flush",
+      "skin": "zine",
+      "grammar": "rhythmic cutlist",
+      "scene_source": null,
+      "library": "Magic UI",
+      "license": "MIT",
+      "source_url": "https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/noise-texture.tsx",
+      "photos": [
+        "Photo by Hebert  Santos on Pexels",
+        "Photo by FOX ^.\u11bd.^= \u222b on Pexels",
+        "Photo by Sevde Alt\u0131nta\u015f on Pexels",
+        "Photo by M\u00e9lodie Lochon on Pexels",
+        "Photo by Tony  Wu on Pexels"
+      ],
+      "model": "gemini-3.7-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "split-stage",
+        "ledger-strip",
+        "terminal-readout",
+        "drift-band",
+        "lineup-pan",
+        "outline-type",
+        "spec-compare",
+        "contact-hours"
+      ],
+      "refined": true,
+      "angle": {
+        "obsession": "We refuse to lock in a roast profile until we have calibrated its solubility against the exact high-calcium mineral hardness of Aarhus tap water.",
+        "register": "technical",
+        "spine": "local water dictates roast curve",
+        "avoid": "romanticizing origin trips and misty hillside farms"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "pin",
+          "draw",
+          "marquee",
+          "pan"
+        ],
+        "target_sections": 9
+      },
+      "dead_scroll": [],
+      "page": "out/norwood-coffee-roasters/page.html",
+      "video": "out/norwood-coffee-roasters/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-11T20:08:48"
     }
   ]
 }
