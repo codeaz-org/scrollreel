@@ -2474,6 +2474,66 @@
       "video": "out/ironwood-bakery/video.mp4",
       "frames": 375,
       "ts": "2026-10-12T18:22:55"
+    },
+    {
+      "business": "Rowan Smile Studio",
+      "trade": "dental practice",
+      "city": "Cork",
+      "component_id": "shadcn-ui/ui:slider",
+      "component": "slider",
+      "ground": "flat",
+      "contrast_problems": [],
+      "scene": null,
+      "template": "editorial",
+      "skin": "swiss",
+      "grammar": "split stage",
+      "scene_source": null,
+      "library": "shadcn/ui",
+      "license": "MIT",
+      "source_url": "https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/new-york-v4/ui/slider.tsx",
+      "photos": [
+        "Photo by cottonbro studio on Pexels",
+        "Photo by Tima Miroshnichenko on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by Cedric Fauntleroy on Pexels",
+        "Photo by Tima Miroshnichenko on Pexels"
+      ],
+      "model": "gemini-3.5-flash",
+      "verify_problems": [],
+      "blocks": [
+        "word-rotate-hero",
+        "photo-reveal",
+        "dawn-wash",
+        "device-mockup",
+        "marquee-strip",
+        "job-tree",
+        "contact-hours"
+      ],
+      "refined": false,
+      "angle": {
+        "obsession": "We refuse to cut away sound, healthy natural enamel to accommodate standardized pre-made crown shapes, relying exclusively on additive micro-restoration to keep original tooth structures intact.",
+        "register": "dry",
+        "spine": "preserve tissue, restore balance, secure longevity",
+        "avoid": "reassurances about gentle care for nervous patients"
+      },
+      "direction": {
+        "opener": "word-rotate-hero",
+        "closer": "contact-hours",
+        "relationship": "none",
+        "structural_blocks": [],
+        "cold_devices": [
+          "reveal",
+          "drift",
+          "flow",
+          "marquee"
+        ],
+        "target_sections": 7
+      },
+      "dead_scroll": [],
+      "page": "out/rowan-smile-studio/page.html",
+      "video": "out/rowan-smile-studio/video.mp4",
+      "frames": 375,
+      "ts": "2026-10-13T16:13:22"
     }
   ]
 }
